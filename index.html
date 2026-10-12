@@ -67,7 +67,11 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .cat-btn{flex:none;padding:8px 12px;border:0;border-radius:100px;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
 .cat-btn.on{background:var(--text);color:#fff}
-.stats-chip{top:16px;right:16px;padding:4px;display:flex;gap:4px;pointer-events:auto}
+.filter-btn{top:16px;right:16px;padding:8px 16px;border:1px solid rgba(10,10,10,.08);border-radius:100px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
+.filter-btn[aria-expanded="true"]{background:var(--text);color:#fff}
+.cat-chip{display:none}
+.cat-chip.open{display:flex}
+.stats-chip{top:16px;right:96px;padding:4px;display:flex;gap:4px;pointer-events:auto}
 .stats-chip [data-f]{cursor:pointer}
 .seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:pan-y}
 .seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:12px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
@@ -398,6 +402,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
       <div class="float stats-chip seg" id="stats"></div>
+      <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="false" aria-controls="cats">Filtre</button>
       <div class="float cat-chip" id="cats" role="group" aria-label="Catégories"></div>
       <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
@@ -751,6 +756,12 @@ const ecard = $("ecard");
 let filter = null; // null, "live" ou "soon"
 let catFilter = null; // null ou une catégorie
 const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier"];
+const filterBtn = $("filter-btn");
+filterBtn.addEventListener("click", () => {
+  const open = !$("cats").classList.contains("open");
+  $("cats").classList.toggle("open", open);
+  filterBtn.setAttribute("aria-expanded", String(open));
+});
 function buildCats() {
   const box = $("cats");
   box.innerHTML = [["", "Toutes"], ...CATS.map(c => [c, c])].map(([c, label]) =>
