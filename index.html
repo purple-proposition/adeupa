@@ -373,7 +373,7 @@ const events = [
     date: "À confirmer", hours: "À confirmer", address: "2 rue de Savy, Lyon 1er",
     desc: "Soirée à confirmer." },
   { title: "Magic Mardi", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi.jpg",
-    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, minAge: 18,
     date: "Mardi", hours: "19h – 1h", address: "50 quai Rambaud, Lyon 2e",
     desc: "Soirée du mardi au Sucre, réservée aux 18 ans et plus." },
   { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
@@ -505,6 +505,7 @@ const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
 
 // Icônes de la carte d'événement, en trait fin
 const ICON_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
+const ICON_AGE = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="3"/><text x="12" y="15" text-anchor="middle" font-size="7.5" font-weight="800" fill="currentColor" stroke="none" font-family="Manrope,sans-serif">18+</text></svg>`;
 const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
 
 // Pas de mention textuelle : seul le sceau vert signale une entreprise vérifiée.
@@ -595,6 +596,7 @@ function openCard(title) {
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
+      ${e.minAge ? `<span class="line">${ICON_AGE}Réservé aux ${e.minAge} ans et plus</span>` : ""}
     </div>
     <div class="desc">${e.desc}</div>
     ${e.ticket ? '<span class="ticket">Billetterie</span>' : ""}`;
