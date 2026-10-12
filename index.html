@@ -29,7 +29,7 @@ a{color:inherit;text-decoration:none}
 
 /* Navigation */
 /* Logo et CTA uniques : positionnés par JS entre le hero et la barre du haut */
-#brand,#cta{position:fixed;top:56px;z-index:30;opacity:0;transform:translateY(-16px);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+#brand,#cta{position:fixed;top:24px;z-index:30;opacity:0;transform:translateY(-16px);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
 #brand{left:48px}#cta{right:48px}
 #brand.show,#cta.show{opacity:1;transform:none;pointer-events:auto}
 .brand-inline{display:flex;width:max-content;align-items:center;gap:16px;font-weight:800;font-size:36px;letter-spacing:-.02em;color:#4169E1;text-decoration:none}
@@ -278,8 +278,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .faq-item.open .faq-a{grid-template-rows:1fr;transition:grid-template-rows 320ms cubic-bezier(.34,1.36,.64,1)}
 .faq-item.open .faq-a-in{opacity:1;transform:none;transition:opacity 320ms cubic-bezier(.34,1.36,.64,1) 40ms,transform 320ms cubic-bezier(.34,1.36,.64,1) 40ms}
 /* Bandeau promo : défile en boucle, fixé en haut */
-body{padding-top:40px}
-.promo{position:fixed;top:0;left:0;right:0;height:40px;z-index:40;background:#4169E1;color:#fff;overflow:hidden;display:flex;align-items:center}
+.promo{position:relative;height:40px;z-index:40;background:#4169E1;color:#fff;overflow:hidden;display:flex;align-items:center}
 .promo-track{display:flex;width:max-content;white-space:nowrap;font-size:16px;font-weight:600;animation:promoScroll 60s linear infinite}
 .promo-track span{display:inline-flex;align-items:center}
 .promo-mark{width:20px;height:20px;margin:0 16px;flex:none}
@@ -292,9 +291,10 @@ body{padding-top:40px}
 .venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:12px;background:rgba(0,0,0,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
 .venue-item:hover{background:rgba(0,0,0,.07)}
 /* Bouton de connexion, toujours visible en haut à droite (connexion, création de compte et publication à venir) */
-#login{position:fixed;top:56px;right:48px;z-index:31;background:rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);color:var(--text);border:1px solid var(--line)}
+#login{position:fixed;top:56px;right:48px;z-index:31;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);color:var(--text);border:1px solid var(--line)}
 #login:hover{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.14)}
 @media (max-width:768px){#login{right:16px}}
+.scrolled #login{top:24px}
 </style>
 </head>
 <body>
@@ -870,6 +870,9 @@ document.querySelectorAll(".faq-q").forEach(btn => {
   const login = document.getElementById("login"), cta = document.getElementById("cta");
   const place = () => { cta.style.right = (parseFloat(getComputedStyle(login).right) + login.offsetWidth + 8) + "px"; };
   place(); window.addEventListener("resize", place);
+  // une fois le bandeau sorti de l\u2019écran, le bouton remonte dans le coin
+  const onScroll = () => document.documentElement.classList.toggle("scrolled", window.scrollY > 40);
+  onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
   document.fonts && document.fonts.ready.then(place);
 })();
 </script>
