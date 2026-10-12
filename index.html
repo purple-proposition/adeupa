@@ -802,7 +802,6 @@ function openVenue(name) {
   ecard.querySelectorAll(".venue-btn").forEach(b => b.addEventListener("click", (ev) => {
     ev.stopPropagation();
     const key = b.dataset.s;
-    pick(key); // active le filtre correspondant sur la carte, la pastille glisse
     const list = events
       .filter(x => x.org.name === name && x.status === key)
       .sort((x, y) => new Date(x.start || 0) - new Date(y.start || 0));
