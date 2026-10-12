@@ -14,7 +14,7 @@
 body{margin:0;min-height:100vh;display:grid;place-items:center;padding:48px 16px;background:var(--bg);font-family:"Manrope",system-ui,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
 .lieu{width:360px;max-width:100%;background:rgba(255,255,255,.7);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:24px;box-shadow:0 14px 40px rgba(0,0,0,.12);padding:16px;animation:in .5s cubic-bezier(.4,0,.2,1) both}
 @keyframes in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
-.cover{aspect-ratio:16/9;border-radius:12px;background:var(--line);display:grid;place-items:center;color:var(--muted);font-size:12px;outline:1px solid var(--line);outline-offset:0;margin-bottom:16px}
+.cover{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;outline:1px solid var(--line);outline-offset:0;margin-bottom:16px}
 .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700}
 .seal{display:inline-flex}
 .seal svg{width:16px;height:16px}
@@ -35,7 +35,7 @@ h2{font-size:24px;line-height:1.2;margin:8px 0 8px;letter-spacing:-.015em}
 </head>
 <body>
 <article class="lieu">
-  <div class="cover">Photo du lieu à fournir</div>
+  <img class="cover" src="assets/lieu-sucre.jpg" alt="Le Sucre">
   <div class="org">Le Sucre <span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="12" cy="3.4" r="3" fill="#4169E1"/><circle cx="20.6" cy="12" r="3" fill="#4169E1"/><circle cx="12" cy="20.6" r="3" fill="#4169E1"/><circle cx="3.4" cy="12" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   <h2>Le Sucre</h2>
   <div class="meta">
