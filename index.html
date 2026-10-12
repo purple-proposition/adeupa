@@ -1025,11 +1025,12 @@ document.querySelectorAll(".faq-q").forEach(btn => {
   const intro = document.getElementById("intro");
   const mark = intro && intro.querySelector("svg");
   if (!mark || !mark.animate) { if (intro) intro.remove(); return; }
-  const slot = document.getElementById("brand-slot");
-  const sr = slot ? slot.getBoundingClientRect() : { left: 48, top: 24, height: 48 };
-  const size = 48;
+  // La cible est la fleur du logo fixe dans le titre (copie en haut de page, mise en place avant cette intro)
+  const target = document.querySelector(".brand-inline .brand-mark") || document.querySelector("#brand .brand-mark");
+  const tr = target ? target.getBoundingClientRect() : { left: 48, top: 24, height: 48, width: 48 };
+  const size = tr.width;
   const start = { left: innerWidth / 2 - 60, top: innerHeight / 2 - 60, w: 120 };
-  const end = { left: sr.left, top: sr.top + (sr.height - size) / 2, w: size };
+  const end = { left: tr.left, top: tr.top, w: size };
   Object.assign(mark.style, { position: "fixed", left: start.left + "px", top: start.top + "px", width: start.w + "px", height: start.w + "px" });
   const spin = mark.animate(
     [{ transform: "rotate(-220deg) scale(.5)", opacity: 0 }, { transform: "rotate(0deg) scale(1)", opacity: 1 }],
