@@ -60,7 +60,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 /* Compteur et filtre, en haut à droite */
 .stats-chip{top:16px;right:16px;padding:4px;display:flex;gap:4px;pointer-events:auto}
 .stats-chip [data-f]{cursor:pointer}
-.seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:none}
+.seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:pan-y}
 .seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:12px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
 .seg-pill.live{background:var(--live)}
 .seg-btn{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:8px 16px;border:0;border-radius:12px;background:none;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .3s ease}
@@ -606,21 +606,29 @@ function pick(f) {
   applyFilter();
 }
 // clic, et glisser d'un bouton à l'autre (la pastille suit le doigt)
-let segDrag = false;
+// Tap ou glissement horizontal sélectionne un filtre ; un geste vertical fait défiler la page
+let seg = null; // { x, y, btn, moved }
 $("stats").addEventListener("pointerdown", e => {
   const btn = e.target.closest(".seg-btn");
   if (!btn) return;
-  segDrag = true;
+  seg = { x: e.clientX, y: e.clientY, btn, moved: false };
   $("stats").setPointerCapture(e.pointerId);
-  pick(btn.dataset.f);
 });
 $("stats").addEventListener("pointermove", e => {
-  if (!segDrag) return;
-  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".seg-btn");
-  if (el) pick(el.dataset.f);
+  if (!seg) return;
+  const dx = e.clientX - seg.x, dy = e.clientY - seg.y;
+  if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { seg = null; return; } // défilement vertical
+  if (Math.abs(dx) > 8) {
+    seg.moved = true;
+    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".seg-btn");
+    if (el) pick(el.dataset.f);
+  }
 });
-$("stats").addEventListener("pointerup", () => { segDrag = false; });
-$("stats").addEventListener("pointercancel", () => { segDrag = false; });
+$("stats").addEventListener("pointerup", () => {
+  if (seg && !seg.moved) pick(seg.btn.dataset.f);
+  seg = null;
+});
+$("stats").addEventListener("pointercancel", () => { seg = null; });
 window.addEventListener("resize", () => renderStats());
 
 // Filtre : on masque les points qui ne correspondent pas
