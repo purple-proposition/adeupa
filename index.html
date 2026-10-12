@@ -84,7 +84,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 @keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
 
 /* Carte d'événement */
-.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:280px;max-width:calc(100% - 24px);background:rgba(255,255,255,.45);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.6);padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .3s ease,transform .45s cubic-bezier(.22,1,.36,1);pointer-events:auto}
+.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:280px;max-width:calc(100% - 24px);background:rgba(255,255,255,.45);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.6);padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .3s ease,transform .5s cubic-bezier(.34,1.3,.64,1);pointer-events:auto}
 .ecard.show{opacity:1;transform:none;pointer-events:auto}
 .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
 .badge{font-size:12px;font-weight:700;padding:4px 8px;border-radius:100px;white-space:nowrap}
@@ -407,7 +407,7 @@ const events = [
     desc: "Soirée à confirmer." },
   { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi-ra.png",
     org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18,
-    date: "Dim. 8 novembre", hours: "De 18h à 23h", address: "50 quai Rambaud, Lyon 2e",
+    date: "Dim. 8 novembre de 18h à 23h", hours: "", address: "50 quai Rambaud, Lyon 2e",
     desc: "Membre de l’écurie Ed Banger, Myd cultive depuis son arrivée une élégance décontractée, signe d’une french touch élégante et insolente. Porté par des titres comme The Sun ayant connus un succès mondial, il s’est aussi produit dans les clubs et festivals les plus prestigieux. A ses côtés, Pedro Bertho dont les racines brésiliennes et les rythmes africains façonnent le son qui célèbre la diversité et l’échange culturel." },
   { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
     org: { name: "Club Le Rivage", type: "ent", verified: true }, ticket: true,
@@ -627,7 +627,7 @@ function openCard(title) {
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
-      <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
+      <span class="line">${ICON_CLOCK}${e.hours ? `${e.date} · ${e.hours}` : e.date}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
