@@ -457,7 +457,31 @@ const events = [
   { title: "Brunch vinyles", lat: 45.7625, lng: 4.8345, status: "soon",
     org: { name: "Tom Lefèvre", type: "par", verified: false }, ticket: false,
     date: "Dimanche 18 oct.", hours: "11h – 15h", address: "Cordeliers, Lyon 2e",
-    desc: "Brunch et écoute de vinyles entre voisins." }
+    desc: "Brunch et écoute de vinyles entre voisins." },
+  { title: "Apéro jazz au Rhône", lat: 45.7585, lng: 4.8265, status: "live",
+    org: { name: "Quai Jazz Club", type: "ent", verified: true }, ticket: true,
+    date: "Ce soir", hours: "18h – 22h", address: "Quai Fulchiron, Lyon 5e",
+    desc: "Set jazz en terrasse au bord du fleuve." },
+  { title: "Projection en plein air", lat: 45.7662, lng: 4.8311, status: "live",
+    org: { name: "Ciné Presqu'île", type: "ent", verified: true }, ticket: true,
+    date: "Ce soir", hours: "21h – 23h30", address: "Place des Célestins, Lyon 2e",
+    desc: "Film projeté sur grand écran, couvertures fournies." },
+  { title: "Cours de yoga", lat: 45.7615, lng: 4.8277, status: "live",
+    org: { name: "Sara Mendes", type: "par", verified: false }, ticket: false,
+    date: "Ce soir", hours: "19h – 20h", address: "Quai Saint-Antoine, Lyon 2e",
+    desc: "Séance en extérieur, tapis à apporter." },
+  { title: "Lecture des vins", lat: 45.7560, lng: 4.8350, status: "soon",
+    org: { name: "Cave des Cordeliers", type: "ent", verified: true }, ticket: true,
+    date: "Vendredi 16 oct.", hours: "19h – 21h", address: "Rue Sainte-Hélène, Lyon 2e",
+    desc: "Dégustation guidée de trois vins de la vallée du Rhône." },
+  { title: "Fête de quartier", lat: 45.7655, lng: 4.8325, status: "soon",
+    org: { name: "Mairie du 1er", type: "mun", verified: true }, ticket: false,
+    date: "Samedi 17 oct.", hours: "14h – 19h", address: "Place Sathonay, Lyon 1er",
+    desc: "Animations, stands d'associations et musique." },
+  { title: "Open mic", lat: 45.7695, lng: 4.8300, status: "soon",
+    org: { name: "Hugo Martel", type: "par", verified: false }, ticket: false,
+    date: "Jeudi 22 oct.", hours: "20h – 23h", address: "Croix-Rousse, Lyon 4e",
+    desc: "Scène ouverte, inscription sur place." }
 ];
 
 // Carte fixe : aucune interaction, elle ne bouge pas
@@ -467,6 +491,12 @@ const map = new maplibregl.Map({
   center: [4.8318, 45.7575],
   zoom: 14.2,
   interactive: true,
+  dragPan: false,
+  scrollZoom: false,
+  doubleClickZoom: false,
+  touchZoomRotate: false,
+  dragRotate: false,
+  keyboard: false,
   attributionControl: { compact: true }
 });
 
@@ -489,7 +519,6 @@ map.on("load", () => {
 });
 
 // Un point par événement, halo pulsant pour les événements en cours
-map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
 map.on("click", () => closeCard());
 
 const markers = events.map(e => {
