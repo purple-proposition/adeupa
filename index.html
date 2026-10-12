@@ -1049,8 +1049,12 @@ document.querySelectorAll(".faq-q").forEach(btn => {
        { left: end.left + "px", top: end.top + "px", width: end.w + "px", height: end.w + "px" }],
       { duration: 800, easing: "cubic-bezier(.65,0,.35,1)", fill: "forwards" }
     );
-    intro.animate([{ backgroundColor: "rgba(250,250,250,1)" }, { backgroundColor: "rgba(250,250,250,0)" }], { duration: 450, delay: 500, fill: "forwards" });
-    move.finished.then(() => { document.body.classList.remove("intro-on"); intro.remove(); });
+    // Le fond reste opaque pendant le vol : la page ne s'affiche qu'une fois la fleur posée sur son logo
+    move.finished.then(() => {
+      document.body.classList.remove("intro-on");
+      const fade = intro.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: "forwards" });
+      fade.finished.then(() => intro.remove());
+    });
   });
 })();
 </script>
