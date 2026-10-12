@@ -599,7 +599,6 @@ function openCard(title) {
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
-      ${e.minAge ? `<span class="line">${ICON_AGE}Réservé aux ${e.minAge} ans et plus</span>` : ""}
     </div>
     <div class="desc">${e.desc}</div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}`;
