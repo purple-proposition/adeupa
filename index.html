@@ -76,8 +76,10 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 .ecard.show{opacity:1;transform:none}
 .org{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;flex-wrap:wrap}
 .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap}
-.badge.ent{background:#e3efff;color:#1f5fbf}
-.badge.mun{background:#e2f5ea;color:#17703d}
+.badge{display:inline-flex;align-items:center;gap:4px}
+.badge svg{width:14px;height:14px;flex:none}
+.badge.ent{background:#e3f7ea;color:#15803d}
+.badge.mun{background:#e3efff;color:#1f5fbf}
 .badge.par{background:#ececec;color:#6b6b6b}
 .ecard h4{font-size:17px;line-height:1.2;margin:10px 0 8px;letter-spacing:-.015em}
 .ecard .meta{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
@@ -471,8 +473,18 @@ const ripple = $("ripple");
 const ecard = $("ecard");
 let filter = null; // null, "live" ou "soon"
 
+// Sceau de vérification : rosace dentelée avec une coche, en vert
+const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#16a34a"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#16a34a"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
 const BADGES = {
-  ent: { cls: "ent", label: "Entreprise · vérifiée" },
+  ent: { cls: "ent", label: "Entreprise · vérifiée", icon: SEAL },
   mun: { cls: "mun", label: "Municipalité · vérifiée" },
   par: { cls: "par", label: "Particulier · non vérifié" }
 };
@@ -501,7 +513,7 @@ function openCard(title) {
   const e = m.e;
   const b = BADGES[e.org.type];
   ecard.innerHTML = `
-    <div class="org"><span>${e.org.name}</span><span class="badge ${b.cls}">${b.label}</span></div>
+    <div class="org"><span>${e.org.name}</span><span class="badge ${b.cls}">${b.icon || ""}${b.label}</span></div>
     <h4>${e.title}</h4>
     <div class="meta">
       <span>${e.date} · ${e.hours}</span>
