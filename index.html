@@ -491,10 +491,8 @@ const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
 const ICON_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
 const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
 
-const BADGES = {
-  mun: { cls: "mun", label: "Municipalité · vérifiée" }
-  // Particulier : pas de badge. Il publie sous prénom et nom ; un nom d'entreprise passe par l'offre payante.
-};
+// Pas de mention textuelle : seul le sceau vert signale une entreprise vérifiée.
+// Particulier et municipalité : aucun badge.
 
 // Compteur et filtre en haut à droite
 function renderStats() {
@@ -528,9 +526,8 @@ function applyFilter() {
 function openCard(title) {
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
-  const b = BADGES[e.org.type]; // undefined pour un particulier
   ecard.innerHTML = `
-    <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}${b ? `<span class="badge ${b.cls}">${b.label}</span>` : ""}</div>
+    <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}</div>
     <h4>${e.title}</h4>
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
