@@ -251,6 +251,18 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Apparition en cascade des éléments de la carte d'événement */
 @keyframes ecardItemIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
 .ecard.show>*{animation:ecardItemIn .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 55ms + 120ms)}
+/* Marges : 3 colonnes de chaque côté pour les sections, 2 pour la carte du hero */
+.wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 4 + 3 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 4 + 3 * var(--grid-gutter))}
+.hero .wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter))}
+.steps,.audiences,.feature{grid-template-columns:repeat(6,minmax(0,1fr))}
+.steps>*{grid-column:span 2}
+.steps>*:nth-child(3){grid-column:span 2}
+.audiences>*,.feature>*{grid-column:span 3}
+@media (max-width:768px){
+  .wrap,.hero .wrap{padding-left:var(--grid-margin);padding-right:var(--grid-margin)}
+  .steps,.audiences,.feature{grid-template-columns:1fr}
+  .steps>*,.audiences>*,.feature>*{grid-column:1 / -1}
+}
 </style>
 </head>
 <body>
