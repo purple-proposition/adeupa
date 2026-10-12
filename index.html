@@ -610,7 +610,12 @@ function openCard(title) {
   ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
   // fondu en bas seulement si la description dépasse et peut défiler
   const dsc = ecard.querySelector(".desc");
-  if (dsc) dsc.classList.toggle("fade", dsc.scrollHeight > dsc.clientHeight + 4);
+  if (dsc) {
+    // le fondu reste tant qu'il reste du texte à lire en bas
+    const updateFade = () => dsc.classList.toggle("fade", dsc.scrollTop + dsc.clientHeight < dsc.scrollHeight - 4);
+    updateFade();
+    dsc.addEventListener("scroll", updateFade, { passive: true });
+  }
   ecard.classList.add("show");
   m.el.classList.add("hot");
 }
