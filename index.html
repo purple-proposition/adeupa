@@ -214,7 +214,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 /* Carte : colonnes 3 à 10 (huit colonnes), deux colonnes libres de chaque côté */
 .product{width:100%;margin-left:0;margin-right:0}
 /* Contenu des sections : colonnes 3 à 10, deux colonnes libres de chaque côté */
-.wrap{padding-left:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter));padding-right:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter))}
+.wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter))}
 .steps,.audiences,.feature{grid-template-columns:repeat(8,minmax(0,1fr))}
 .steps>*{grid-column:span 3}
 .steps>*:nth-child(3){grid-column:span 2}
