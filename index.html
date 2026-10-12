@@ -65,7 +65,7 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 /* Points et halos */
 .event{position:relative;width:12px;height:12px;transition:transform .35s,opacity .35s}
 .event.hot{transform:scale(1.6)}
-.event.dim{opacity:.22}
+.event.hidden{display:none}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .event.live .pin{background:var(--live)}
 .halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,107,.5) 0%,rgba(255,59,107,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
@@ -83,6 +83,8 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 .badge.par{background:#ececec;color:#6b6b6b}
 .ecard h4{font-size:17px;line-height:1.2;margin:10px 0 8px;letter-spacing:-.015em}
 .ecard .meta{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.ecard .meta .line{display:flex;align-items:center;gap:6px}
+.ecard .meta svg{width:14px;height:14px;flex:none;color:var(--muted)}
 .ecard .desc{font-size:13px;color:#444;margin:10px 0 0;line-height:1.45}
 .ticket{display:block;margin-top:12px;padding:9px 14px;border-radius:100px;background:var(--text);color:var(--bg);font-size:13px;font-weight:700;text-align:center}
 
@@ -403,7 +405,7 @@ const events = [
     date: "Jusqu'au 31 oct.", hours: "10h – 22h", address: "Place des Terreaux, Lyon 1er",
     desc: "Vingt tirages grand format exposés sous les arcades." },
   { title: "Marché nocturne", lat: 45.7578, lng: 4.8320, status: "soon",
-    org: { name: "Mairie de quartier", type: "mun", verified: true }, ticket: true,
+    org: { name: "Mairie de quartier", type: "mun", verified: true }, ticket: false,
     date: "Demain", hours: "18h – 23h", address: "Place Bellecour, Lyon 2e",
     desc: "Producteurs locaux, street food et musique live." },
   { title: "Lecture de poésie", lat: 45.7643, lng: 4.8352, status: "soon",
@@ -483,6 +485,10 @@ const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
   <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
+// Icônes de la carte d'événement, en trait fin
+const ICON_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>`;
+const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
+
 const BADGES = {
   ent: { cls: "ent", label: "Entreprise · vérifiée", icon: SEAL },
   mun: { cls: "mun", label: "Municipalité · vérifiée" }
@@ -498,11 +504,11 @@ function renderStats() {
     <span class="${filter === "soon" ? "on" : ""}" data-f="soon">À venir <b>${soon}</b></span>`;
 }
 
-// Filtre : on estompe les points qui ne correspondent pas
+// Filtre : on masque les points qui ne correspondent pas
 function applyFilter() {
   markers.forEach(m => {
     const match = !filter || m.e.status === filter;
-    m.el.classList.toggle("dim", !match);
+    m.el.classList.toggle("hidden", !match);
   });
   renderStats();
 }
@@ -516,8 +522,9 @@ function openCard(title) {
     <div class="org"><span>${e.org.name}</span>${b ? `<span class="badge ${b.cls}">${b.icon || ""}${b.label}</span>` : ""}</div>
     <h4>${e.title}</h4>
     <div class="meta">
-      <span>${e.date} · ${e.hours}</span>
-      <span>${e.address}</span>
+      <span>${e.date}</span>
+      <span class="line">${ICON_CLOCK}${e.hours}</span>
+      <span class="line">${ICON_PIN}${e.address}</span>
     </div>
     <div class="desc">${e.desc}</div>
     ${e.ticket ? '<span class="ticket">Billetterie</span>' : ""}`;
