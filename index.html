@@ -250,7 +250,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .link:hover{opacity:.7}
 /* Apparition en cascade des éléments de la carte d'événement */
 @keyframes ecardItemIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
-.ecard.show>*{animation:ecardItemIn .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 55ms + 120ms)}
+.ecard.show>*{animation:ecardItemIn .32s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 30ms + 60ms)}
 /* Marges : 3 colonnes de chaque côté pour les sections, 2 pour la carte du hero */
 .wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 4 + 3 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 4 + 3 * var(--grid-gutter))}
 .hero .wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter))}
