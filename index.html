@@ -295,6 +295,25 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 #login:hover{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.14)}
 @media (max-width:768px){#login{right:16px}}
 .scrolled #login{top:24px}
+/* Animations au défilement (rythme repris de Causal) */
+:root{--ease-emerge:cubic-bezier(.22,1,.36,1);--ease-glide:cubic-bezier(.33,1,.68,1);--dur-enter:800ms;--dur-hover:150ms;--dur-press:100ms;--dur-swap:260ms;--stagger:120ms}
+[data-reveal]{opacity:0;transform:translateY(16px);filter:blur(6px);transition:opacity var(--dur-enter) var(--ease-emerge),transform var(--dur-enter) var(--ease-emerge),filter var(--dur-enter) var(--ease-emerge);transition-delay:calc(var(--i,0) * var(--stagger))}
+[data-reveal].in{opacity:1;transform:none;filter:none}
+.btn:active,.venue-btn:active,.ticket:active{transform:scale(.98);transition-duration:var(--dur-press)}
+.btn,.venue-btn,.ticket{transition-duration:var(--dur-hover)}
+.demo-canvas{position:relative;height:360px;border-radius:24px;background:var(--soft);overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.demo-card{position:absolute;width:240px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);transition:transform .8s var(--ease-glide)}
+.demo-card b{display:block;font-size:16px;margin-bottom:4px}
+.demo-card span{font-size:12px;color:var(--text)}
+.price-card{background:var(--surface);border-radius:24px;padding:32px;box-shadow:0 0 0 1px var(--line);flex:1}
+.price-card .amount{font-size:36px;font-weight:800;letter-spacing:-.03em;margin:8px 0 16px}
+.price-card ul{list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:8px}
+.price-card li{padding-left:24px;position:relative;font-size:16px}
+.price-card li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;border-radius:50%;background:var(--text)}
+.pricing{display:flex;gap:24px}
+.pricing-note{font-size:12px;color:var(--muted);margin-top:16px}
+@media (max-width:768px){.pricing{flex-direction:column}.demo-canvas{height:300px}}
+@media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;filter:none;transition:none}}
 </style>
 </head>
 <body>
@@ -327,21 +346,21 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 
 <section id="benefices">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head" data-reveal>
       <h2>Soyez trouvé au-delà de vos abonnés.</h2>
     </div>
     <div class="steps">
-      <div class="step">
+      <div class="step" data-reveal style="--i:0">
         <div class="n">1</div>
         <h3>Soyez trouvé au-delà de vos abonnés</h3>
         <p>Votre public découvre votre événement en explorant la carte, sans avoir à vous suivre.</p>
       </div>
-      <div class="step">
+      <div class="step" data-reveal style="--i:1">
         <div class="n">2</div>
         <h3>Apparaissez au bon endroit, au bon moment</h3>
         <p>Votre événement s'affiche à son adresse, pendant toute sa durée. [à vérifier dans le MVP]</p>
       </div>
-      <div class="step">
+      <div class="step" data-reveal style="--i:2">
         <div class="n">3</div>
         <h3>Gardez votre budget</h3>
         <p>Pas de flyers à imprimer, pas de publicité à payer.</p>
@@ -350,12 +369,24 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
   </div>
 </section>
 
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head" data-reveal><h2>Vos événements, en un coup d'œil.</h2></div>
+    <div class="demo-canvas" data-reveal id="demo-canvas">
+      <div class="demo-card" data-x="8" data-y="12"><b>Concert jazz</b><span>Quartier Ainay · Sam. 17 oct.</span></div>
+      <div class="demo-card" data-x="46" data-y="30"><b>Expo photo</b><span>Place des Terreaux · jusqu'au 31 oct.</span></div>
+      <div class="demo-card" data-x="20" data-y="62"><b>Brunch vinyles</b><span>Cordeliers · Dim. 18 oct.</span></div>
+    </div>
+    <p class="pricing-note">Contenus de démonstration, à remplacer par de vrais événements.</p>
+  </div>
+</section>
+
 <section id="faq">
   <div class="wrap">
     <div class="section-head">
       <h2>Questions fréquentes.</h2>
     </div>
-    <div class="faq">
+    <div class="faq" data-reveal>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Est-ce gratuit pour les particuliers ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>Oui. Voir ce qui se passe autour de vous ne coûte rien. Les formules pour les lieux et les organisateurs sont en préparation.</p></div></div>
@@ -371,6 +402,27 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Puis-je modifier un événement après l'avoir publié ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>Oui, l'adresse, les horaires et la description peuvent être corrigés à tout moment.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <div class="section-head" data-reveal><h2>Tarifs</h2></div>
+    <div class="pricing">
+      <div class="price-card" data-reveal style="--i:0">
+        <div class="k">Particuliers</div>
+        <div class="amount">0 €</div>
+        <ul><li>Voir tous les événements</li><li>Filtrer en cours ou à venir</li><li>Ouvrir chaque fiche</li></ul>
+        <a class="btn" href="pricing.html">Voir les tarifs</a>
+      </div>
+      <div class="price-card" data-reveal style="--i:1">
+        <div class="k">Entreprises et lieux</div>
+        <div class="amount">29 € <small style="font-size:16px;color:var(--muted);font-weight:600">/ mois</small></div>
+        <ul><li>Publication illimitée</li><li>Badge entreprise vérifiée</li><li>Billetterie intégrée</li></ul>
+        <a class="btn btn-dark" href="#">Publier mon événement</a>
+        <p class="pricing-note">Tarif indicatif, à valider.</p>
       </div>
     </div>
   </div>
@@ -874,6 +926,24 @@ document.querySelectorAll(".faq-q").forEach(btn => {
   const onScroll = () => document.documentElement.classList.toggle("scrolled", window.scrollY > 40);
   onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
   document.fonts && document.fonts.ready.then(place);
+})();
+</script>
+<script>
+// Apparition au défilement et cartes de démo qui glissent avec la page
+(() => {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+  document.querySelectorAll("[data-reveal]").forEach(el => io.observe(el));
+  const canvas = document.getElementById("demo-canvas");
+  const cards = canvas ? [...canvas.querySelectorAll(".demo-card")] : [];
+  const move = () => {
+    const r = canvas.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (window.innerHeight - r.top) / (window.innerHeight + r.height)));
+    cards.forEach((c, i) => { c.style.transform = `translateY(${(1 - p) * (24 + i * 16)}px)`; });
+  };
+  cards.forEach(c => { c.style.left = c.dataset.x + "%"; c.style.top = c.dataset.y + "%"; });
+  if (canvas) { move(); window.addEventListener("scroll", move, { passive: true }); }
 })();
 </script>
 </body>
