@@ -67,11 +67,15 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .cat-btn{flex:none;padding:8px 12px;border:0;border-radius:100px;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
 .cat-btn.on{background:var(--text);color:#fff}
-.filter-btn{top:16px;right:16px;padding:8px 16px;border:1px solid rgba(10,10,10,.08);border-radius:100px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
+.filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid rgba(10,10,10,.08);border-radius:100px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
 .filter-btn[aria-expanded="true"]{background:var(--text);color:#fff}
-.cat-chip{display:none}
-.cat-chip.open{display:flex}
-.stats-chip{top:16px;right:96px;padding:4px;display:flex;gap:4px;pointer-events:auto}
+.cat-chip{display:none;top:72px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:8px;max-width:min(420px,calc(100% - 32px))}
+.cat-chip.open{display:flex;animation:catIn .32s cubic-bezier(.22,1,.36,1)}
+@keyframes catIn{from{opacity:0;transform:translateY(-12px) scale(.98)}to{opacity:1;transform:none}}
+.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px}
+.cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fff}
+.cat-chip .cat-btn:hover:not(.on){border-color:var(--muted)}
+.stats-chip{height:48px;top:16px;right:96px;padding:4px;display:flex;gap:4px;pointer-events:auto}
 .stats-chip [data-f]{cursor:pointer}
 .seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:pan-y}
 .seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:12px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
@@ -402,7 +406,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
       <div class="float stats-chip seg" id="stats"></div>
-      <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="false" aria-controls="cats">Filtre</button>
+      <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="false" aria-controls="cats"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"/></svg><span>Filtre</span></button>
       <div class="float cat-chip" id="cats" role="group" aria-label="Catégories"></div>
       <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
@@ -762,10 +766,11 @@ filterBtn.addEventListener("click", () => {
   $("cats").classList.toggle("open", open);
   filterBtn.setAttribute("aria-expanded", String(open));
 });
+const CAT_ICON = {"Musique": `<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>`, "Culture": `<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>`, "Sport": `<path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/>`, "Brocante": `<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>`, "Fête": `<path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/>`, "Atelier": `<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>`};
 function buildCats() {
   const box = $("cats");
-  box.innerHTML = [["", "Toutes"], ...CATS.map(c => [c, c])].map(([c, label]) =>
-    `<button type="button" class="cat-btn${(c || null) === catFilter ? " on" : ""}" data-c="${c}">${label}</button>`).join("");
+  box.innerHTML = [["", "Toutes", ""], ...CATS.map(c => [c, c, CAT_ICON[c]])].map(([c, label, ic]) =>
+    `<button type="button" class="cat-btn${(c || null) === catFilter ? " on" : ""}" data-c="${c}">${ic ? `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>` : ""}${label}</button>`).join("");
   box.querySelectorAll(".cat-btn").forEach(b => b.addEventListener("click", () => {
     catFilter = b.dataset.c || null;
     buildCats(); applyFilter();
