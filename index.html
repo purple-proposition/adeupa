@@ -77,6 +77,15 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .seg-btn.live .dot{background:var(--live)}
 .seg-btn.live.on .dot{background:#fff}
 
+.data-chart{margin:48px 0 0}
+.data-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.data-chart .dc-grid{stroke:var(--line);stroke-width:1}
+.data-chart .dc-axis{stroke:var(--muted);stroke-width:1}
+.data-chart .dc-tick{font-size:14px;fill:var(--muted);font-family:inherit}
+.data-chart .dc-label{font-size:14px;font-weight:600;fill:var(--text);font-family:inherit}
+.data-chart .dc-dot{fill:var(--text);opacity:.85}
+.data-chart .dc-dot.dc-hot{fill:#4169E1}
+.data-chart figcaption{margin-top:16px;font-size:14px;color:var(--muted);text-align:center}
 /* Points et halos */
 .event{position:absolute;top:0;left:0;width:12px;height:12px;transition:opacity .32s}
 .event.hot{}
@@ -443,6 +452,20 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <p>Retrouvez le détail de vos événements depuis votre espace, et exportez-les quand vous voulez.</p>
       </div>
     </div>
+    <figure class="data-chart" data-reveal>
+        <svg viewBox="0 0 800 360" role="img" aria-labelledby="dc-title dc-desc">
+          <title id="dc-title">Nombre de vues par événement, selon la date</title>
+          <desc id="dc-desc">Exemple illustratif : chaque point est un événement, placé selon sa date (de gauche à droite) et son nombre de vues (de bas en haut).</desc>
+          <line x1="72" x2="760" y1="300.0" y2="300.0" class="dc-grid"/><text x="60" y="305.0" class="dc-tick" text-anchor="end">0</text><line x1="72" x2="760" y1="235.0" y2="235.0" class="dc-grid"/><text x="60" y="240.0" class="dc-tick" text-anchor="end">65</text><line x1="72" x2="760" y1="170.0" y2="170.0" class="dc-grid"/><text x="60" y="175.0" class="dc-tick" text-anchor="end">130</text><line x1="72" x2="760" y1="105.0" y2="105.0" class="dc-grid"/><text x="60" y="110.0" class="dc-tick" text-anchor="end">195</text><line x1="72" x2="760" y1="40.0" y2="40.0" class="dc-grid"/><text x="60" y="45.0" class="dc-tick" text-anchor="end">260</text>
+          <line x1="72" x2="72" y1="40" y2="300" class="dc-axis"/>
+          <line x1="72" x2="760" y1="300" y2="300" class="dc-axis"/>
+          <line x1="72.0" x2="72.0" y1="300" y2="306" class="dc-axis"/><text x="72.0" y="324" class="dc-tick" text-anchor="middle">oct.</text><line x1="209.6" x2="209.6" y1="300" y2="306" class="dc-axis"/><text x="209.6" y="324" class="dc-tick" text-anchor="middle">nov.</text><line x1="347.2" x2="347.2" y1="300" y2="306" class="dc-axis"/><text x="347.2" y="324" class="dc-tick" text-anchor="middle">déc.</text><line x1="484.8" x2="484.8" y1="300" y2="306" class="dc-axis"/><text x="484.8" y="324" class="dc-tick" text-anchor="middle">janv.</text><line x1="622.4" x2="622.4" y1="300" y2="306" class="dc-axis"/><text x="622.4" y="324" class="dc-tick" text-anchor="middle">févr.</text><line x1="760.0" x2="760.0" y1="300" y2="306" class="dc-axis"/><text x="760.0" y="324" class="dc-tick" text-anchor="middle">mars</text>
+          <circle cx="99.5" cy="262.0" r="7" class="dc-dot" style="--i:0"/><circle cx="154.6" cy="236.0" r="7" class="dc-dot" style="--i:1"/><circle cx="209.6" cy="248.0" r="7" class="dc-dot" style="--i:2"/><circle cx="271.5" cy="204.0" r="7" class="dc-dot" style="--i:3"/><circle cx="326.6" cy="229.0" r="7" class="dc-dot" style="--i:4"/><circle cx="381.6" cy="160.0" r="7" class="dc-dot" style="--i:5"/><circle cx="436.6" cy="182.0" r="7" class="dc-dot" style="--i:6"/><circle cx="498.6" cy="124.0" r="7" class="dc-dot dc-hot" style="--i:7"/><circle cx="553.6" cy="168.0" r="7" class="dc-dot" style="--i:8"/><circle cx="615.5" cy="95.0" r="7" class="dc-dot dc-hot" style="--i:9"/><circle cx="670.6" cy="132.0" r="7" class="dc-dot dc-hot" style="--i:10"/><circle cx="725.6" cy="70.0" r="7" class="dc-dot dc-hot" style="--i:11"/>
+          <text x="72" y="24" class="dc-label">Vues</text>
+          <text x="760" y="352" class="dc-label" text-anchor="end">Chronologie</text>
+        </svg>
+        <figcaption>Exemple illustratif, avec des valeurs fictives. Chaque point est un événement : plus il est haut, plus il a été vu ; plus il est à droite, plus il est récent.</figcaption>
+      </figure>
   </div>
 </section>
 
