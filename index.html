@@ -315,21 +315,29 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .pricing-note{font-size:12px;color:var(--muted);margin-top:16px}
 @media (max-width:768px){.pricing{flex-direction:column}.demo-canvas{height:300px}}
 @media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;filter:none;transition:none}}
-/* Rangée de cartes qui défile seule, fondu sur les bords */
+/* Rangée de cartes qui défile seule : même design que la carte d'événement, hauteur fixe */
 .rail{overflow:hidden;padding:8px 0 32px;-webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent)}
-.rail-track{display:flex;gap:16px;width:max-content;animation:railScroll 48s linear infinite}
+.rail-track{display:flex;gap:16px;width:max-content;animation:railScroll 56s linear infinite}
 .rail:hover .rail-track{animation-play-state:paused}
 @keyframes railScroll{to{transform:translateX(-50%)}}
-.rail-card{flex:0 0 248px;background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
-.rail-card.seen{opacity:.55}
-.rail-img{height:136px;background:var(--soft)}
-.rail-body{padding:16px;display:flex;flex-direction:column;gap:4px}
-.rail-body b{font-size:16px;font-weight:700}
-.rail-body span{font-size:14px;color:var(--muted)}
-.rail-badge{align-self:flex-start;font-size:12px;font-weight:700;padding:4px 8px;border-radius:100px;background:var(--soft);color:var(--muted);margin-bottom:4px}
-.rail-badge.boost{background:#4169E1;color:#fff}
-.rail-badge.seen{background:var(--line);color:var(--muted)}
-@media (prefers-reduced-motion:reduce){.rail-track{animation:none}}
+@keyframes railDesc{0%,20%{transform:translateY(0)}80%,100%{transform:translateY(calc(-100% + 96px))}}
+.rail-card{flex:0 0 288px;height:480px;display:flex;flex-direction:column;background:rgba(255,255,255,.7);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.12);padding:16px;overflow:hidden}
+.rail-cover-box{padding:0;margin:0 0 16px}
+.rail-cover{display:block;width:100%;aspect-ratio:16/9;border-radius:12px;background:var(--soft);outline:1px solid var(--line);outline-offset:0}
+.rail-card .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
+.rail-card .seal{display:inline-flex}
+.rail-card .seal svg{width:16px;height:16px}
+.rail-card h4{font-size:24px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
+.rail-tags{min-height:0}
+.rail-tag{display:inline-block;font-size:12px;font-weight:700;padding:4px 8px;border-radius:100px;background:#4169E1;color:#fff;margin-bottom:8px}
+.rail-card .meta{font-size:14px;color:var(--text);display:flex;flex-direction:column;gap:4px}
+.rail-card .meta .line{display:flex;align-items:center;gap:8px}
+.rail-card .meta svg{width:14px;height:14px;flex:none;color:var(--text)}
+.rail-desc{position:relative;height:96px;overflow:hidden;margin:8px 0 12px;font-size:16px;color:#444;line-height:1.45}
+.rail-desc-in{animation:railDesc 14s ease-in-out infinite alternate}
+.rail-desc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(248,248,248,0),rgba(248,248,248,.95));pointer-events:none}
+.rail-card .ticket{margin-top:auto;display:block;padding:10px 18px;border-radius:100px;background:#4169E1;color:#fff;font-size:16px;font-weight:600;text-align:center}
+@media (prefers-reduced-motion:reduce){.rail-track,.rail-desc-in{animation:none}}
 </style>
 </head>
 <body>
@@ -393,8 +401,49 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
     </div>
   </div>
   <div class="rail" aria-label="Exemples de cartes d'événements">
-    <div class="rail-track"><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Concert jazz</b><span>Sam. 17 oct. · Ainay</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Expo photo</b><span>Jusqu'au 31 oct. · Terreaux</span></div></div><div class="rail-card seen"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge seen">Déjà vu</span><b>Brunch vinyles</b><span>Dim. 18 oct. · Cordeliers</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Rave Against Fascism</b><span>Ven. 23 oct. · Le Sucre</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Projection en plein air</b><span>Ce soir · Célestins</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Cours de yoga</b><span>Ce soir · Saint-Antoine</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Concert jazz</b><span>Sam. 17 oct. · Ainay</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Expo photo</b><span>Jusqu'au 31 oct. · Terreaux</span></div></div><div class="rail-card seen"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge seen">Déjà vu</span><b>Brunch vinyles</b><span>Dim. 18 oct. · Cordeliers</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Rave Against Fascism</b><span>Ven. 23 oct. · Le Sucre</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Projection en plein air</b><span>Ce soir · Célestins</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Cours de yoga</b><span>Ce soir · Saint-Antoine</span></div></div></div>
-  </div>
+    <div class="rail-track"><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Le Sucre</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Rave Against Fascism</h4><div class="rail-tags"></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Vendredi 23 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Le Sucre, 50 quai Rambaud, Lyon 2e</span></div><div class="rail-desc"><div class="rail-desc-in">Soirée contre le fascisme, avec une programmation pensée pour le rooftop.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Galerie Nord Sud</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Expo photo en plein air</h4><div class="rail-tags"><span class="rail-tag">Mise en avant</span></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Jusqu'au 31 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Place des Terreaux, Lyon 1er</span></div><div class="rail-desc"><div class="rail-desc-in">Vingt tirages grand format exposés sous les arcades, en accès libre.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Hugo Dubois</span></div><h4>Atelier street art</h4><div class="rail-tags"></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Ce soir de 19h à 21h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Pentes de la Croix-Rousse, Lyon 1er</span></div><div class="rail-desc"><div class="rail-desc-in">Initiation au pochoir, matériel fourni sur place.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Jazz à Ainay</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Concert jazz</h4><div class="rail-tags"><span class="rail-tag">Mise en avant</span></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 21h à 23h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quartier Ainay, Lyon 2e</span></div><div class="rail-desc"><div class="rail-desc-in">Trio jazz dans une cour pavée, deux sets dans la soirée.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Le Sucre</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Rave Against Fascism</h4><div class="rail-tags"></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Vendredi 23 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Le Sucre, 50 quai Rambaud, Lyon 2e</span></div><div class="rail-desc"><div class="rail-desc-in">Soirée contre le fascisme, avec une programmation pensée pour le rooftop.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Galerie Nord Sud</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Expo photo en plein air</h4><div class="rail-tags"><span class="rail-tag">Mise en avant</span></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Jusqu'au 31 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Place des Terreaux, Lyon 1er</span></div><div class="rail-desc"><div class="rail-desc-in">Vingt tirages grand format exposés sous les arcades, en accès libre.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Hugo Dubois</span></div><h4>Atelier street art</h4><div class="rail-tags"></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Ce soir de 19h à 21h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Pentes de la Croix-Rousse, Lyon 1er</span></div><div class="rail-desc"><div class="rail-desc-in">Initiation au pochoir, matériel fourni sur place.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover"></div></div><div class="org"><span>Jazz à Ainay</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true">
+  <circle cx="12" cy="12" r="8.6" fill="#4169E1"/>
+  ${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => {
+    const r = a * Math.PI / 180;
+    return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
+  }).join("")}
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span></div><h4>Concert jazz</h4><div class="rail-tags"><span class="rail-tag">Mise en avant</span></div><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 21h à 23h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quartier Ainay, Lyon 2e</span></div><div class="rail-desc"><div class="rail-desc-in">Trio jazz dans une cour pavée, deux sets dans la soirée.</div></div><span class="ticket">Billetterie</span></div></div>
 </section>
 
 <section id="faq">
