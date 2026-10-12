@@ -790,7 +790,7 @@ function filterRow(kind, title, opts, sel) {
 }
 function buildCats() {
   const box = $("cats");
-  box.innerHTML = filterRow("time", "Temporalité", [{ key: "live", label: "En cours", dot: true }, { key: "soon", label: "À venir" }], timeSel)
+  box.innerHTML = filterRow("time", "Temporalité", [{ key: "live", label: "En cours", icon: `<path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/>` }, { key: "soon", label: "À venir", icon: `<path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/>` }], timeSel)
     + filterRow("cat", "Genre", CATS.map(c => ({ key: c, label: c, icon: CAT_ICON[c] })), catSel);
   box.querySelectorAll(".cat-btn").forEach(b => b.addEventListener("click", () => {
     const set = b.dataset.kind === "time" ? timeSel : catSel;
