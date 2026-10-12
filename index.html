@@ -485,8 +485,8 @@ const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
 
 const BADGES = {
   ent: { cls: "ent", label: "Entreprise · vérifiée", icon: SEAL },
-  mun: { cls: "mun", label: "Municipalité · vérifiée" },
-  par: { cls: "par", label: "Particulier · non vérifié" }
+  mun: { cls: "mun", label: "Municipalité · vérifiée" }
+  // Particulier : pas de badge. Il publie sous prénom et nom ; un nom d'entreprise passe par l'offre payante.
 };
 
 // Compteur et filtre en haut à droite
@@ -511,9 +511,9 @@ function applyFilter() {
 function openCard(title) {
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
-  const b = BADGES[e.org.type];
+  const b = BADGES[e.org.type]; // undefined pour un particulier
   ecard.innerHTML = `
-    <div class="org"><span>${e.org.name}</span><span class="badge ${b.cls}">${b.icon || ""}${b.label}</span></div>
+    <div class="org"><span>${e.org.name}</span>${b ? `<span class="badge ${b.cls}">${b.icon || ""}${b.label}</span>` : ""}</div>
     <h4>${e.title}</h4>
     <div class="meta">
       <span>${e.date} · ${e.hours}</span>
