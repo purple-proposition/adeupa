@@ -104,7 +104,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .ecard .meta .line{display:flex;align-items:center;gap:8px}
 .ecard .meta svg{width:16px;height:16px;flex:none;color:var(--muted)}
-.ecard .desc{font-size:16px;color:#444;margin:8px 0 0;line-height:1.45;max-height:112px;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
+.ecard .desc{font-size:16px;color:#444;margin:8px 0 0;line-height:1.45;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
 .ecard .desc::-webkit-scrollbar{display:none}
 .desc-wrap{position:relative}
 .desc-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(248,248,248,0),rgba(248,248,248,.95));opacity:0;transition:opacity .4s ease;pointer-events:none}
@@ -280,9 +280,9 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Bandeau promo : défile en boucle, fixé en haut */
 body{padding-top:40px}
 .promo{position:fixed;top:0;left:0;right:0;height:40px;z-index:40;background:#4169E1;color:#fff;overflow:hidden;display:flex;align-items:center}
-.promo-track{display:flex;width:max-content;white-space:nowrap;font-size:16px;font-weight:600;animation:promoScroll 24s linear infinite}
-.promo-track span{display:inline-flex;align-items:center;padding-right:48px}
-.promo-mark{width:20px;height:20px;margin-left:16px;flex:none}
+.promo-track{display:flex;width:max-content;white-space:nowrap;font-size:16px;font-weight:600;animation:promoScroll 60s linear infinite}
+.promo-track span{display:inline-flex;align-items:center}
+.promo-mark{width:20px;height:20px;margin:0 16px;flex:none}
 @keyframes promoScroll{to{transform:translateX(-50%)}}
 </style>
 </head>
@@ -649,14 +649,22 @@ function openCard(title) {
   ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
   [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
   // fondu en bas seulement si la description dépasse et peut défiler
+  // la carte ne dépasse pas la hauteur de la carte géographique ; le texte n'est rogné qu'en dernier recours
   const dsc = ecard.querySelector(".desc");
   const dwrap = ecard.querySelector(".desc-wrap");
-  if (dsc) {
-    // le fondu reste tant qu'il reste du texte à lire en bas
+  const fitCard = () => {
+    const maxCard = product.clientHeight - 32;
+    dsc.style.maxHeight = "none";
+    dwrap.classList.remove("fade");
+    const natural = ecard.offsetHeight;
+    if (natural > maxCard) {
+      dsc.style.maxHeight = Math.max(48, dsc.offsetHeight - (natural - maxCard)) + "px";
+    }
     const updateFade = () => dwrap.classList.toggle("fade", dsc.scrollTop + dsc.clientHeight < dsc.scrollHeight - 4);
     updateFade();
-    dsc.addEventListener("scroll", updateFade, { passive: true });
-  }
+    dsc.onscroll = updateFade;
+  };
+  if (dsc) fitCard();
   ecard.classList.add("show");
   m.el.classList.add("hot");
 }
