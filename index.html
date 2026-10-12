@@ -1031,12 +1031,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
   const intro = document.getElementById("intro");
   const mark = intro && intro.querySelector("svg");
   if (!mark || !mark.animate) { if (intro) intro.remove(); return; }
-  // La cible est la fleur du logo fixe dans le titre (copie en haut de page, mise en place avant cette intro)
-  const target = document.querySelector(".brand-inline .brand-mark") || document.querySelector("#brand .brand-mark");
-  const tr = target ? target.getBoundingClientRect() : { left: 48, top: 24, height: 48, width: 48 };
-  const size = tr.width;
   const start = { left: innerWidth / 2 - 60, top: innerHeight / 2 - 60, w: 120 };
-  const end = { left: tr.left, top: tr.top, w: size };
   document.body.classList.add("intro-on");
   Object.assign(mark.style, { position: "fixed", left: start.left + "px", top: start.top + "px", width: start.w + "px", height: start.w + "px" });
   const spin = mark.animate(
@@ -1044,6 +1039,11 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     { duration: 900, easing: "cubic-bezier(.22,1,.36,1)", fill: "forwards" }
   );
   spin.finished.then(() => new Promise(r => setTimeout(r, 250))).then(() => {
+    // Cible mesurée à l'arrivée : si la page a été rechargée en défilé, le logo fixe en haut à gauche est visible, sinon le titre du haut de page
+    const scrolled = window.scrollY > 40;
+    const target = document.querySelector(scrolled ? "#brand .brand-mark" : ".brand-inline .brand-mark");
+    const tr = target ? target.getBoundingClientRect() : { left: 48, top: 24, height: 48, width: 48 };
+    const end = { left: tr.left, top: tr.top, w: tr.width };
     const move = mark.animate(
       [{ left: start.left + "px", top: start.top + "px", width: start.w + "px", height: start.w + "px" },
        { left: end.left + "px", top: end.top + "px", width: end.w + "px", height: end.w + "px" }],
