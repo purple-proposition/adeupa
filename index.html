@@ -27,15 +27,12 @@ a{color:inherit;text-decoration:none}
 .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
 
 /* Navigation */
-nav{position:sticky;top:0;z-index:20;background:rgba(249,249,249,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
-.logo{font-weight:800;font-size:17px;letter-spacing:-.02em;padding:6px 10px;border:1px dashed #c4c4c2;border-radius:8px;color:var(--muted)}
-.links{display:flex;gap:22px;font-size:14px;font-weight:500;color:var(--muted)}
-.links a:hover{color:var(--text)}
-.nav-right{margin-left:auto}
-/* CTA de la barre : caché tant que le CTA du hero est visible */
-.nav-cta{opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .35s ease,transform .35s ease}
-.nav-cta.show{opacity:1;transform:none;pointer-events:auto}
+/* Logo et CTA uniques : positionnés par JS entre le hero et la barre du haut */
+#header{position:fixed;top:0;left:0;right:0;height:64px;z-index:20;pointer-events:none;border-bottom:1px solid transparent}
+#brand,#cta{position:fixed;left:0;top:0;z-index:30;will-change:transform}
+#brand{font-weight:800;font-size:17px;letter-spacing:-.02em;padding:6px 10px;border:1px dashed #c4c4c2;border-radius:8px;color:var(--muted);white-space:nowrap}
+.slot{display:block;margin:0 auto}
+#brand-slot{margin-bottom:28px}
 
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:100px;font-size:15px;font-weight:600;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:opacity .15s}
 .btn-dark{background:var(--text);color:var(--bg)}
@@ -166,9 +163,6 @@ h2{font-size:clamp(28px,3.6vw,40px);line-height:1.1;letter-spacing:-.03em;margin
 .faq details p{margin:12px 0 0;color:var(--muted);font-size:15px;max-width:640px}
 
 /* Appel final */
-.cta-band{text-align:center;padding:96px 0}
-.cta-band h2{font-size:clamp(30px,4.2vw,46px)}
-.cta-band p{color:var(--muted);margin:0 0 30px;font-size:17px}
 
 footer{padding:40px 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -193,24 +187,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="logo" href="#">Nom à définir</a>
-    <div class="nav-right">
-      <a class="btn btn-dark nav-cta" href="#">Publier un événement</a>
-    </div>
-  </div>
-</nav>
+<a id="brand" href="#">Nom à définir</a>
+<a id="cta" class="btn btn-dark" href="#">Publier un événement</a>
+<div id="header"></div>
 
 <header class="hero" id="carte">
   <div class="wrap">
+    <div class="slot" id="brand-slot"></div>
     <div class="eyebrow">Près de chez vous</div>
     <h1>Tout ce qui se passe près de chez vous, sur une seule carte.</h1>
     <p class="sub">Sortez sans chercher. Faites voir votre événement là où il se passe, au moment où les gens sont dehors.</p>
-    <div class="ctas">
-      <a class="btn btn-dark" href="#carte">Explorer la carte</a>
-      <a class="btn btn-light" href="#pour-qui">Publier un événement</a>
-    </div>
+    <div class="slot" id="cta-slot"></div>
 
     <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
     <div class="product" id="product" aria-hidden="true">
@@ -309,13 +296,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="k">Particuliers</div>
         <h3>Voyez ce qui se passe autour de vous.</h3>
         <p>Ce soir, demain ou ce week-end : concerts, expositions, marchés, afterworks. Tout est localisé, rien n'est enfoui dans un flux.</p>
-        <a class="link" href="#carte">Ouvrir la carte →</a>
       </div>
       <div class="audience dark">
         <div class="k">Lieux et organisateurs</div>
         <h3>Soyez vu là où ça se passe.</h3>
         <p>Votre événement apparaît à son adresse exacte, avec un halo visible pendant toute sa durée. Une salle, une marque ou une collectivité : un seul endroit pour toucher les gens à proximité.</p>
-        <a class="link" href="#">Publier un événement →</a>
       </div>
     </div>
   </div>
@@ -374,14 +359,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </section>
 
-<section class="cta-band">
-  <div class="wrap">
-    <h2>Votre événement mérite une carte.</h2>
-    <p>Pour les particuliers, les lieux et les organisateurs. Démarrage dans une zone pilote.</p>
-    <a class="btn btn-dark" href="#">Publier un événement</a>
-  </div>
-</section>
-
 <footer>
   <div class="wrap">
     <span>Nom à définir</span>
@@ -391,14 +368,60 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script>
-// Le CTA de la barre n'apparaît qu'une fois le CTA du hero sorti de l'écran
+// Logo et CTA glissent du hero vers la barre du haut pendant le défilement
 (() => {
-  const heroCta = document.querySelector(".hero .ctas");
-  const navCta = document.querySelector(".nav-cta");
-  if (!heroCta || !navCta) return;
-  new IntersectionObserver(([entry]) => {
-    navCta.classList.toggle("show", !entry.isIntersecting);
-  }, { threshold: 0 }).observe(heroCta);
+  const brand = document.getElementById("brand");
+  const cta = document.getElementById("cta");
+  const brandSlot = document.getElementById("brand-slot");
+  const ctaSlot = document.getElementById("cta-slot");
+  const header = document.getElementById("header");
+  const SPAN = 260; // distance de défilement sur laquelle la transition se joue
+  let start = {};   // positions dans le document, au repos dans le hero
+
+  const ease = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function measure() {
+    const b = brand.offsetWidth, bh = brand.offsetHeight;
+    const c = cta.offsetWidth, ch = cta.offsetHeight;
+    brandSlot.style.width = b + "px"; brandSlot.style.height = bh + "px";
+    ctaSlot.style.width = c + "px";  ctaSlot.style.height = ch + "px";
+    const bs = brandSlot.getBoundingClientRect();
+    const cs = ctaSlot.getBoundingClientRect();
+    start = {
+      brand: { x: bs.left, y: bs.top + window.scrollY, w: b, h: bh },
+      cta:   { x: cs.left, y: cs.top + window.scrollY, w: c, h: ch },
+    };
+  }
+
+  function render() {
+    const y = window.scrollY;
+    const p = Math.min(1, Math.max(0, y / SPAN));
+    const e = ease(p);
+    const H = 64;
+    // cible : logo en haut à gauche, CTA en haut à droite
+    const bt = { x: 24, y: (H - start.brand.h) / 2 };
+    const ct = { x: window.innerWidth - 24 - start.cta.w, y: (H - start.cta.h) / 2 };
+    // départ : suit la position du hero, qui remonte avec le défilement
+    const bx = lerp(start.brand.x, bt.x, e), by = lerp(start.brand.y - y, bt.y, e);
+    const cx = lerp(start.cta.x, ct.x, e),   cy = lerp(start.cta.y - y, ct.y, e);
+    brand.style.transform = `translate(${bx}px, ${by}px)`;
+    cta.style.transform = `translate(${cx}px, ${cy}px)`;
+    header.style.background = `rgba(249,249,249,${0.85 * p})`;
+    header.style.backdropFilter = `blur(${12 * p}px)`;
+    header.style.borderBottomColor = `rgba(0,0,0,${0.08 * p})`;
+  }
+
+  let queued = false;
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; render(); });
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => { measure(); render(); });
+  window.addEventListener("load", () => { measure(); render(); });
+  measure(); render();
 })();
 </script>
 <script>
