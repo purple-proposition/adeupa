@@ -518,7 +518,7 @@ const map = new maplibregl.Map({
 });
 
 // Carte simplifiée : on garde l'eau, les grands axes et les noms de quartiers
-const HIDE_SYMBOL = /^(poi_|roadname_minor|roadname_sec|housenumber|waterway_label|watername_)/;
+const HIDE_SYMBOL = /^(poi_|roadname_minor|roadname_sec|housenumber|waterway_label|watername_|place_city|place_capital)/;
 const HIDE_LINE = /^(road_service|road_path|bridge_service|bridge_path|tunnel_service|tunnel_path|aeroway|rail|boundary_)/;
 const HIDE_FILL = /^(building|park_|landuse_residential)/;
 
