@@ -585,7 +585,7 @@ const events = [
     date: "Vendredi 23 octobre", hours: "", address: "50 quai Rambaud, 69002 Lyon",
     desc: "Rave Against Fascism au Sucre." },
   { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-11-08", image: "assets/magic-mardi-ra.png",
-    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18, tickets: 31, interested: 104,
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18, tickets: 34, interested: 104,
     date: "Dim. 8 novembre de 18h à 23h", hours: "", address: "50 quai Rambaud, 69002 Lyon",
     desc: "Membre de l’écurie Ed Banger, Myd cultive depuis son arrivée une élégance décontractée, signe d’une french touch élégante et insolente. Porté par des titres comme The Sun ayant connus un succès mondial, il s’est aussi produit dans les clubs et festivals les plus prestigieux. A ses côtés, Pedro Bertho dont les racines brésiliennes et les rythmes africains façonnent le son qui célèbre la diversité et l’échange culturel." },
   { title: "Set électro au Sucre", image: "assets/illus-1.jpg", lat: 45.76440, lng: 4.83205, status: "live",
@@ -885,7 +885,7 @@ function openCard(title, direct) {
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
-    <button class="interest" type="button" aria-pressed="false"><span>${e.tickets ?? "—"} billet${e.tickets === 1 ? "" : "s"} pris</span><span class="sep" aria-hidden="true">·</span><span><span class="interest-n">${e.interested ?? "—"}</span> intéressé${e.interested === 1 ? "" : "s"}</span></button>`;
+    <button class="interest" type="button" aria-pressed="false"><span>${e.tickets ?? "—"} confirmé${e.tickets === 1 ? "" : "s"}</span><span class="sep" aria-hidden="true">·</span><span><span class="interest-n">${e.interested ?? "—"}</span> intéressé${e.interested === 1 ? "" : "s"}</span></button>`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
   // carte affichée en haut à gauche de la carte
