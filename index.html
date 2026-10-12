@@ -467,6 +467,11 @@ map.on("load", () => {
   map.setPaintProperty("water_shadow", "fill-color", "#dde1e5");
   start();
 });
+// Cadrage fixe sur la zone (presqu'île et lieux ajoutés), recalculé selon la taille de l'écran
+const VIEW_BOUNDS = [[4.8115, 45.7335], [4.8415, 45.7715]];
+function frameView() { map.fitBounds(VIEW_BOUNDS, { padding: 24, animate: false }); }
+map.on("load", frameView);
+window.addEventListener("resize", () => { map.resize(); frameView(); });
 
 // Un point par événement, halo pulsant pour les événements en cours
 map.on("click", () => closeCard());
