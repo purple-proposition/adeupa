@@ -73,8 +73,8 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 /* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
 .cat-chip .cat-btn{opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.22,1,.36,1),background-color .25s ease,color .25s ease;transition-delay:calc(var(--i,0) * 40ms)}
 .cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
-.cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:16px;max-width:min(760px,calc(100% - 32px))}
-.filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:100%}
+.cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:8px;max-width:min(760px,calc(100% - 32px))}
+.filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:100%}
 .filter-label{font-size:12px;font-weight:600;color:var(--muted)}
 .filter-pills{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding:12px 2px;margin:-12px -2px}
 .filter-pills::-webkit-scrollbar{display:none}
