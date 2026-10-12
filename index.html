@@ -781,7 +781,6 @@ const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="
 function filterRow(kind, title, opts, sel) {
   const all = opts;
   return `<div class="filter-row">
-    <span class="filter-label">${title}</span>
     <div class="filter-pills">${all.map((o, i) => {
       const on = sel.has(o.key);
       return `<button type="button" class="cat-btn${on ? " on" : ""}" data-kind="${kind}" data-k="${o.key}" style="--i:${i}">${o.dot ? '<span class="dot"></span>' : ""}${o.icon ? svgIcon(o.icon) : ""}${o.label}</button>`;
