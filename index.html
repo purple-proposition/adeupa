@@ -317,8 +317,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 @media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;filter:none;transition:none}}
 /* Rangée de cartes qui défile seule : même design que la carte d'événement, hauteur fixe */
 .rail{overflow:hidden;padding:8px 0 32px;--fade-in:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));-webkit-mask-image:linear-gradient(to right,transparent var(--fade-in),#000 calc(var(--fade-in) + 96px),#000 calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)));mask-image:linear-gradient(to right,transparent var(--fade-in),#000 calc(var(--fade-in) + 96px),#000 calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)))}
-.rail-track{display:flex;gap:16px;width:max-content;animation:railScroll 56s linear infinite}
-.rail:hover .rail-track{animation-play-state:paused}
+.rail-track{display:flex;gap:16px;padding-right:16px;width:max-content;animation:railScroll 56s linear infinite}
 @keyframes railScroll{to{transform:translateX(-50%)}}
 @keyframes railDesc{0%,20%{transform:translateY(0)}80%,100%{transform:translateY(calc(-100% + 96px))}}
 .rail-card{flex:0 0 288px;height:480px;display:flex;flex-direction:column;background:rgba(255,255,255,.7);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.12);padding:16px;overflow:hidden}
