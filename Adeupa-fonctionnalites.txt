@@ -61,6 +61,8 @@ Carte interactive
   vérifiées, numéros de rue existants).
 - Filtre à trois états avec pastille glissante : Tous / En cours / À venir.
   Largeur fixe, glissement tactile ou à la souris.
+- Code couleur : en cours = noir (points, pastille, boutons de lieu) ;
+  à venir = bleu indigo #4169E1 (points, pastille, boutons de lieu).
 - Compteurs en haut à droite (événements en cours et à venir).
 - Clic sur un point : ouvre la fiche de l'événement ou du lieu.
 - Deuxième clic sur le même point : referme la fiche.
