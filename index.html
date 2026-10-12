@@ -96,6 +96,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard-close{margin-left:auto;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer}
 .ecard-close:hover{background:rgba(0,0,0,.06);color:var(--text)}
 .ecard-close svg{width:16px;height:16px}
+.ecard-cover{display:block;width:calc(100% + 32px);max-width:none;height:auto;aspect-ratio:16 / 9;max-height:240px;object-fit:cover;margin:-16px -16px 16px;border-radius:18px 18px 0 0}
 .ecard h4{font-size:24px;line-height:1.2;margin:8px 0 8px;letter-spacing:-.015em}
 .ecard .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .ecard .meta .line{display:flex;align-items:center;gap:8px}
@@ -648,6 +649,7 @@ function openCard(title) {
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
   ecard.innerHTML = `
+    ${e.image ? `<img class="ecard-cover" src="${e.image}" alt="">` : ""}
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
