@@ -17,8 +17,8 @@
   --text:#171717;
   --muted:#737373;
   --line:#e5e5e5;
-  --dot:#737373;
-  --live:#4169E1;
+  --dot:#4169E1;
+  --live:#171717;
   --radius:24px;
 }
 *{box-sizing:border-box}
@@ -64,6 +64,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:pan-y}
 .seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:12px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
 .seg-pill.live{background:var(--live)}
+.seg-pill.soon{background:var(--dot)}
 .seg-btn{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:8px 16px;border:0;border-radius:12px;background:none;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .3s ease}
 .seg-btn{flex:0 0 136px;width:136px;justify-content:center}
 .seg-btn b{font-weight:800}
@@ -71,6 +72,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .seg-btn.live.on b{color:#fff}
 .seg-btn:not(.on) b{color:var(--text)}
 .seg-btn.live:not(.on) b{color:var(--live)}
+.seg-btn.soon:not(.on) b{color:var(--dot)}
 .seg-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--dot)}
 .seg-btn.live .dot{background:var(--live)}
 .seg-btn.live.on .dot{background:#fff}
@@ -81,7 +83,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .event.hidden{display:none}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:0;box-shadow:none}
 .event.live .pin{background:var(--live)}
-.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);animation:haloBreathe 3.2s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
+.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(10,10,10,.35) 0%,rgba(10,10,10,0) 70%);animation:haloBreathe 3.2s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
 @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
 @keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
 
@@ -154,7 +156,7 @@ h2{font-size:36px;line-height:1.1;letter-spacing:-.03em;margin:0 0 16px;font-wei
 .mini-map{position:relative;height:200px;border-radius:16px;background:var(--soft);overflow:hidden}
 .mini-map .pt{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--dot);border:2px solid #fff;transform:translate(-50%,-50%)}
 .mini-map .pt.live{background:var(--live)}
-.mini-map .ring{position:absolute;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);transform:translate(-50%,-50%);animation:pulse 2.2s ease-out infinite}
+.mini-map .ring{position:absolute;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle,rgba(10,10,10,.35) 0%,rgba(10,10,10,0) 70%);transform:translate(-50%,-50%);animation:pulse 2.2s ease-out infinite}
 
 /* Pour qui */
 .audiences{display:grid;grid-template-columns:1fr 1fr;gap:24px}
@@ -287,6 +289,8 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Page du lieu : boutons du même style que le CTA */
 .venue-counts{display:flex;gap:8px;margin-top:16px}
 .venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fff;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
+.venue-btn.live{background:#171717}
+.venue-btn.live:hover{background:#0a0a0a}
 .venue-btn:hover{background:#3558CC;box-shadow:0 4px 12px rgba(10,10,10,.14)}
 .venue-list{display:flex;flex-direction:column;gap:8px}
 .venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:12px;background:rgba(10,10,10,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
@@ -719,7 +723,7 @@ const SEG = [
 function buildSeg() {
   const box = $("stats");
   box.innerHTML = '<span class="seg-pill"></span>' + SEG.map(o =>
-    `<button type="button" class="seg-btn ${o.f === "live" ? "live" : ""}" data-f="${o.f}">${o.dot ? '<span class="dot"></span>' : ""}${o.label} <b data-n="${o.f}"></b></button>`
+    `<button type="button" class="seg-btn ${o.f === "live" ? "live" : ""} ${o.f === "soon" ? "soon" : ""}" data-f="${o.f}">${o.dot ? '<span class="dot"></span>' : ""}${o.label} <b data-n="${o.f}"></b></button>`
   ).join("");
 }
 function renderStats() {
@@ -735,6 +739,7 @@ function renderStats() {
   const active = box.querySelector(`.seg-btn[data-f="${cur}"]`);
   const pill = box.querySelector(".seg-pill");
   pill.classList.toggle("live", cur === "live");
+  pill.classList.toggle("soon", cur === "soon");
   pill.style.width = active.offsetWidth + "px";
   pill.style.transform = `translateX(${active.offsetLeft}px)`;
 }
@@ -791,7 +796,7 @@ function openVenue(name) {
     <div class="meta"><span class="line">${ICON_PIN}${v.address}</span></div>
     <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
     <div class="venue-counts">
-      <button class="venue-btn" type="button" data-s="live">${live} en cours</button>
+      <button class="venue-btn live" type="button" data-s="live">${live} en cours</button>
       <button class="venue-btn" type="button" data-s="soon">${soon} à venir</button>
     </div>`;
   ecard.style.left = "16px";

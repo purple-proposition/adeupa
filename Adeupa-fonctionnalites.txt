@@ -1,0 +1,152 @@
+ADEUPA : RÉSUMÉ DES FONCTIONNALITÉS
+===================================
+
+Adeupa est une landing page en une seule page, avec une démo interactive
+de carte des événements du centre de Lyon (presqu'île). Elle s'adresse aux
+organisateurs : associations, bars, salles de concert, galeries, collectifs.
+
+Fichiers principaux
+-------------------
+- index.html : la page complète (CSS, JavaScript et démo inclus)
+- demo-lieu.html : fiche démo d'un lieu (Le Sucre)
+- pricing.html : page tarifs détaillée
+- assets/ : photos et illustrations (libres de droits, Wikimedia Commons)
+- logo*.svg, favicon.svg : variantes du logo et icône d'onglet
+- wrangler.jsonc : configuration de déploiement Cloudflare Workers
+
+Logo et identité
+----------------
+- Logo : fleur à six pétales, chaque pétale ouvert par un trou, en forme de
+  repère de carte. Couleur unique : bleu #4169E1.
+- Nom : "Adeupa" (casse Title Case, en bleu dans le titre).
+- Typographie : Manrope, échelle de tailles en multiples de 4
+  (12 légende, 16, 24, 36, 56), ratio 1,5.
+- Espacements et dimensions : multiples de 4.
+- Couleurs de texte et de fond : palette Tailwind neutral (gris).
+- Grille de 12 colonnes, affichable avec la touche G (superposition de
+  contrôle, comme dans 8Beats Studio).
+
+Introduction animée
+-------------------
+- À chaque chargement, la fleur apparaît au centre, tourne, se réduit, puis
+  vole jusqu'à sa place à gauche du titre. Le logo du titre est masqué
+  pendant le vol, pour qu'une seule fleur existe.
+
+Bandeau promotionnel
+--------------------
+- Bandeau bleu en haut de page avec les séparateurs en logo :
+  "Profitez d'un mois gratuit, plus un trimestre offert au lancement".
+- Il défile avec la page (il n'est pas fixe).
+
+Barre d'actions
+---------------
+- Bouton "Me connecter" en haut à droite (non fonctionnel pour l'instant).
+- Bouton unique "Publier mon événement" (bleu, en bas de la section hero
+  quand on est en haut de page).
+- Au défilement, logo et bouton glissent dans les coins supérieurs (logo à
+  gauche, bouton à droite).
+
+Section hero
+------------
+- Titre : "Vos événements deviennent des rendez-vous immanquables pour votre
+  public."
+- Sous-titre qui cible les organisateurs.
+- Carte interactive (MapLibre GL, fond CARTO Positron) au centre de la page.
+
+Carte interactive
+-----------------
+- Vue fixe : pas de zoom ni de déplacement, cadrage sur la presqu'île.
+- Un point par lieu, dont la taille augmente avec le nombre d'événements.
+- Les points sont placés à l'adresse réelle de chaque événement (coordonnées
+  vérifiées, numéros de rue existants).
+- Filtre à trois états avec pastille glissante : Tous / En cours / À venir.
+  Largeur fixe, glissement tactile ou à la souris.
+- Compteurs en haut à droite (événements en cours et à venir).
+- Clic sur un point : ouvre la fiche de l'événement ou du lieu.
+- Deuxième clic sur le même point : referme la fiche.
+- Bouton de fermeture (croix) sur chaque fiche.
+
+Cartes d'événements (fiche sur la carte)
+----------------------------------------
+- Effet verre dépoli, entrée par la gauche avec un léger rebond, animation
+  échelonnée.
+- Image avec un fin contour.
+- Nom de l'organisateur. Sceau vert-bleu à côté du nom, uniquement pour les
+  entreprises.
+- Date et horaires en une phrase, par exemple "Dim. 8 novembre de 18h à
+  23h".
+- Adresse en noir, avec icône d'épingle.
+- Description avec défilement, et fondu seulement si le texte dépasse.
+- Bouton de billetterie, uniquement pour les entreprises.
+- Indication d'âge (icône 18+) quand elle est renseignée.
+- Survol : ombre légère, sans déplacement.
+
+Fiche lieu (Le Sucre)
+---------------------
+- Nom, adresse, description et compteurs cliquables.
+- Chaque compteur filtre la carte sur les événements du lieu.
+- Liste des événements du lieu, classée par ordre chronologique.
+
+Section "Bénéfices"
+-------------------
+Trois avantages : être trouvé au-delà de ses abonnés, apparaître au bon
+endroit et au bon moment, garder son budget (pas de flyers, pas de pub).
+
+Section démo : carrousel
+------------------------
+- Carrousel de cartes d'événements en défilement infini (boucle continue).
+- Badges en haut à droite de l'image : "Mise en avant" (bleu) et "Déjà vu"
+  (gris).
+- Cartes non cliquables, au même design que celles de la carte.
+- Fondu sur les bords à partir de deux colonnes de la grille.
+- Cartes de démo qui glissent avec la page au défilement.
+
+Section FAQ
+-----------
+Quatre questions (gratuité, durée de visibilité, villes, modification) avec
+accordéon : titre à gauche, chevron à droite, animation de type Clover.
+
+Section tarifs
+--------------
+- Particuliers : 0 €, sans bouton.
+- Entreprises et lieux : 29 € par mois (tarif indicatif, à valider) :
+  publication illimitée, badge d'entreprise vérifiée, billetterie intégrée.
+- Bouton "Publier mon événement" dans la carte entreprise.
+
+Section avis
+------------
+Trois emplacements de témoignages, actuellement marqués "Avis de
+démonstration" en attendant de vrais retours d'organisateurs.
+
+Pied de page
+------------
+Mention de copyright.
+
+Données de démonstration
+------------------------
+- 21 événements fictifs mais réalistes, à des adresses réelles de Lyon.
+- Événements du Sucre, Ninkasi Cordeliers, Super5, S.society (lien Shotgun),
+  etc.
+- Coordonnées obtenues par géocodage (Nominatim, OpenStreetMap).
+
+Technique
+---------
+- Un seul fichier HTML (CSS et JavaScript inclus).
+- MapLibre GL 5.24.0 chargé depuis unpkg.
+- Animations : IntersectionObserver (apparitions au défilement), Web
+  Animations API (intro), requestAnimationFrame (carrousel).
+- Déploiement : Cloudflare Workers (static assets) via wrangler.
+- Dépôt GitHub : commits sur la branche principale.
+
+Points non encore fonctionnels ou à valider
+-------------------------------------------
+- Connexion et création de compte : bouton présent, pas de logique.
+- Formulaire de publication d'événement : bouton présent, pas de logique.
+- Paiement et billetterie : affichage uniquement.
+- Affirmations marquées "à vérifier dans le MVP" dans les bénéfices.
+- Prix de 29 € par mois : indicatif, à valider.
+- Avis : emplacements de démonstration, pas de vrais témoignages.
+- Fond de carte CARTO Positron : ses couleurs ne sont pas encore passées
+  sur la palette neutral.
+- Pas de données réelles d'événements : Shotgun et Resident Advisor n'ont
+  pas d'API publique officielle.
