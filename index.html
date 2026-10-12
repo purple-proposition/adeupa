@@ -284,6 +284,12 @@ body{padding-top:40px}
 .promo-track span{display:inline-flex;align-items:center}
 .promo-mark{width:20px;height:20px;margin:0 16px;flex:none}
 @keyframes promoScroll{to{transform:translateX(-50%)}}
+/* Page du lieu */
+.venue-counts{display:flex;gap:8px;margin-top:16px}
+.venue-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:700;background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
+.venue-btn.live{background:#4169E1;color:#fff;box-shadow:none}
+.venue-btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.venue-btn .dot{width:8px;height:8px;border-radius:50%;background:#fff}
 </style>
 </head>
 <body>
@@ -405,6 +411,15 @@ body{padding-top:40px}
 // Données de démo fictives, coordonnées approximatives.
 // type : "ent" (entreprise), "mun" (municipalité), "par" (particulier)
 // Pour les entreprises et municipalités vérifiées, on affiche la billetterie.
+// Fiches des lieux : affichées au clic sur un de leurs événements
+const VENUES = {
+  "Le Sucre": {
+    address: "50 quai Rambaud, Lyon 2e",
+    verified: true,
+    desc: "Le Sucre est ouvert toute l’année, les vendredis, samedis et dimanches, et les mardis gratuitement jusqu'à fin octobre. L’occasion de venir écouter les headliners d’aujourd’hui et de demain, perchés sur le rooftop de la Sucrière.",
+  },
+};
+
 const events = [
   { title: "Soirée au Ninkasi Cordeliers", lat: 45.76295, lng: 4.83782, status: "soon",
     org: { name: "Ninkasi Cordeliers", type: "ent", verified: false }, ticket: false,
@@ -624,6 +639,30 @@ function applyFilter() {
   renderStats();
 }
 
+// Page du lieu : nom, description, adresse et compteurs qui filtrent la carte
+function openVenue(name) {
+  const v = VENUES[name];
+  const live = events.filter(x => x.org.name === name && x.status === "live").length;
+  const soon = events.filter(x => x.org.name === name && x.status === "soon").length;
+  ecard.innerHTML = `
+    <div class="org"><span>${name}</span>${v.verified ? `<span class="seal" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div class="meta"><span class="line">${ICON_PIN}${v.address}</span></div>
+    <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
+    <div class="venue-counts">
+      <button class="venue-btn live" type="button" data-f="live"><span class="dot"></span>${live} en cours</button>
+      <button class="venue-btn" type="button" data-f="soon">${soon} à venir</button>
+    </div>`;
+  ecard.style.left = "16px";
+  ecard.style.top = "16px";
+  ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
+  ecard.querySelectorAll(".venue-btn").forEach(b => b.addEventListener("click", (ev) => { ev.stopPropagation(); pick(b.dataset.f); }));
+  [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
+  const dsc = ecard.querySelector(".desc");
+  dsc.style.maxHeight = "none";
+  ecard.classList.add("show");
+  markers.forEach(m => m.el.classList.toggle("hot", m.e.org.name === name));
+}
+
 // Carte d'événement : ouverte sur le point cliqué
 let openTitle = null;
 function openCard(title) {
@@ -631,6 +670,7 @@ function openCard(title) {
   // (le bouton de fermeture est ajouté dans le gabarit ci-dessous)
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
+  if (VENUES[e.org.name]) return openVenue(e.org.name);
   ecard.innerHTML = `
     ${e.image ? `<div class="ecard-cover-box"><img class="ecard-cover" src="${e.image}" alt=""></div>` : ""}
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
