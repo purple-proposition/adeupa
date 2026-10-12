@@ -208,6 +208,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .steps>*,.audiences>*,.feature>*{grid-column:1 / -1}
   .feature{row-gap:32px}
 }
+/* Carte : colonnes 3 à 10 (huit colonnes), deux colonnes libres de chaque côté */
+.product{width:calc((100% - 11 * var(--grid-gutter)) / 12 * 8 + 7 * var(--grid-gutter));margin-left:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter));margin-right:0}
+@media (max-width:768px){.product{width:100%;margin-left:0}}
 </style>
 </head>
 <body>
