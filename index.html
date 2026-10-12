@@ -343,6 +343,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 #intro svg{width:96px;height:96px;animation:introIn .8s cubic-bezier(.22,1,.36,1) both}
 @keyframes introIn{from{opacity:0;transform:scale(.6) rotate(-30deg)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#intro svg{animation:none}}
+body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibility:hidden}
 /* FAQ : titre à gauche, questions à droite, chevrons */
 .faq-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:24px;align-items:start}
 .faq-title{font-size:clamp(28px,3.6vw,40px);line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:800}
@@ -1031,6 +1032,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
   const size = tr.width;
   const start = { left: innerWidth / 2 - 60, top: innerHeight / 2 - 60, w: 120 };
   const end = { left: tr.left, top: tr.top, w: size };
+  document.body.classList.add("intro-on");
   Object.assign(mark.style, { position: "fixed", left: start.left + "px", top: start.top + "px", width: start.w + "px", height: start.w + "px" });
   const spin = mark.animate(
     [{ transform: "rotate(-220deg) scale(.5)", opacity: 0 }, { transform: "rotate(0deg) scale(1)", opacity: 1 }],
@@ -1043,7 +1045,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
       { duration: 800, easing: "cubic-bezier(.65,0,.35,1)", fill: "forwards" }
     );
     intro.animate([{ backgroundColor: "rgba(250,250,250,1)" }, { backgroundColor: "rgba(250,250,250,0)" }], { duration: 450, delay: 500, fill: "forwards" });
-    move.finished.then(() => intro.remove());
+    move.finished.then(() => { document.body.classList.remove("intro-on"); intro.remove(); });
   });
 })();
 </script>
