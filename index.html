@@ -121,6 +121,9 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .desc-wrap{position:relative}
 .desc-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(250,250,250,0),rgba(250,250,250,.95));opacity:0;transition:opacity .4s ease;pointer-events:none}
 .desc-wrap.fade::after{opacity:1}
+.interest{display:block;width:100%;margin-top:8px;padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.interest:hover{border-color:var(--muted)}
+.interest.on{background:#171717;border-color:#171717;color:#fff}
 .ticket{display:block;margin-top:16px;padding:8px 16px;border-radius:100px;background:#4169E1;color:#fff;font-size:16px;font-weight:700;text-align:center}
 
 /* Curseur fictif et ronds de clic */
@@ -879,13 +882,24 @@ function openCard(title, direct) {
       <span class="line">${ICON_PIN}${e.address}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
-    ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}`;
+    ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
+    <button class="interest" type="button" aria-pressed="false"><span class="interest-n">${e.interested ?? "—"}</span> intéressé${e.interested === 1 ? "" : "s"}</button>`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
   // carte affichée en haut à gauche de la carte
   ecard.style.left = "16px";
   ecard.style.top = "16px";
   ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
+  // Bouton « intéressé » : bascule pour ce visiteur seulement (rien n'est enregistré)
+  const intBtn = ecard.querySelector(".interest");
+  intBtn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const on = intBtn.getAttribute("aria-pressed") !== "true";
+    intBtn.setAttribute("aria-pressed", String(on));
+    intBtn.classList.toggle("on", on);
+    const n = intBtn.querySelector(".interest-n");
+    if (typeof e.interested === "number") { e.interested += on ? 1 : -1; n.textContent = e.interested; intBtn.lastChild.textContent = ` intéressé${e.interested === 1 ? "" : "s"}`; }
+  });
   [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
   // fondu en bas seulement si la description dépasse et peut défiler
   // la carte ne dépasse pas la hauteur de la carte géographique ; le texte n'est rogné qu'en dernier recours
