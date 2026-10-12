@@ -105,7 +105,9 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard .meta svg{width:14px;height:14px;flex:none;color:var(--muted)}
 .ecard .desc{font-size:16px;color:#444;margin:8px 0 0;line-height:1.45;max-height:112px;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
 .ecard .desc::-webkit-scrollbar{display:none}
-.ecard .desc.fade{-webkit-mask-image:linear-gradient(to bottom,#000 65%,transparent);mask-image:linear-gradient(to bottom,#000 65%,transparent)}
+.desc-wrap{position:relative}
+.desc-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(248,248,248,0),rgba(248,248,248,.95));opacity:0;transition:opacity .4s ease;pointer-events:none}
+.desc-wrap.fade::after{opacity:1}
 .ticket{display:block;margin-top:16px;padding:8px 16px;border-radius:100px;background:#4169E1;color:#fff;font-size:16px;font-weight:700;text-align:center}
 
 /* Curseur fictif et ronds de clic */
@@ -600,7 +602,7 @@ function openCard(title) {
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
     </div>
-    <div class="desc">${e.desc}</div>
+    <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
@@ -610,9 +612,10 @@ function openCard(title) {
   ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
   // fondu en bas seulement si la description dépasse et peut défiler
   const dsc = ecard.querySelector(".desc");
+  const dwrap = ecard.querySelector(".desc-wrap");
   if (dsc) {
     // le fondu reste tant qu'il reste du texte à lire en bas
-    const updateFade = () => dsc.classList.toggle("fade", dsc.scrollTop + dsc.clientHeight < dsc.scrollHeight - 4);
+    const updateFade = () => dwrap.classList.toggle("fade", dsc.scrollTop + dsc.clientHeight < dsc.scrollHeight - 4);
     updateFade();
     dsc.addEventListener("scroll", updateFade, { passive: true });
   }
