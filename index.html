@@ -61,6 +61,9 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 /* Compteur et filtre, en haut à droite */
 .cat-chip{left:16px;bottom:16px;right:16px;display:flex;gap:4px;padding:4px;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 32px);pointer-events:auto}
 .cat-chip::-webkit-scrollbar{display:none}
+.cat-demo{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:32px}
+.cat-demo .cat-btn{border:1px solid var(--line);background:var(--surface);padding:8px 16px;font-size:16px;color:var(--text)}
+.cat-demo .cat-btn.on{background:var(--text);border-color:var(--text);color:#fff}
 .cat-btn{flex:none;padding:8px 12px;border:0;border-radius:100px;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
 .cat-btn.on{background:var(--text);color:#fff}
@@ -498,6 +501,23 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
   </div>
 </section>
 
+<section id="categories">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Trouvez tout de suite ce qui vous correspond.</h2>
+      <p class="lead">Chaque événement est classé par type : musique, culture, sport, brocante, fête ou atelier. Un clic sur une catégorie ne garde que les événements qui vous intéressent, et se combine avec le filtre en cours ou à venir.</p>
+    </div>
+    <div class="cat-demo" data-reveal>
+      <button type="button" class="cat-btn on">Toutes</button>
+      <button type="button" class="cat-btn">Musique</button>
+      <button type="button" class="cat-btn">Culture</button>
+      <button type="button" class="cat-btn">Sport</button>
+      <button type="button" class="cat-btn">Brocante</button>
+      <button type="button" class="cat-btn">Fête</button>
+      <button type="button" class="cat-btn">Atelier</button>
+    </div>
+  </div>
+</section>
 <section id="faq">
   <div class="wrap faq-layout">
     <h2 class="faq-title">Questions fréquentes</h2>
