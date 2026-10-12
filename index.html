@@ -52,7 +52,8 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 .float{position:absolute;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.1)}
 
 /* Compteur et filtre, en haut à droite */
-.stats-chip{top:16px;right:16px;padding:5px;display:flex;gap:4px}
+.stats-chip{top:16px;right:16px;padding:5px;display:flex;gap:4px;pointer-events:auto}
+.stats-chip [data-f]{cursor:pointer}
 .seg span{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 12px;border-radius:12px;color:var(--muted);transition:background .25s,color .25s}
 .seg span b{font-weight:800;color:var(--text)}
 .seg span.live b{color:var(--live)}
@@ -77,7 +78,8 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 .org{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;flex-wrap:wrap}
 .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap}
 .badge{display:inline-flex;align-items:center;gap:4px}
-.badge svg{width:14px;height:14px;flex:none}
+.seal{display:inline-flex}
+.seal svg{width:16px;height:16px;display:block}
 .badge.ent{background:#e3f7ea;color:#15803d}
 .badge.mun{background:#e3efff;color:#1f5fbf}
 .badge.par{background:#ececec;color:#6b6b6b}
@@ -490,7 +492,6 @@ const ICON_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
 
 const BADGES = {
-  ent: { cls: "ent", label: "Entreprise · vérifiée", icon: SEAL },
   mun: { cls: "mun", label: "Municipalité · vérifiée" }
   // Particulier : pas de badge. Il publie sous prénom et nom ; un nom d'entreprise passe par l'offre payante.
 };
@@ -503,6 +504,16 @@ function renderStats() {
     <span class="live ${filter === "live" ? "on" : ""}" data-f="live"><span class="dot"></span>En cours <b>${live}</b></span>
     <span class="${filter === "soon" ? "on" : ""}" data-f="soon">À venir <b>${soon}</b></span>`;
 }
+
+// Bascule : cliquer sur un filtre actif revient à tout afficher
+function toggleFilter(f) {
+  filter = filter === f ? null : f;
+  applyFilter();
+}
+$("stats").addEventListener("click", e => {
+  const btn = e.target.closest("[data-f]");
+  if (btn) toggleFilter(btn.dataset.f);
+});
 
 // Filtre : on masque les points qui ne correspondent pas
 function applyFilter() {
@@ -519,7 +530,7 @@ function openCard(title) {
   const e = m.e;
   const b = BADGES[e.org.type]; // undefined pour un particulier
   ecard.innerHTML = `
-    <div class="org"><span>${e.org.name}</span>${b ? `<span class="badge ${b.cls}">${b.icon || ""}${b.label}</span>` : ""}</div>
+    <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}${b ? `<span class="badge ${b.cls}">${b.label}</span>` : ""}</div>
     <h4>${e.title}</h4>
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
