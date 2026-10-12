@@ -649,9 +649,23 @@ window.addEventListener("resize", () => renderStats());
 
 // Filtre : on masque les points qui ne correspondent pas
 function applyFilter() {
+  // un point par lieu : les autres événements du même lieu sont masqués derrière lui
+  const groups = new Map();
   markers.forEach(m => {
-    const match = !filter || m.e.status === filter;
-    m.el.classList.toggle("hidden", !match);
+    const k = m.e.lat + "," + m.e.lng;
+    if (!groups.has(k)) groups.set(k, []);
+    groups.get(k).push(m);
+  });
+  groups.forEach(list => {
+    const visible = list.filter(m => !filter || m.e.status === filter);
+    list.forEach((m, i) => { if (i > 0) m.el.classList.add("hidden"); });
+    const leader = list[0];
+    leader.el.classList.toggle("hidden", visible.length === 0);
+    const size = 12 + 4 * Math.min(Math.max(visible.length - 1, 0), 5);
+    leader.el.style.width = size + "px";
+    leader.el.style.height = size + "px";
+    leader.el.classList.toggle("live", visible.some(m => m.e.status === "live"));
+    leader.el.classList.toggle("soon", !visible.some(m => m.e.status === "live"));
   });
   renderStats();
 }
@@ -712,6 +726,10 @@ function openCard(title, direct) {
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
   if (!direct && VENUES[e.org.name]) return openVenue(e.org.name);
+  const place = events.filter(x => x.lat === e.lat && x.lng === e.lng);
+  if (!direct && place.length > 1) {
+    return openVenueList(e.org.name, null, place.slice().sort((x, y) => new Date(x.start || 0) - new Date(y.start || 0)));
+  }
   ecard.innerHTML = `
     ${e.image ? `<div class="ecard-cover-box"><img class="ecard-cover" src="${e.image}" alt=""></div>` : ""}
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
