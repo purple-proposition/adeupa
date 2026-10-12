@@ -41,39 +41,57 @@ nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
 
 /* Hero */
 .hero{padding:88px 0 56px;text-align:center}
-.eyebrow{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-bottom:18px}
+.eyebrow{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:18px}
 h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;margin:0 auto 20px;max-width:860px;font-weight:800}
 .sub{font-size:19px;color:var(--muted);max-width:580px;margin:0 auto 32px}
 .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-/* Capture produit : la carte */
-.product{position:relative;height:min(64vh,600px);border-radius:var(--radius);overflow:hidden;background:var(--soft);box-shadow:0 30px 80px -30px rgba(0,0,0,.25),0 0 0 1px var(--line);margin-top:56px}
+/* Démo produit en boucle : non interactive */
+.product{position:relative;height:min(64vh,600px);border-radius:var(--radius);overflow:hidden;background:var(--soft);box-shadow:0 30px 80px -30px rgba(0,0,0,.25),0 0 0 1px var(--line);margin-top:56px;pointer-events:none;user-select:none;text-align:left}
 #map{position:absolute;inset:0}
 .float{position:absolute;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.1)}
-.stats-chip{top:16px;left:16px;padding:12px 16px;font-size:14px;font-weight:500}
+.stats-chip{top:16px;left:16px;padding:12px 16px;font-size:14px;font-weight:500;transition:opacity .4s}
 .stats-chip .live{color:var(--live);font-weight:700}
 .stats-chip b{font-weight:700}
 .stats-chip small{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-weight:500}
 .list-chip{top:88px;left:16px;bottom:16px;width:300px;padding:14px;display:flex;flex-direction:column;gap:8px}
-.list-chip h3{margin:0 0 4px;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.list-scroll{overflow-y:auto;display:flex;flex-direction:column;gap:6px}
-.ev{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:var(--soft)}
+.list-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.list-chip h3{margin:0;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.filters{display:flex;gap:4px;background:var(--soft);border-radius:100px;padding:3px}
+.filters span{font-size:11px;font-weight:600;padding:4px 9px;border-radius:100px;color:var(--muted);transition:background .25s,color .25s}
+.filters span.on{background:var(--text);color:var(--bg)}
+.list-scroll{overflow:hidden;display:flex;flex-direction:column;gap:6px;position:relative}
+.ev{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:var(--soft);transition:background .3s,transform .3s,opacity .3s}
+.ev.hl{background:#fff;box-shadow:0 0 0 2px var(--text)}
 .ev .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);flex:none}
 .ev.live .dot{background:var(--live)}
 .ev .txt{min-width:0;flex:1}
 .ev .t{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ev .m{font-size:12px;color:var(--muted)}
+.ev.out{opacity:0;transform:translateY(-4px);height:0;padding:0;margin:-3px 0}
 .empty{font-size:13px;color:var(--muted)}
 
 /* Points et halos */
-.event{position:relative;width:12px;height:12px;cursor:pointer}
+.event{position:relative;width:12px;height:12px;transition:transform .35s}
+.event.hot{transform:scale(1.6)}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .event.live .pin{background:var(--live)}
 .halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,107,.5) 0%,rgba(255,59,107,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
 @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
-.maplibregl-popup-content{border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
 
-/* Sections de fonctionnalités */
+/* Curseur fictif et infobulle */
+.cursor{position:absolute;left:0;top:0;z-index:9;width:22px;height:22px;pointer-events:none;opacity:0;transition:opacity .4s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.cursor svg{display:block;width:22px;height:22px}
+.cursor.down svg{transform:scale(.85);transform-origin:top left;transition:transform .12s}
+.ripple{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid var(--text);pointer-events:none;opacity:0}
+.ripple.go{animation:ripple .6s ease-out forwards}
+@keyframes ripple{0%{transform:scale(.3);opacity:.6}100%{transform:scale(1.6);opacity:0}}
+.tip{position:absolute;z-index:7;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.15);font-size:13px;white-space:nowrap;opacity:0;transform:translate(-50%,-100%) translateY(-14px);transition:opacity .3s,transform .3s;pointer-events:none}
+.tip.show{opacity:1;transform:translate(-50%,-100%) translateY(-18px)}
+.tip b{display:block;font-size:14px}
+.tip span{color:var(--muted)}
+
+/* Sections */
 section{padding:88px 0;border-top:1px solid var(--line)}
 .section-head{text-align:center;max-width:680px;margin:0 auto 52px}
 .section-head .k{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px}
@@ -133,7 +151,7 @@ h2{font-size:clamp(28px,3.6vw,40px);line-height:1.1;letter-spacing:-.03em;margin
 .faq details:first-child{border-top:1px solid var(--line)}
 .faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:17px;font-weight:700}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-size:22px;font-weight:500;color:var(--muted);transition:transform .2s}
+.faq summary::after{content:"+";font-size:22px;font-weight:500;color:var(--muted)}
 .faq details[open] summary::after{content:"–"}
 .faq details p{margin:12px 0 0;color:var(--muted);font-size:15px;max-width:640px}
 
@@ -159,6 +177,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .stats-chip{top:12px;left:12px;right:12px}
   .audience{padding:28px}
 }
+@media (prefers-reduced-motion: reduce){
+  .halo,.mini-map .ring{animation:none;opacity:.6}
+}
 </style>
 </head>
 <body>
@@ -180,20 +201,33 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <header class="hero" id="carte">
   <div class="wrap">
-    <div class="eyebrow">Lyon · Presqu'île, pour l'instant</div>
-    <h1>Tout ce qui se passe à Lyon, sur une seule carte.</h1>
+    <div class="eyebrow">Près de chez vous</div>
+    <h1>Tout ce qui se passe près de chez vous, sur une seule carte.</h1>
     <p class="sub">Sortez sans chercher. Faites voir votre événement là où il se passe, au moment où les gens sont dehors.</p>
     <div class="ctas">
       <a class="btn btn-dark" href="#carte">Explorer la carte</a>
       <a class="btn btn-light" href="#pour-qui">Publier un événement</a>
     </div>
 
-    <div class="product">
+    <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
+    <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
       <div class="float stats-chip" id="stats"></div>
       <div class="float list-chip">
-        <h3>Dans cette zone</h3>
+        <div class="list-head">
+          <h3>Dans cette zone</h3>
+          <div class="filters" id="filters">
+            <span data-f="all" class="on">Tous</span>
+            <span data-f="live">En cours</span>
+            <span data-f="soon">À venir</span>
+          </div>
+        </div>
         <div class="list-scroll" id="list"></div>
+      </div>
+      <div class="tip" id="tip"></div>
+      <div class="ripple" id="ripple"></div>
+      <div class="cursor" id="cursor">
+        <svg viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.6L16 21l-3.2 1.3-3.6-8L4 17z" fill="#1a1a1a" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
       </div>
     </div>
   </div>
@@ -337,8 +371,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <p>Pendant toute sa durée, puis il passe dans la liste des événements à venir ou disparaît une fois terminé.</p>
       </details>
       <details>
-        <summary>Pourquoi seulement la presqu'île de Lyon ?</summary>
-        <p>On démarre sur un périmètre restreint pour que chaque zone soit vraiment active. Les autres quartiers suivront.</p>
+        <summary>Dans quelles villes est-ce disponible ?</summary>
+        <p>On démarre dans une zone pilote pour que chaque quartier soit vraiment actif. D'autres villes et quartiers suivront.</p>
       </details>
       <details>
         <summary>Puis-je modifier un événement après l'avoir publié ?</summary>
@@ -351,14 +385,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section class="cta-band">
   <div class="wrap">
     <h2>Votre événement mérite une carte.</h2>
-    <p>Pour les particuliers, les lieux et les organisateurs. Démarrage sur la presqu'île de Lyon.</p>
+    <p>Pour les particuliers, les lieux et les organisateurs. Démarrage dans une zone pilote.</p>
     <a class="btn btn-dark" href="#">Publier un événement</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <span>Nom à définir · Lyon</span>
+    <span>Nom à définir</span>
     <span>Données de démonstration</span>
   </div>
 </footer>
@@ -377,14 +411,17 @@ const events = [
   { title: "Brunch vinyles", place: "Cordeliers", lat: 45.7625, lng: 4.8345, time: "dimanche 11h", status: "soon" }
 ];
 
+const START = { center: [4.8318, 45.7575], zoom: 14.2 };
+const CROIX_ROUSSE = { center: [4.8300, 45.7690], zoom: 14.6 };
+
+// Carte non interactive : elle ne fait que tourner la démo
 const map = new maplibregl.Map({
   container: "map",
   style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-  center: [4.8318, 45.7575],
-  zoom: 14.2,
+  ...START,
+  interactive: false,
   attributionControl: { compact: true }
 });
-map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
 
 // Carte simplifiée : on garde l'eau, les grands axes et les noms de quartiers
 const HIDE_SYMBOL = /^(poi_|roadname_minor|roadname_sec|housenumber|waterway_label|watername_)/;
@@ -401,39 +438,41 @@ map.on("load", () => {
   map.setPaintProperty("water", "fill-color", "#dde1e5");
   map.setPaintProperty("waterway", "line-color", "#dde1e5");
   map.setPaintProperty("water_shadow", "fill-color", "#dde1e5");
-  render();
+  start();
 });
 
 // Un point par événement, halo pulsant pour les événements en cours
-events.forEach(e => {
+const markers = events.map(e => {
   const isLive = e.status === "live";
   const el = document.createElement("div");
   el.className = `event ${isLive ? "live" : ""}`;
   el.innerHTML = `${isLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
-
-  new maplibregl.Marker({ element: el })
-    .setLngLat([e.lng, e.lat])
-    .setPopup(new maplibregl.Popup({ offset: 12 }).setHTML(`<strong>${e.title}</strong><br>${e.place}<br>${e.time}`))
-    .addTo(map);
+  const marker = new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
+  return { e, el, marker };
 });
 
-// Compte et liste les événements visibles dans la zone affichée
-function render() {
+const $ = id => document.getElementById(id);
+const product = $("product");
+const cursor = $("cursor");
+const ripple = $("ripple");
+const tip = $("tip");
+let filter = "all";
+
+// Liste et compteur : filtrés par le mode courant et la zone visible
+function render(highlight) {
   const bounds = map.getBounds();
   const visible = events.filter(e => bounds.contains([e.lng, e.lat]));
   const live = visible.filter(e => e.status === "live");
   const soon = visible.filter(e => e.status === "soon");
 
-  document.getElementById("stats").innerHTML =
+  $("stats").innerHTML =
     `<span class="live">${live.length} en cours</span> · <b>${soon.length}</b> à venir<small>dans la zone affichée</small>`;
 
-  const list = document.getElementById("list");
-  if (visible.length === 0) {
-    list.innerHTML = `<div class="empty">Aucun événement ici. Déplacez la carte.</div>`;
-    return;
-  }
-  list.innerHTML = [...live, ...soon].map(e => `
-    <div class="ev ${e.status}">
+  const shown = [...live, ...soon].filter(e => filter === "all" || e.status === filter);
+  $("list").innerHTML = shown.length === 0
+    ? `<div class="empty">Aucun événement ici.</div>`
+    : shown.map(e => `
+    <div class="ev ${e.status} ${highlight === e.title ? "hl" : ""}" data-t="${e.title}">
       <span class="dot"></span>
       <div class="txt">
         <div class="t">${e.title}</div>
@@ -442,7 +481,135 @@ function render() {
     </div>`).join("");
 }
 
-map.on("moveend", render);
+// Positions en pixels relatives à la démo
+function rel(el) {
+  const p = product.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  return { x: r.left - p.left + r.width / 2, y: r.top - p.top + r.height / 2 };
+}
+function markerPos(title) {
+  const m = markers.find(m => m.e.title === title);
+  return rel(m.el);
+}
+function listPos(title) {
+  const el = document.querySelector(`.ev[data-t="${title}"]`);
+  return el ? rel(el) : { x: 150, y: 200 };
+}
+function chipPos(f) {
+  return rel(document.querySelector(`#filters [data-f="${f}"]`));
+}
+
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+async function moveTo(p, ms = 900) {
+  cursor.style.transition = `transform ${ms}ms cubic-bezier(.65,0,.35,1), opacity .4s`;
+  cursor.style.transform = `translate(${p.x}px, ${p.y}px)`;
+  cursor.style.opacity = 1;
+  await wait(ms + 80);
+}
+
+async function click(p) {
+  ripple.style.left = p.x + "px";
+  ripple.style.top = p.y + "px";
+  ripple.classList.remove("go");
+  void ripple.offsetWidth;
+  ripple.classList.add("go");
+  cursor.classList.add("down");
+  await wait(140);
+  cursor.classList.remove("down");
+  await wait(260);
+}
+
+function showTip(title) {
+  const m = markers.find(m => m.e.title === title);
+  const p = rel(m.el);
+  tip.innerHTML = `<b>${m.e.title}</b><span>${m.e.place} · ${m.e.time}</span>`;
+  tip.style.left = p.x + "px";
+  tip.style.top = p.y + "px";
+  tip.classList.add("show");
+  m.el.classList.add("hot");
+}
+function hideTip() {
+  tip.classList.remove("show");
+  markers.forEach(m => m.el.classList.remove("hot"));
+}
+
+function setFilter(f) {
+  filter = f;
+  document.querySelectorAll("#filters span").forEach(s => s.classList.toggle("on", s.dataset.f === f));
+  render();
+}
+
+function resetDemo() {
+  filter = "all";
+  hideTip();
+  render();
+  map.jumpTo(START);
+  cursor.style.transition = "none";
+  cursor.style.opacity = 0;
+  cursor.style.transform = "translate(-40px, 380px)";
+}
+
+// Scénario en boucle
+async function loop() {
+  while (true) {
+    resetDemo();
+    await wait(900);
+
+    // 1. Le curseur arrive sur un événement en cours
+    await moveTo(markerPos("Expo photo en plein air"));
+    await click(markerPos("Expo photo en plein air"));
+    showTip("Expo photo en plein air");
+    await wait(1700);
+
+    // 2. Il sélectionne l'événement dans la liste
+    const item = listPos("Expo photo en plein air");
+    await moveTo(item, 800);
+    await click(item);
+    render("Expo photo en plein air");
+    await wait(900);
+    hideTip();
+
+    // 3. Il filtre sur les événements en cours, puis revient à tous
+    await moveTo(chipPos("live"), 800);
+    await click(chipPos("live"));
+    setFilter("live");
+    await wait(1400);
+    await moveTo(chipPos("all"), 700);
+    await click(chipPos("all"));
+    setFilter("all");
+    await wait(700);
+
+    // 4. La carte se déplace vers la Croix-Rousse, le curseur suit
+    await moveTo({ x: product.clientWidth * 0.5, y: product.clientHeight * 0.2 }, 600);
+    await wait(200);
+    map.easeTo({ ...CROIX_ROUSSE, duration: 2200 });
+    await wait(2300);
+    render();
+    const target = markerPos("Atelier street art");
+    await moveTo(target, 1000);
+    await click(target);
+    showTip("Atelier street art");
+    await wait(1700);
+    hideTip();
+
+    // 5. Retour au point de départ, pause, puis on recommence
+    await moveTo({ x: product.clientWidth - 40, y: product.clientHeight - 40 }, 800);
+    cursor.style.opacity = 0;
+    map.easeTo({ ...START, duration: 1800 });
+    await wait(2200);
+  }
+}
+
+function start() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    render();
+    return;
+  }
+  map.on("moveend", () => render());
+  render();
+  loop();
+}
 </script>
 </body>
 </html>
