@@ -372,10 +372,10 @@ const events = [
     org: { name: "Super5", type: "ent", verified: false }, ticket: false,
     date: "À confirmer", hours: "À confirmer", address: "2 rue de Savy, Lyon 1er",
     desc: "Soirée à confirmer." },
-  { title: "Magic Mardi", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi-ra.png",
-    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, minAge: 18,
-    date: "Mardi", hours: "19h – 1h", address: "50 quai Rambaud, Lyon 2e",
-    desc: "Soirée du mardi au Sucre, réservée aux 18 ans et plus." },
+  { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi-ra.png",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://fr.ra.co/events/2556932", minAge: 18,
+    date: "Dim. 8 nov.", hours: "18h – lun. 23h", address: "50 quai Rambaud, Lyon 2e",
+    desc: "Myd, membre de l'écurie Ed Banger, et Pedro Bertho, dont les rythmes africains et les racines brésiliennes célèbrent la diversité et l'échange culturel. House." },
   { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
     org: { name: "Club Le Rivage", type: "ent", verified: true }, ticket: true,
     date: "Samedi 17 oct.", hours: "23h – 2h", address: "Quai Saint-Antoine, Lyon 2e",
@@ -599,7 +599,7 @@ function openCard(title) {
       ${e.minAge ? `<span class="line">${ICON_AGE}Réservé aux ${e.minAge} ans et plus</span>` : ""}
     </div>
     <div class="desc">${e.desc}</div>
-    ${e.ticket ? '<span class="ticket">Billetterie</span>' : ""}`;
+    ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
   // carte affichée en haut à gauche de la carte
