@@ -611,14 +611,9 @@ function openCard(title) {
     ${e.ticket ? '<span class="ticket">Billetterie</span>' : ""}`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
-  // carte près du point cliqué, à l'intérieur de la carte
-  const p = rel(m.el);
-  const w = ecard.offsetWidth, h = ecard.offsetHeight;
-  const W = product.clientWidth, H = product.clientHeight;
-  const left = p.x > W / 2 ? p.x - 26 - w : p.x + 26;
-  const top = Math.min(Math.max(p.y - h / 2, 12), H - h - 12);
-  ecard.style.left = Math.max(12, left) + "px";
-  ecard.style.top = top + "px";
+  // carte affichée en haut à gauche de la carte
+  ecard.style.left = "16px";
+  ecard.style.top = "16px";
   ecard.classList.add("show");
   m.el.classList.add("hot");
 }
