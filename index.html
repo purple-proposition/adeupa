@@ -232,6 +232,16 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
   .steps>*,.audiences>*,.feature>*{grid-column:1 / -1}
 }
 .note-src{font-size:12px;color:var(--muted);max-width:640px;margin:16px auto 0}
+/* Survol : tous les boutons */
+.btn,.ticket,.seg-btn,.link,.ecard-close{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .2s ease}
+.btn:hover,.ticket:hover{transform:translateY(-1px)}
+.btn-dark:hover,.btn-light:hover{opacity:1}
+.btn-dark:hover{background:#2a2a2a}
+.btn-light:hover{background:var(--soft)}
+#cta:hover{background:rgba(54,88,204,.95)}
+.ticket:hover{background:#3558CC}
+.seg-btn:hover:not(.on){color:var(--text)}
+.link:hover{opacity:.7}
 </style>
 </head>
 <body>
