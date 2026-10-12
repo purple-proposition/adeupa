@@ -393,23 +393,30 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     };
   }
 
+  // Chaque élément suit la page tant qu'il est visible, puis glisse dans son coin
+  const docked = { brand: false, cta: false };
+  function place(el, key, st, target, y) {
+    const out = st.y - y + st.h < 0;            // emplacement d'origine sorti de l'écran
+    if (out && !docked[key]) {
+      docked[key] = true;
+      el.style.transition = "none";
+      el.style.transform = `translate(${target.x}px, ${-st.h - 16}px)`;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        el.style.transition = "transform .45s cubic-bezier(.22,1,.36,1)";
+        el.style.transform = `translate(${target.x}px, ${target.y}px)`;
+      }));
+    } else if (out) {
+      el.style.transform = `translate(${target.x}px, ${target.y}px)`;
+    } else {
+      docked[key] = false;
+      el.style.transition = "none";
+      el.style.transform = `translate(${st.x}px, ${st.y - y}px)`;
+    }
+  }
   function render() {
-    const y = window.scrollY;
-    const H = 64;
-    // cible : logo en haut à gauche, CTA en haut à droite
-    const bt = { x: 24, y: (H - start.brand.h) / 2 };
-    const ct = { x: window.innerWidth - 24 - start.cta.w, y: (H - start.cta.h) / 2 };
-    // fixes pendant le défilement, puis glissent vers les coins
-    // la transition ne part que quand l'emplacement d'origine est sorti de l'écran
-    const T0 = start.cta.y + start.cta.h;
-    // distance de défilement proportionnelle à la hauteur de l'écran
-    const span = Math.max(1, Math.round(window.innerHeight * 0.4));
-    const p = Math.min(1, Math.max(0, (y - T0) / span));
-    const e = ease(p);
-    const bx = lerp(start.brand.x, bt.x, e), by = lerp(start.brand.y, bt.y, e);
-    const cx = lerp(start.cta.x, ct.x, e),   cy = lerp(start.cta.y, ct.y, e);
-    brand.style.transform = `translate(${bx}px, ${by}px)`;
-    cta.style.transform = `translate(${cx}px, ${cy}px)`;
+    const y = window.scrollY, H = 64;
+    place(brand, "brand", start.brand, { x: 24, y: (H - start.brand.h) / 2 }, y);
+    place(cta, "cta", start.cta, { x: window.innerWidth - 24 - start.cta.w, y: (H - start.cta.h) / 2 }, y);
   }
 
   let queued = false;
