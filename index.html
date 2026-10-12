@@ -65,7 +65,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:12px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
 .seg-pill.live{background:var(--live)}
 .seg-btn{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:8px 16px;border:0;border-radius:12px;background:none;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .3s ease}
-.seg-btn{min-width:136px;justify-content:center}
+.seg-btn{flex:0 0 136px;width:136px;justify-content:center}
 .seg-btn b{font-weight:800}
 .seg-btn.on{color:var(--bg)}
 .seg-btn.live.on b{color:#fff}
@@ -510,59 +510,59 @@ const events = [
     desc: "Membre de l’écurie Ed Banger, Myd cultive depuis son arrivée une élégance décontractée, signe d’une french touch élégante et insolente. Porté par des titres comme The Sun ayant connus un succès mondial, il s’est aussi produit dans les clubs et festivals les plus prestigieux. A ses côtés, Pedro Bertho dont les racines brésiliennes et les rythmes africains façonnent le son qui célèbre la diversité et l’échange culturel." },
   { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
     org: { name: "Club Le Rivage", type: "ent", verified: true }, ticket: true,
-    date: "Samedi 17 oct.", hours: "23h – 2h", address: "Quai Saint-Antoine, Lyon 2e",
+    date: "Samedi 17 oct.", hours: "de 23h à 2h", address: "Quai Saint-Antoine, Lyon 2e",
     desc: "Une nuit de sets électro sur les quais, en plein air." },
   { title: "Expo photo en plein air", lat: 45.7677, lng: 4.8337, status: "live",
     org: { name: "Galerie Nord Sud", type: "ent", verified: true }, ticket: true,
-    date: "Jusqu'au 31 oct.", hours: "10h – 22h", address: "Place des Terreaux, Lyon 1er",
+    date: "Jusqu'au 31 oct.", hours: "de 10h à 22h", address: "Place des Terreaux, Lyon 1er",
     desc: "Vingt tirages grand format exposés sous les arcades." },
   { title: "Marché nocturne", lat: 45.7578, lng: 4.8320, status: "soon",
     org: { name: "Mairie de quartier", type: "mun", verified: true }, ticket: false,
-    date: "Demain", hours: "18h – 23h", address: "Place Bellecour, Lyon 2e",
+    date: "Demain", hours: "de 18h à 23h", address: "Place Bellecour, Lyon 2e",
     desc: "Producteurs locaux, street food et musique live." },
   { title: "Lecture de poésie", lat: 45.7643, lng: 4.8352, status: "soon",
     org: { name: "Claire Martin", type: "par", verified: false }, ticket: false,
-    date: "Demain", hours: "20h – 21h30", address: "Place des Cordeliers, Lyon 2e",
+    date: "Demain", hours: "de 20h à 21h30", address: "Place des Cordeliers, Lyon 2e",
     desc: "Lecture informelle, entrée libre, apportez votre chaise." },
   { title: "Concert jazz", lat: 45.7530, lng: 4.8270, status: "soon",
     org: { name: "Jazz à Ainay", type: "ent", verified: true }, ticket: true,
-    date: "Samedi 17 oct.", hours: "21h – 23h", address: "Quartier Ainay, Lyon 2e",
+    date: "Samedi 17 oct.", hours: "de 21h à 23h", address: "Quartier Ainay, Lyon 2e",
     desc: "Trio jazz dans une cour pavée, deux sets." },
   { title: "Atelier street art", lat: 45.7700, lng: 4.8290, status: "live",
     org: { name: "Hugo Dubois", type: "par", verified: false }, ticket: false,
-    date: "Ce soir", hours: "19h – 21h", address: "Pentes de la Croix-Rousse, Lyon 1er",
+    date: "Ce soir", hours: "de 19h à 21h", address: "Pentes de la Croix-Rousse, Lyon 1er",
     desc: "Initiation au pochoir, matériel fourni." },
   { title: "DJ set rooftop", lat: 45.7590, lng: 4.8302, status: "soon",
     org: { name: "Léa Fontaine", type: "par", verified: false }, ticket: false,
-    date: "Ce soir", hours: "23h – 1h", address: "Presqu'île Sud, Lyon 2e",
+    date: "Ce soir", hours: "de 23h à 1h", address: "Presqu'île Sud, Lyon 2e",
     desc: "Set house sur un toit, places limitées." },
   { title: "Brunch vinyles", lat: 45.7625, lng: 4.8345, status: "soon",
     org: { name: "Tom Lefèvre", type: "par", verified: false }, ticket: false,
-    date: "Dimanche 18 oct.", hours: "11h – 15h", address: "Cordeliers, Lyon 2e",
+    date: "Dimanche 18 oct.", hours: "de 11h à 15h", address: "Cordeliers, Lyon 2e",
     desc: "Brunch et écoute de vinyles entre voisins." },
   { title: "Apéro jazz au Rhône", lat: 45.7594, lng: 4.8267, status: "live",
     org: { name: "Quai Jazz Club", type: "ent", verified: true }, ticket: true,
-    date: "Ce soir", hours: "18h – 22h", address: "Quai Fulchiron, Lyon 5e",
+    date: "Ce soir", hours: "de 18h à 22h", address: "Quai Fulchiron, Lyon 5e",
     desc: "Set jazz en terrasse au bord du fleuve." },
   { title: "Projection en plein air", lat: 45.7662, lng: 4.8316, status: "live",
     org: { name: "Ciné Presqu'île", type: "ent", verified: true }, ticket: true,
-    date: "Ce soir", hours: "21h – 23h30", address: "Place des Célestins, Lyon 2e",
+    date: "Ce soir", hours: "de 21h à 23h30", address: "Place des Célestins, Lyon 2e",
     desc: "Film projeté sur grand écran, couvertures fournies." },
   { title: "Cours de yoga", lat: 45.7615, lng: 4.8277, status: "live",
     org: { name: "Sara Mendes", type: "par", verified: false }, ticket: false,
-    date: "Ce soir", hours: "19h – 20h", address: "Quai Saint-Antoine, Lyon 2e",
+    date: "Ce soir", hours: "de 19h à 20h", address: "Quai Saint-Antoine, Lyon 2e",
     desc: "Séance en extérieur, tapis à apporter." },
   { title: "Lecture des vins", lat: 45.7560, lng: 4.8350, status: "soon",
     org: { name: "Cave des Cordeliers", type: "ent", verified: true }, ticket: true,
-    date: "Vendredi 16 oct.", hours: "19h – 21h", address: "Rue Sainte-Hélène, Lyon 2e",
+    date: "Vendredi 16 oct.", hours: "de 19h à 21h", address: "Rue Sainte-Hélène, Lyon 2e",
     desc: "Dégustation guidée de trois vins de la vallée du Rhône." },
   { title: "Fête de quartier", lat: 45.7655, lng: 4.8325, status: "soon",
     org: { name: "Mairie du 1er", type: "mun", verified: true }, ticket: false,
-    date: "Samedi 17 oct.", hours: "14h – 19h", address: "Place Sathonay, Lyon 1er",
+    date: "Samedi 17 oct.", hours: "de 14h à 19h", address: "Place Sathonay, Lyon 1er",
     desc: "Animations, stands d'associations et musique." },
   { title: "Open mic", lat: 45.7695, lng: 4.8300, status: "soon",
     org: { name: "Hugo Martel", type: "par", verified: false }, ticket: false,
-    date: "Jeudi 22 oct.", hours: "20h – 23h", address: "Croix-Rousse, Lyon 4e",
+    date: "Jeudi 22 oct.", hours: "de 20h à 23h", address: "Croix-Rousse, Lyon 4e",
     desc: "Scène ouverte, inscription sur place." }
 ];
 
@@ -795,7 +795,7 @@ function openCard(title, direct) {
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
-      <span class="line">${ICON_CLOCK}${e.hours ? `${e.date} · ${e.hours}` : e.date}</span>
+      <span class="line">${ICON_CLOCK}${e.hours ? `${e.date} ${e.hours}` : e.date}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
