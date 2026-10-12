@@ -389,6 +389,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     brand.classList.toggle("show", show); cta.classList.toggle("show", show);
   });
   io.observe(c2);
+  // version minimisée du logo dans le coin : même hauteur que le CTA
+  const fit = () => {
+    const h = cta.offsetHeight;
+    brand.style.height = h + "px";
+    brand.style.fontSize = Math.round(h * 0.6) + "px";
+    brand.style.gap = Math.round(h * 0.2) + "px";
+    const m = brand.querySelector(".brand-mark");
+    m.style.width = m.style.height = h + "px";
+  };
+  fit(); window.addEventListener("resize", fit);
 })();
 </script>
 <script>
