@@ -289,6 +289,8 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Page du lieu : boutons du même style que le CTA */
 .venue-counts{display:flex;gap:8px;margin-top:16px}
 .venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fff;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
+.venue-cover{margin:0 0 16px}
+.venue-cover img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;outline:1px solid var(--line);outline-offset:0}
 .venue-btn.live{background:#171717}
 .venue-btn.live:hover{background:#0a0a0a}
 .venue-btn:hover{background:#3558CC;box-shadow:0 4px 12px rgba(10,10,10,.14)}
@@ -521,6 +523,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 // Fiches des lieux : affichées au clic sur un de leurs événements
 const VENUES = {
   "Le Sucre": {
+    img: "assets/le-sucre-fiche.jpg",
     address: "50 quai Rambaud, 69002 Lyon",
     verified: true,
     desc: "Le Sucre est ouvert toute l’année, les vendredis, samedis et dimanches, et les mardis gratuitement jusqu'à fin octobre. L’occasion de venir écouter les headliners d’aujourd’hui et de demain, perchés sur le rooftop de la Sucrière.",
@@ -789,6 +792,7 @@ function openVenue(name) {
   const live = events.filter(x => x.org.name === name && x.status === "live").length;
   const soon = events.filter(x => x.org.name === name && x.status === "soon").length;
   ecard.innerHTML = `
+    ${v.img ? `<div class="venue-cover"><img src="${v.img}" alt="${name}"></div>` : ""}
     <div class="org"><span>${name}</span>${v.verified ? `<span class="seal" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <div class="meta"><span class="line">${ICON_PIN}${v.address}</span></div>
     <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
