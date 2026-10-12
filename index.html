@@ -79,8 +79,9 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .event.hidden{display:none}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:0;box-shadow:none}
 .event.live .pin{background:var(--live)}
-.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
+.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);animation:haloBreathe 3.2s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
 @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+@keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
 
 /* Carte d'événement */
 .ecard{position:absolute;z-index:6;width:280px;max-width:calc(100% - 24px);background:rgba(255,255,255,.45);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.6);padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .3s ease,transform .45s cubic-bezier(.22,1,.36,1);pointer-events:none}
