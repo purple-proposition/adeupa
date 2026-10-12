@@ -399,8 +399,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     // cible : logo en haut à gauche, CTA en haut à droite
     const bt = { x: 24, y: (H - start.brand.h) / 2 };
     const ct = { x: window.innerWidth - 24 - start.cta.w, y: (H - start.cta.h) / 2 };
-    // immobiles tant qu'ils sont à l'écran, puis glissent vers les coins
-    const T0 = Math.max(0, start.cta.y - 80);
+    // fixes pendant le défilement, puis glissent vers les coins
+    // la transition ne part que quand l'emplacement d'origine est sorti de l'écran
+    const T0 = start.cta.y + start.cta.h;
     const p = Math.min(1, Math.max(0, (y - T0) / SPAN));
     const e = ease(p);
     const bx = lerp(start.brand.x, bt.x, e), by = lerp(start.brand.y, bt.y, e);
