@@ -73,7 +73,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 /* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
 .cat-chip .cat-btn{opacity:0;transform:translateY(-14px);pointer-events:none;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1),background-color .2s ease,color .2s ease;transition-delay:calc(var(--i,0) * 45ms)}
 .cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
-.cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:16px;max-width:min(760px,calc(100% - 32px))}
+.cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:var(--grid-margin);max-width:min(760px,calc(100% - 32px))}
 .filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:8px;max-width:100%}
 .filter-label{font-size:12px;font-weight:600;color:var(--muted)}
 .filter-pills{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding:2px}
@@ -415,7 +415,6 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
-      <div class="float stats-chip seg" id="stats"></div>
       <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="false" aria-controls="cats"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg><span>Filtre</span></button>
       <div class="float cat-chip" id="cats" role="group" aria-label="Catégories"></div>
       <div class="ecard" id="ecard"></div>
@@ -820,13 +819,6 @@ const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 // Pas de mention textuelle : seul le sceau vert signale une entreprise vérifiée.
 // Particulier et municipalité : aucun badge.
 
-// Compteur en haut à droite (lecture seule : le filtre est dans le bouton Filtre)
-function renderStats() {
-  const live = events.filter(e => e.status === "live").length;
-  const soon = events.filter(e => e.status === "soon").length;
-  $("stats").innerHTML = `<span><b>${events.length}</b> événements</span><span class="stats-sep"></span><span class="stats-live"><span class="dot"></span><b>${live}</b> en cours</span><span class="stats-sep"></span><span><b>${soon}</b> à venir</span>`;
-}
-window.addEventListener("resize", () => renderStats());
 
 // Filtre : on masque les points qui ne correspondent pas (temporalité ET genre)
 function applyFilter() {
@@ -995,7 +987,6 @@ function resetDemo() {
 const EMPTY = () => ({ x: 40, y: 60 });
 
 function start() {
-  renderStats();
   buildCats();
 }
 </script>
