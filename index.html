@@ -343,6 +343,12 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 #intro svg{width:96px;height:96px;animation:introIn .8s cubic-bezier(.22,1,.36,1) both}
 @keyframes introIn{from{opacity:0;transform:scale(.6) rotate(-30deg)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#intro svg{animation:none}}
+/* FAQ : titre à gauche, questions à droite, chevrons */
+.faq-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:24px;align-items:start}
+.faq-title{font-size:clamp(28px,3.6vw,40px);line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:800}
+.faq-layout .faq{max-width:none}
+.faq-q{font-size:20px;font-weight:600;padding:24px 0}
+@media (max-width:768px){.faq-layout{grid-template-columns:1fr;row-gap:32px}}
 </style>
 </head>
 <body>
@@ -447,30 +453,30 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 </section>
 
 <section id="faq">
-  <div class="wrap">
-    <div class="section-head">
-      <h2>Questions fréquentes.</h2>
-    </div>
-    <div class="faq" data-reveal>
-      <div class="faq-item">
+  <div class="wrap faq-layout">
+    <h2 class="faq-title">Questions fréquentes</h2>
+    <div class="faq">
+<div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Est-ce gratuit pour les particuliers ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>Oui. Voir ce qui se passe autour de vous ne coûte rien. Les formules pour les lieux et les organisateurs sont en préparation.</p></div></div>
       </div>
-      <div class="faq-item">
+<div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Combien de temps un événement reste-t-il visible ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>Pendant toute sa durée, puis il passe dans la liste des événements à venir ou disparaît une fois terminé.</p></div></div>
       </div>
-      <div class="faq-item">
+<div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Dans quelles villes est-ce disponible ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>On démarre dans une zone pilote pour que chaque quartier soit vraiment actif. D'autres villes et quartiers suivront.</p></div></div>
       </div>
-      <div class="faq-item">
+<div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Puis-je modifier un événement après l'avoir publié ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
         <div class="faq-a"><div class="faq-a-in"><p>Oui, l'adresse, les horaires et la description peuvent être corrigés à tout moment.</p></div></div>
       </div>
     </div>
   </div>
 </section>
+
+
 
 <section id="tarifs">
   <div class="wrap">
@@ -489,6 +495,17 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
         <a class="btn btn-dark" href="#">Publier mon événement</a>
         <p class="pricing-note">Tarif indicatif, à valider.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="avis">
+  <div class="wrap">
+    <h2 class="faq-title" style="margin-bottom:48px">Avis</h2>
+    <div class="steps">
+      <div class="step"><p>Avis de démonstration : cet emplacement accueillera les retours de vrais organisateurs.</p><h3>Organisateur de concerts</h3></div>
+      <div class="step"><p>Avis de démonstration : cet emplacement accueillera les retours de vrais organisateurs.</p><h3>Association culturelle</h3></div>
+      <div class="step"><p>Avis de démonstration : cet emplacement accueillera les retours de vrais organisateurs.</p><h3>Bar et galerie</h3></div>
     </div>
   </div>
 </section>
