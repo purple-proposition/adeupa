@@ -522,8 +522,7 @@ function openCard(title) {
     <div class="org"><span>${e.org.name}</span>${b ? `<span class="badge ${b.cls}">${b.icon || ""}${b.label}</span>` : ""}</div>
     <h4>${e.title}</h4>
     <div class="meta">
-      <span>${e.date}</span>
-      <span class="line">${ICON_CLOCK}${e.hours}</span>
+      <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
       <span class="line">${ICON_PIN}${e.address}</span>
     </div>
     <div class="desc">${e.desc}</div>
