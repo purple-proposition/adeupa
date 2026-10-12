@@ -441,6 +441,18 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 // type : "ent" (entreprise), "mun" (municipalité), "par" (particulier)
 // Pour les entreprises et municipalités vérifiées, on affiche la billetterie.
 const events = [
+  { title: "Soirée au Ninkasi Cordeliers", lat: 45.76295, lng: 4.83782, status: "soon",
+    org: { name: "Ninkasi Cordeliers", type: "ent", verified: false }, ticket: false,
+    date: "À confirmer", hours: "À confirmer", address: "1 rue du Président Carnot, Lyon 2e",
+    desc: "Soirée à confirmer." },
+  { title: "Soirée au Super5", lat: 45.76944, lng: 4.82989, status: "soon",
+    org: { name: "Super5", type: "ent", verified: false }, ticket: false,
+    date: "À confirmer", hours: "À confirmer", address: "2 rue de Savy, Lyon 1er",
+    desc: "Soirée à confirmer." },
+  { title: "Magic Mardi", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi.jpg",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    date: "Mardi", hours: "19h – 1h", address: "50 quai Rambaud, Lyon 2e",
+    desc: "Soirée du mardi au Sucre, réservée aux 18 ans et plus." },
   { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
     org: { name: "Club Le Rivage", type: "ent", verified: true }, ticket: true,
     date: "Samedi 17 oct.", hours: "23h – 2h", address: "Quai Saint-Antoine, Lyon 2e",
@@ -503,8 +515,8 @@ const events = [
 const map = new maplibregl.Map({
   container: "map",
   style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-  center: [4.8270, 45.7555],
-  zoom: 13.5,
+  center: [4.8270, 45.7530],
+  zoom: 13.2,
   interactive: true,
   dragPan: false,
   scrollZoom: false,
@@ -650,7 +662,7 @@ function openCard(title) {
   const e = m.e;
   ecard.innerHTML = `
     ${e.image ? `<img class="ecard-cover" src="${e.image}" alt="">` : ""}
-    <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" && e.org.verified ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.date} · ${e.hours}</span>
