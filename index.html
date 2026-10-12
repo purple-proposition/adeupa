@@ -69,10 +69,10 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .cat-btn.on{background:var(--text);color:#fff}
 .filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid rgba(10,10,10,.08);border-radius:100px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
 .filter-btn[aria-expanded="true"]{background:var(--text);color:#fff}
-.cat-chip{display:none;top:72px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.cat-chip.open{display:flex}
-.cat-chip.open .cat-btn{animation:catPill .42s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 45ms)}
-@keyframes catPill{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+.cat-chip{display:flex;top:72px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+/* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
+.cat-chip .cat-btn{opacity:0;transform:translateY(-14px);pointer-events:none;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1),background-color .2s ease,color .2s ease;transition-delay:calc(var(--i,0) * 45ms)}
+.cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
 .cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(10,10,10,.08);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
 .cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fff}
 .cat-chip .cat-btn:hover:not(.on){border-color:var(--muted)}
