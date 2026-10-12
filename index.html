@@ -395,15 +395,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
   function render() {
     const y = window.scrollY;
-    const p = Math.min(1, Math.max(0, y / SPAN));
-    const e = ease(p);
     const H = 64;
     // cible : logo en haut à gauche, CTA en haut à droite
     const bt = { x: 24, y: (H - start.brand.h) / 2 };
     const ct = { x: window.innerWidth - 24 - start.cta.w, y: (H - start.cta.h) / 2 };
-    // départ : suit la position du hero, qui remonte avec le défilement
-    const bx = lerp(start.brand.x, bt.x, e), by = lerp(start.brand.y - y, bt.y, e);
-    const cx = lerp(start.cta.x, ct.x, e),   cy = lerp(start.cta.y - y, ct.y, e);
+    // immobiles tant qu'ils sont à l'écran, puis glissent vers les coins
+    const T0 = Math.max(0, start.cta.y - 80);
+    const p = Math.min(1, Math.max(0, (y - T0) / SPAN));
+    const e = ease(p);
+    const bx = lerp(start.brand.x, bt.x, e), by = lerp(start.brand.y, bt.y, e);
+    const cx = lerp(start.cta.x, ct.x, e),   cy = lerp(start.cta.y, ct.y, e);
     brand.style.transform = `translate(${bx}px, ${by}px)`;
     cta.style.transform = `translate(${cx}px, ${cy}px)`;
   }
