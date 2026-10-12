@@ -17,8 +17,8 @@
   --text:#171717;
   --muted:#737373;
   --line:#e5e5e5;
-  --dot:#4169E1;
-  --live:#171717;
+  --dot:#171717;
+  --live:#4169E1;
   --radius:24px;
 }
 *{box-sizing:border-box}
@@ -300,8 +300,10 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fff;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
 .venue-cover{margin:0 0 16px}
 .venue-cover img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;outline:1px solid var(--line);outline-offset:0}
-.venue-btn.live{background:#171717}
-.venue-btn.live:hover{background:#0a0a0a}
+.venue-btn.live{background:#4169E1}
+.venue-btn.live:hover{background:#3558CC}
+.venue-btn.soon{background:#171717}
+.venue-btn.soon:hover{background:#0a0a0a}
 .venue-btn:hover{background:#3558CC;box-shadow:0 4px 12px rgba(10,10,10,.14)}
 .venue-list{display:flex;flex-direction:column;gap:8px}
 .venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:12px;background:rgba(10,10,10,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
@@ -678,7 +680,7 @@ function frameView() { map.fitBounds(VIEW_BOUNDS, { padding: 24, animate: false 
 map.on("load", frameView);
 window.addEventListener("resize", () => { map.resize(); frameView(); });
 
-// Un point par lieu, halo pulsant bleu pour les points à venir (les points en cours sont noirs, sans halo)
+// Un point par lieu, halo pulsant bleu pour les points en cours (les points à venir sont noirs, sans halo)
 map.on("click", () => closeCard());
 
 // Un point par lieu, calculé une fois au chargement : position, taille et état ne changent jamais.
@@ -700,7 +702,7 @@ const places = [];    // un point par lieu
     el.className = `event ${hasLive ? "live" : ""}`;
     el.style.width = size + "px";
     el.style.height = size + "px";
-    el.innerHTML = `${!hasLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+    el.innerHTML = `${hasLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
     el.addEventListener("click", (ev) => {
       ev.stopPropagation();
       if (openTitle === leader.title) closeCard(); else openCard(leader.title);
@@ -820,7 +822,7 @@ function openVenue(name) {
     <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
     <div class="venue-counts">
       <button class="venue-btn live" type="button" data-s="live">${live} en cours</button>
-      <button class="venue-btn" type="button" data-s="soon">${soon} à venir</button>
+      <button class="venue-btn soon" type="button" data-s="soon">${soon} à venir</button>
     </div>`;
   ecard.style.left = "16px";
   ecard.style.top = "16px";
