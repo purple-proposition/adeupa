@@ -28,9 +28,10 @@ a{color:inherit;text-decoration:none}
 
 /* Navigation */
 /* Logo et CTA uniques : positionnés par JS entre le hero et la barre du haut */
-#header{position:fixed;top:0;left:0;right:0;height:64px;z-index:20;pointer-events:none;border-bottom:1px solid transparent}
 #brand,#cta{position:fixed;left:0;top:0;z-index:30;will-change:transform}
-#brand{font-weight:800;font-size:17px;letter-spacing:-.02em;padding:6px 10px;border:1px dashed #c4c4c2;border-radius:8px;color:var(--muted);white-space:nowrap}
+#brand,#cta{background:rgba(255,255,255,.6);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);border:1px solid rgba(255,255,255,.7);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+#brand{font-weight:800;font-size:17px;letter-spacing:-.02em;padding:10px 16px;border-radius:999px;color:var(--text);white-space:nowrap}
+#cta{margin:0;background:rgba(26,26,26,.72);border-color:rgba(255,255,255,.12);color:var(--bg)}
 .slot{display:block;margin:0 auto}
 #brand-slot{margin-bottom:28px}
 
@@ -189,7 +190,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <a id="brand" href="#">Nom à définir</a>
 <a id="cta" class="btn btn-dark" href="#">Publier un événement</a>
-<div id="header"></div>
 
 <header class="hero" id="carte">
   <div class="wrap">
@@ -374,7 +374,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   const cta = document.getElementById("cta");
   const brandSlot = document.getElementById("brand-slot");
   const ctaSlot = document.getElementById("cta-slot");
-  const header = document.getElementById("header");
   const SPAN = 260; // distance de défilement sur laquelle la transition se joue
   let start = {};   // positions dans le document, au repos dans le hero
 
@@ -407,9 +406,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     const cx = lerp(start.cta.x, ct.x, e),   cy = lerp(start.cta.y - y, ct.y, e);
     brand.style.transform = `translate(${bx}px, ${by}px)`;
     cta.style.transform = `translate(${cx}px, ${cy}px)`;
-    header.style.background = `rgba(249,249,249,${0.85 * p})`;
-    header.style.backdropFilter = `blur(${12 * p}px)`;
-    header.style.borderBottomColor = `rgba(0,0,0,${0.08 * p})`;
   }
 
   let queued = false;
