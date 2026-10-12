@@ -541,7 +541,7 @@ const markers = events.map(e => {
   const el = document.createElement("div");
   el.className = `event ${isLive ? "live" : ""}`;
   el.innerHTML = `${isLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
-  el.addEventListener("click", (ev) => { ev.stopPropagation(); openCard(e.title); });
+  el.addEventListener("click", (ev) => { ev.stopPropagation(); if (openTitle === e.title) closeCard(); else openCard(e.title); });
   const marker = new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
   return { e, el, marker };
 });
@@ -599,7 +599,9 @@ function applyFilter() {
 }
 
 // Carte d'événement : ouverte sur le point cliqué
+let openTitle = null;
 function openCard(title) {
+  openTitle = title;
   // (le bouton de fermeture est ajouté dans le gabarit ci-dessous)
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
@@ -622,6 +624,7 @@ function openCard(title) {
   m.el.classList.add("hot");
 }
 function closeCard() {
+  openTitle = null;
   ecard.classList.remove("show");
   markers.forEach(m => m.el.classList.remove("hot"));
 }
