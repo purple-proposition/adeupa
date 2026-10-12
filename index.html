@@ -289,7 +289,7 @@ body{padding-top:40px}
 .venue-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:700;background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
 .venue-btn.live{background:#4169E1;color:#fff;box-shadow:none}
 .venue-btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.14)}
-.venue-btn .dot{width:8px;height:8px;border-radius:50%;background:#fff}
+.venue-btn{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -649,7 +649,7 @@ function openVenue(name) {
     <div class="meta"><span class="line">${ICON_PIN}${v.address}</span></div>
     <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
     <div class="venue-counts">
-      <button class="venue-btn live" type="button" data-f="live"><span class="dot"></span>${live} en cours</button>
+      <button class="venue-btn live" type="button" data-f="live">${live} en cours</button>
       <button class="venue-btn" type="button" data-f="soon">${soon} à venir</button>
     </div>`;
   ecard.style.left = "16px";
