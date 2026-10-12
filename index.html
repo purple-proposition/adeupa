@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lyon, les événements sur une carte</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<style>
+:root{
+  --bg:#ffffff;
+  --soft:#f5f5f4;
+  --text:#1c1c1e;
+  --muted:#6f7680;
+  --line:#e7e7e5;
+  --dot:#6b7580;
+  --live:#ff3b6b;
+  --accent:#1c1c1e;
+  --radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.5}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* Navigation */
+nav{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.logo{font-weight:700;font-size:17px;letter-spacing:-.01em;padding:6px 10px;border:1px dashed #c9c9c6;border-radius:8px;color:var(--muted)}
+.links{display:flex;gap:20px;font-size:14px;color:var(--muted)}
+.links a:hover{color:var(--text)}
+.nav-right{margin-left:auto}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn-dark{background:var(--accent);color:#fff}
+.btn-light{background:#fff;color:var(--text);border-color:var(--line)}
+.btn:hover{opacity:.9}
+
+/* Hero */
+.hero{padding:72px 0 40px;text-align:center}
+.eyebrow{font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px}
+h1{font-size:clamp(34px,5.5vw,56px);line-height:1.05;letter-spacing:-.03em;margin:0 auto 18px;max-width:820px;font-weight:700}
+.sub{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 32px}
+.ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Carte */
+.map-section{padding:0 0 72px}
+.map-frame{position:relative;height:min(68vh,620px);border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--soft)}
+#map{position:absolute;inset:0}
+
+.chip{position:absolute;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,.1);padding:12px 14px}
+.stats-chip{top:16px;left:16px;font-size:14px}
+.stats-chip .live{color:var(--live);font-weight:600}
+.stats-chip b{font-weight:600}
+.stats-chip small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.list-chip{bottom:16px;left:16px;right:16px;max-width:360px;max-height:44%;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.list-chip h3{margin:0 0 2px;font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.list-scroll{overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.ev{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--soft)}
+.ev .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);flex:none}
+.ev.live .dot{background:var(--live)}
+.ev .t{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ev .m{font-size:12px;color:var(--muted)}
+.ev .txt{min-width:0;flex:1}
+.empty{font-size:13px;color:var(--muted)}
+
+/* Points et halos */
+.event{position:relative;width:12px;height:12px;cursor:pointer}
+.pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.event.live .pin{background:var(--live)}
+.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,107,.5) 0%,rgba(255,59,107,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
+@keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+.maplibregl-popup-content{border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+
+/* Explications */
+.how{padding:72px 0;border-top:1px solid var(--line)}
+.how h2{font-size:32px;letter-spacing:-.02em;margin:0 0 40px;font-weight:700;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step{padding:28px;border-radius:var(--radius);background:var(--soft)}
+.step .n{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:14px}
+.step h3{margin:0 0 8px;font-size:18px;letter-spacing:-.01em}
+.step p{margin:0;color:var(--muted);font-size:15px}
+
+.pros{padding:72px 0;border-top:1px solid var(--line)}
+.pros-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.audience{padding:36px;border-radius:var(--radius);background:var(--soft)}
+.audience.dark{background:var(--accent);color:#fff}
+.audience.dark p{color:#c9c9cc}
+.tag-aud{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.audience.dark .tag-aud{color:#9a9aa0}
+.audience h2{font-size:26px;letter-spacing:-.02em;line-height:1.15;margin:0 0 12px;font-weight:700}
+.audience p{margin:0 0 24px;color:var(--muted);font-size:15px}
+.link{font-size:15px;font-weight:600;color:inherit}
+
+.cta-band{padding:72px 0;text-align:center;background:var(--soft)}
+.cta-band h2{font-size:32px;letter-spacing:-.02em;margin:0 0 12px;font-weight:700}
+.cta-band p{color:var(--muted);margin:0 0 28px}
+
+footer{padding:32px 0;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:820px){
+  .links{display:none}
+  .steps,.pros-grid{grid-template-columns:1fr}
+  .hero{padding:48px 0 28px}
+}
+@media (max-width:520px){
+  .map-frame{height:72vh}
+  .stats-chip{top:12px;left:12px;right:12px}
+  .list-chip{left:12px;right:12px;bottom:12px;max-width:none;max-height:40%}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#">Nom à définir</a>
+    <div class="links">
+      <a href="#carte">Explorer</a>
+      <a href="#pour-vous">Pour vous</a>
+      <a href="#pros">Pour les pros</a>
+      <a href="#comment">Comment ça marche</a>
+    </div>
+    <div class="nav-right">
+      <a class="btn btn-dark" href="#">Publier un événement</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Lyon · Presqu'île</div>
+    <h1>Tout ce qui se passe à Lyon, sur une seule carte.</h1>
+    <p class="sub">Sortez sans chercher. Faites voir votre événement là où il se passe, au moment où les gens sont dehors.</p>
+    <div class="ctas">
+      <a class="btn btn-dark" href="#carte">Explorer la carte</a>
+      <a class="btn btn-light" href="#pros">Publier un événement</a>
+    </div>
+  </div>
+</section>
+
+<section class="map-section" id="carte">
+  <div class="wrap">
+    <div class="map-frame">
+      <div id="map"></div>
+      <div class="chip stats-chip" id="stats"></div>
+      <div class="chip list-chip">
+        <h3>Dans cette zone</h3>
+        <div class="list-scroll" id="list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pros" id="pour-vous">
+  <div class="wrap">
+    <div class="pros-grid">
+      <div class="audience">
+        <div class="tag-aud">Particuliers</div>
+        <h2>Voyez ce qui se passe autour de vous.</h2>
+        <p>Ce soir, demain ou ce week-end : concerts, expositions, marchés, afterworks. Tout est localisé, rien n'est enfoui dans un flux.</p>
+        <a class="link" href="#carte">Ouvrir la carte →</a>
+      </div>
+      <div class="audience dark" id="pros">
+        <div class="tag-aud">Lieux et organisateurs</div>
+        <h2>Soyez vu là où ça se passe.</h2>
+        <p>Votre événement apparaît à son adresse exacte, avec un halo visible pendant toute sa durée. Une salle, une marque ou une collectivité, un seul endroit pour toucher les gens à proximité.</p>
+        <a class="link" href="#">Publier un événement →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="comment">
+  <div class="wrap">
+    <h2>Comment ça marche</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <h3>Publiez en moins d'une minute</h3>
+        <p>Titre, lieu, horaires. Les informations essentielles, sans formulaire interminable.</p>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <h3>Votre événement apparaît sur la carte</h3>
+        <p>Un point s'affiche à l'adresse exacte, avec un halo lumineux pendant toute sa durée.</p>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <h3>Il est vu au bon moment</h3>
+        <p>Les personnes à proximité voient ce qui se passe maintenant, puis ce qui arrive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Votre événement mérite une carte.</h2>
+    <p>Pour les particuliers, les lieux et les organisateurs. Démarrage sur la presqu'île de Lyon.</p>
+    <a class="btn btn-dark" href="#">Publier un événement</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Nom à définir · Lyon</span>
+    <span>Données de démonstration</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script>
+// Données de démo fictives, coordonnées approximatives
+const events = [
+  { title: "Set électro au Sucre", place: "Quai Saint-Antoine", lat: 45.7548, lng: 4.8298, time: "jusqu'à 2h", status: "live" },
+  { title: "Expo photo en plein air", place: "Place des Terreaux", lat: 45.7677, lng: 4.8337, time: "jusqu'à 22h", status: "live" },
+  { title: "Marché nocturne", place: "Place Bellecour", lat: 45.7578, lng: 4.8320, time: "demain 18h", status: "soon" },
+  { title: "Lecture de poésie", place: "Place des Cordeliers", lat: 45.7643, lng: 4.8352, time: "demain 20h", status: "soon" },
+  { title: "Concert jazz", place: "Quartier Ainay", lat: 45.7530, lng: 4.8270, time: "samedi 21h", status: "soon" },
+  { title: "Atelier street art", place: "Pentes de la Croix-Rousse", lat: 45.7700, lng: 4.8290, time: "ce soir 19h", status: "live" },
+  { title: "DJ set rooftop", place: "Presqu'île Sud", lat: 45.7590, lng: 4.8290, time: "ce soir 23h", status: "soon" },
+  { title: "Brunch vinyles", place: "Cordeliers", lat: 45.7625, lng: 4.8345, time: "dimanche 11h", status: "soon" }
+];
+
+const map = new maplibregl.Map({
+  container: "map",
+  style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+  center: [4.8318, 45.7575],
+  zoom: 14.2,
+  attributionControl: { compact: true }
+});
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+
+// Carte simplifiée : on garde l'eau, les grands axes et les noms de quartiers
+const HIDE_SYMBOL = /^(poi_|roadname_|housenumber|waterway_label|watername_)/;
+const HIDE_LINE = /^(road_minor|road_service|road_path|bridge_minor|bridge_service|bridge_path|tunnel_minor|tunnel_service|tunnel_path|aeroway|rail|boundary_)/;
+const HIDE_FILL = /^(building|park_|landuse_residential)/;
+
+map.on("load", () => {
+  map.getStyle().layers.forEach(l => {
+    if (l.id === "background") map.setPaintProperty(l.id, "background-color", "#f5f5f4");
+    if (HIDE_SYMBOL.test(l.id) || HIDE_LINE.test(l.id) || HIDE_FILL.test(l.id)) {
+      map.setLayoutProperty(l.id, "visibility", "none");
+    }
+  });
+  map.setPaintProperty("water", "fill-color", "#dde1e5");
+  map.setPaintProperty("waterway", "line-color", "#dde1e5");
+  map.setPaintProperty("water_shadow", "fill-color", "#dde1e5");
+  render();
+});
+
+// Un point par événement, halo pulsant pour les événements en cours
+events.forEach(e => {
+  const isLive = e.status === "live";
+  const el = document.createElement("div");
+  el.className = `event ${isLive ? "live" : ""}`;
+  el.innerHTML = `${isLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+
+  new maplibregl.Marker({ element: el })
+    .setLngLat([e.lng, e.lat])
+    .setPopup(new maplibregl.Popup({ offset: 12 }).setHTML(`<strong>${e.title}</strong><br>${e.place}<br>${e.time}`))
+    .addTo(map);
+});
+
+// Compte et liste les événements visibles dans la zone affichée
+function render() {
+  const bounds = map.getBounds();
+  const visible = events.filter(e => bounds.contains([e.lng, e.lat]));
+  const live = visible.filter(e => e.status === "live");
+  const soon = visible.filter(e => e.status === "soon");
+
+  document.getElementById("stats").innerHTML =
+    `<span class="live">${live.length} en cours</span> · <b>${soon.length}</b> à venir<small>dans la zone affichée</small>`;
+
+  const list = document.getElementById("list");
+  if (visible.length === 0) {
+    list.innerHTML = `<div class="empty">Aucun événement ici. Déplace la carte.</div>`;
+    return;
+  }
+  list.innerHTML = [...live, ...soon].map(e => `
+    <div class="ev ${e.status}">
+      <span class="dot"></span>
+      <div class="txt">
+        <div class="t">${e.title}</div>
+        <div class="m">${e.place} · ${e.time}</div>
+      </div>
+    </div>`).join("");
+}
+
+map.on("moveend", render);
+</script>
+</body>
+</html>

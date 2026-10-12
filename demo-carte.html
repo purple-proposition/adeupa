@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Presqu'île, démo carte événements</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<style>
+:root{
+  --bg:#f2f2f2;
+  --card:rgba(255,255,255,.92);
+  --text:#1c1c1e;
+  --muted:#8e8e93;
+  --line:rgba(0,0,0,.08);
+  --dot:#5b5b60;
+  --live:#ff3b6b;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+#map{position:fixed;inset:0;background:var(--bg)}
+
+/* Panneaux flottants */
+.float{position:fixed;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:500}
+
+.search{top:16px;left:50%;transform:translateX(-50%);width:min(420px,calc(100% - 32px));display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:15px;color:var(--muted)}
+.search kbd{margin-left:auto;font:inherit;font-size:12px;background:rgba(0,0,0,.05);padding:2px 6px;border-radius:6px}
+
+.add{top:16px;right:16px;padding:10px 16px;font-size:14px;font-weight:600;border:0;cursor:pointer;color:var(--text);font-family:inherit}
+
+.panel{bottom:16px;left:50%;transform:translateX(-50%);width:min(420px,calc(100% - 32px));padding:14px;max-height:52vh;display:flex;flex-direction:column}
+.panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:2px 4px 12px}
+.panel-head h2{margin:0;font-size:16px;font-weight:600}
+.counts{font-size:13px;color:var(--muted)}
+.counts b{color:var(--text);font-weight:600}
+.counts .live{color:var(--live)}
+
+.list{overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:rgba(0,0,0,.035);cursor:pointer}
+.item:hover{background:rgba(0,0,0,.07)}
+.item .dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--dot)}
+.item.live .dot{background:var(--live)}
+.item .txt{min-width:0;flex:1}
+.item .title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .meta{font-size:12px;color:var(--muted);margin-top:2px}
+.item .badge{font-size:11px;font-weight:600;color:var(--live);text-transform:uppercase;letter-spacing:.04em}
+.empty{font-size:14px;color:var(--muted);padding:12px 4px}
+
+/* Points des événements, dans le style des points de la référence */
+.event{position:relative;width:14px;height:14px;cursor:pointer}
+.pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.event.live .pin{background:var(--live)}
+.halo{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,107,.55) 0%,rgba(255,59,107,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
+@keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
+
+.maplibregl-popup-content{border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+
+@media (max-width:640px){
+  .add{top:72px;left:16px;right:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="float search">
+  <span>⌕</span><span>Rechercher un événement</span><kbd>⌘K</kbd>
+</div>
+
+<button class="float add">+ Ajouter un événement</button>
+
+<div class="float panel">
+  <div class="panel-head">
+    <h2>Presqu'île</h2>
+    <div class="counts" id="counts"></div>
+  </div>
+  <div class="list" id="list"></div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script>
+// Données de démo fictives, coordonnées approximatives
+const events = [
+  { title: "Set électro au Sucre", place: "Quai Saint-Antoine", lat: 45.7548, lng: 4.8298, time: "jusqu'à 2h", status: "live" },
+  { title: "Expo photo en plein air", place: "Place des Terreaux", lat: 45.7677, lng: 4.8337, time: "jusqu'à 22h", status: "live" },
+  { title: "Marché nocturne", place: "Place Bellecour", lat: 45.7578, lng: 4.8320, time: "demain 18h", status: "soon" },
+  { title: "Lecture de poésie", place: "Place des Cordeliers", lat: 45.7643, lng: 4.8352, time: "demain 20h", status: "soon" },
+  { title: "Concert jazz", place: "Quartier Ainay", lat: 45.7530, lng: 4.8270, time: "samedi 21h", status: "soon" },
+  { title: "Atelier street art", place: "Pentes de la Croix-Rousse", lat: 45.7700, lng: 4.8290, time: "ce soir 19h", status: "live" },
+  { title: "DJ set rooftop", place: "Presqu'île Sud", lat: 45.7590, lng: 4.8290, time: "ce soir 23h", status: "soon" },
+  { title: "Brunch vinyles", place: "Cordeliers", lat: 45.7625, lng: 4.8345, time: "dimanche 11h", status: "soon" }
+];
+
+// Même fond que radiocast.co : MapLibre GL + style vectoriel CARTO Positron
+const map = new maplibregl.Map({
+  container: "map",
+  style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+  center: [4.8318, 45.7575],
+  zoom: 14.5,
+  attributionControl: { compact: true }
+});
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+
+// Un point par événement, avec halo pulsant pour les événements en cours
+events.forEach(e => {
+  const isLive = e.status === "live";
+  const el = document.createElement("div");
+  el.className = `event ${isLive ? "live" : ""}`;
+  el.innerHTML = `${isLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+
+  new maplibregl.Marker({ element: el })
+    .setLngLat([e.lng, e.lat])
+    .setPopup(new maplibregl.Popup({ offset: 12 }).setHTML(`<strong>${e.title}</strong><br>${e.place}<br>${e.time}`))
+    .addTo(map);
+});
+
+// Compte et liste les événements visibles dans la zone affichée
+function render() {
+  const bounds = map.getBounds();
+  const visible = events.filter(e => bounds.contains([e.lng, e.lat]));
+  const live = visible.filter(e => e.status === "live");
+  const soon = visible.filter(e => e.status === "soon");
+
+  document.getElementById("counts").innerHTML =
+    `<span class="live"><b>${live.length}</b> en cours</span> · <b>${soon.length}</b> à venir`;
+
+  const list = document.getElementById("list");
+  if (visible.length === 0) {
+    list.innerHTML = `<div class="empty">Aucun événement dans cette zone. Déplace la carte.</div>`;
+    return;
+  }
+  list.innerHTML = [...live, ...soon].map(e => `
+    <div class="item ${e.status}">
+      <span class="dot"></span>
+      <div class="txt">
+        <div class="title">${e.title}</div>
+        <div class="meta">${e.place} · ${e.time}</div>
+      </div>
+      ${e.status === "live" ? '<span class="badge">En cours</span>' : ""}
+    </div>`).join("");
+}
+
+map.on("moveend", render);
+map.on("load", render);
+</script>
+</body>
+</html>
