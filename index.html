@@ -211,6 +211,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 /* Carte : colonnes 3 à 10 (huit colonnes), deux colonnes libres de chaque côté */
 .product{width:calc((100% - 11 * var(--grid-gutter)) / 12 * 8 + 7 * var(--grid-gutter));margin-left:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter));margin-right:0}
 @media (max-width:768px){.product{width:100%;margin-left:0}}
+/* Contenu des sections : colonnes 3 à 10, deux colonnes libres de chaque côté */
+.wrap{padding-left:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter));padding-right:calc((100% - 11 * var(--grid-gutter)) / 12 * 2 + 2 * var(--grid-gutter))}
+.steps,.audiences,.feature{grid-template-columns:repeat(8,minmax(0,1fr))}
+.steps>*{grid-column:span 3}
+.steps>*:nth-child(3){grid-column:span 2}
+.audiences>*,.feature>*{grid-column:span 4}
+@media (max-width:768px){
+  .wrap{padding-left:var(--grid-margin);padding-right:var(--grid-margin)}
+  .steps,.audiences,.feature{grid-template-columns:1fr}
+  .steps>*,.audiences>*,.feature>*{grid-column:1 / -1}
+}
 </style>
 </head>
 <body>
