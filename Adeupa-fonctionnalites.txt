@@ -35,7 +35,7 @@ Introduction animée
 Bandeau promotionnel
 --------------------
 - Bandeau bleu en haut de page avec les séparateurs en logo :
-  "Profitez d'un mois gratuit, plus un trimestre offert au lancement".
+  "Profitez de 50 % sur le premier trimestre et d'un mois gratuit".
 - Il défile avec la page (il n'est pas fixe).
 
 Barre d'actions
