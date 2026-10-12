@@ -263,6 +263,19 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
   .steps,.audiences,.feature{grid-template-columns:1fr}
   .steps>*,.audiences>*,.feature>*{grid-column:1 / -1}
 }
+/* FAQ : chevron qui se retourne, hauteur qui se déplie (rythme de Clover) */
+.faq{max-width:none}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item:first-child{border-top:1px solid var(--line)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0;border:0;background:none;font:inherit;font-size:20px;font-weight:700;color:var(--text);text-align:left;cursor:pointer;transition:opacity 160ms cubic-bezier(.22,1,.36,1)}
+.faq-q:hover{opacity:.7}
+.chev{flex:none;width:24px;height:24px;color:var(--muted);transition:transform 240ms cubic-bezier(.34,1.36,.64,1)}
+.faq-item.open .chev{transform:rotate(180deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows 160ms cubic-bezier(.55,0,1,.45)}
+.faq-a-in{overflow:hidden;min-height:0;opacity:0;transform:translateY(-8px);transition:opacity 160ms cubic-bezier(.55,0,1,.45),transform 160ms cubic-bezier(.55,0,1,.45)}
+.faq-a-in p{margin:0;padding-bottom:24px;color:var(--muted);font-size:16px;max-width:640px}
+.faq-item.open .faq-a{grid-template-rows:1fr;transition:grid-template-rows 320ms cubic-bezier(.34,1.36,.64,1)}
+.faq-item.open .faq-a-in{opacity:1;transform:none;transition:opacity 320ms cubic-bezier(.34,1.36,.64,1) 40ms,transform 320ms cubic-bezier(.34,1.36,.64,1) 40ms}
 </style>
 </head>
 <body>
@@ -322,22 +335,22 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
       <h2>Questions fréquentes.</h2>
     </div>
     <div class="faq">
-      <details>
-        <summary>Est-ce gratuit pour les particuliers ?</summary>
-        <p>Oui. Voir ce qui se passe autour de vous ne coûte rien. Les formules pour les lieux et les organisateurs sont en préparation.</p>
-      </details>
-      <details>
-        <summary>Combien de temps un événement reste-t-il visible ?</summary>
-        <p>Pendant toute sa durée, puis il passe dans la liste des événements à venir ou disparaît une fois terminé.</p>
-      </details>
-      <details>
-        <summary>Dans quelles villes est-ce disponible ?</summary>
-        <p>On démarre dans une zone pilote pour que chaque quartier soit vraiment actif. D'autres villes et quartiers suivront.</p>
-      </details>
-      <details>
-        <summary>Puis-je modifier un événement après l'avoir publié ?</summary>
-        <p>Oui, l'adresse, les horaires et la description peuvent être corrigés à tout moment.</p>
-      </details>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false"><span>Est-ce gratuit pour les particuliers ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><div class="faq-a-in"><p>Oui. Voir ce qui se passe autour de vous ne coûte rien. Les formules pour les lieux et les organisateurs sont en préparation.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false"><span>Combien de temps un événement reste-t-il visible ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><div class="faq-a-in"><p>Pendant toute sa durée, puis il passe dans la liste des événements à venir ou disparaît une fois terminé.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false"><span>Dans quelles villes est-ce disponible ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><div class="faq-a-in"><p>On démarre dans une zone pilote pour que chaque quartier soit vraiment actif. D'autres villes et quartiers suivront.</p></div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false"><span>Puis-je modifier un événement après l'avoir publié ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="faq-a"><div class="faq-a-in"><p>Oui, l'adresse, les horaires et la description peuvent être corrigés à tout moment.</p></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -720,6 +733,16 @@ function start() {
   });
   window.addEventListener("resize", placeGrid);
 })();
+</script>
+<script>
+// FAQ : une question s'ouvre ou se referme au clic
+document.querySelectorAll(".faq-q").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const item = btn.closest(".faq-item");
+    const open = item.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+  });
+});
 </script>
 </body>
 </html>
