@@ -124,6 +124,8 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .interest{display:block;width:100%;margin-top:8px;padding:8px 16px;border-radius:100px;border:1px solid var(--line);background:transparent;color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .interest:hover{border-color:var(--muted)}
 .interest.on{background:#171717;border-color:#171717;color:#fff}
+.interest .sep{margin:0 8px;color:var(--muted)}
+.interest.on .sep{color:rgba(255,255,255,.6)}
 .ticket{display:block;margin-top:16px;padding:8px 16px;border-radius:100px;background:#4169E1;color:#fff;font-size:16px;font-weight:700;text-align:center}
 
 /* Curseur fictif et ronds de clic */
@@ -583,7 +585,7 @@ const events = [
     date: "Vendredi 23 octobre", hours: "", address: "50 quai Rambaud, 69002 Lyon",
     desc: "Rave Against Fascism au Sucre." },
   { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-11-08", image: "assets/magic-mardi-ra.png",
-    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18,
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18, tickets: 31, interested: 104,
     date: "Dim. 8 novembre de 18h à 23h", hours: "", address: "50 quai Rambaud, 69002 Lyon",
     desc: "Membre de l’écurie Ed Banger, Myd cultive depuis son arrivée une élégance décontractée, signe d’une french touch élégante et insolente. Porté par des titres comme The Sun ayant connus un succès mondial, il s’est aussi produit dans les clubs et festivals les plus prestigieux. A ses côtés, Pedro Bertho dont les racines brésiliennes et les rythmes africains façonnent le son qui célèbre la diversité et l’échange culturel." },
   { title: "Set électro au Sucre", image: "assets/illus-1.jpg", lat: 45.76440, lng: 4.83205, status: "live",
@@ -883,7 +885,7 @@ function openCard(title, direct) {
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
-    <button class="interest" type="button" aria-pressed="false"><span class="interest-n">${e.interested ?? "—"}</span> intéressé${e.interested === 1 ? "" : "s"}</button>`;
+    <button class="interest" type="button" aria-pressed="false"><span>${e.tickets ?? "—"} billet${e.tickets === 1 ? "" : "s"} pris</span><span class="sep" aria-hidden="true">·</span><span><span class="interest-n">${e.interested ?? "—"}</span> intéressé${e.interested === 1 ? "" : "s"}</span></button>`;
 
   // Positionnement à côté du point, à l'intérieur de la démo
   // carte affichée en haut à gauche de la carte
@@ -898,7 +900,7 @@ function openCard(title, direct) {
     intBtn.setAttribute("aria-pressed", String(on));
     intBtn.classList.toggle("on", on);
     const n = intBtn.querySelector(".interest-n");
-    if (typeof e.interested === "number") { e.interested += on ? 1 : -1; n.textContent = e.interested; intBtn.lastChild.textContent = ` intéressé${e.interested === 1 ? "" : "s"}`; }
+    if (typeof e.interested === "number") { e.interested += on ? 1 : -1; n.textContent = e.interested; n.parentElement.lastChild.textContent = ` intéressé${e.interested === 1 ? "" : "s"}`; }
   });
   [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
   // fondu en bas seulement si la description dépasse et peut défiler
