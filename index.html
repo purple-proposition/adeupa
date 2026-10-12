@@ -193,7 +193,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 /* Grille de mise en page (touche G), mêmes valeurs que la démo 8Beats Studio */
 #grid-overlay{position:fixed;inset:0;z-index:80;pointer-events:none;display:none}
 #grid-overlay.on{display:block}
-.go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
+.go-cols{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,1120px);display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
 .go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
 .go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:8px}
 /* Grille : 12 colonnes, gouttière et marge de 24 px (16 px sous 1024 px), comme la touche G */
