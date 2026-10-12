@@ -925,7 +925,7 @@ function openCard(title, direct) {
   if (!direct && VENUES[e.org.name]) return openVenue(e.org.name);
   const place = events.filter(x => x.lat === e.lat && x.lng === e.lng);
   if (!direct && place.length > 1) {
-    return openVenueList(e.org.name, null, place.slice().sort((x, y) => new Date(x.start || 0) - new Date(y.start || 0)));
+    return openVenueList(e.address, null, place.slice().sort((x, y) => new Date(x.start || 0) - new Date(y.start || 0)));
   }
   ecard.innerHTML = `
     ${e.image ? `<div class="ecard-cover-box"><img class="ecard-cover" src="${e.image}" alt=""></div>` : ""}
