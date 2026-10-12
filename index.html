@@ -46,50 +46,51 @@ h1{font-size:clamp(36px,5.6vw,60px);line-height:1.04;letter-spacing:-.035em;marg
 .sub{font-size:19px;color:var(--muted);max-width:580px;margin:0 auto 32px}
 .ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-/* Démo produit en boucle : non interactive */
+/* Démo produit en boucle : rien n'est cliquable pour le visiteur */
 .product{position:relative;height:min(64vh,600px);border-radius:var(--radius);overflow:hidden;background:var(--soft);box-shadow:0 30px 80px -30px rgba(0,0,0,.25),0 0 0 1px var(--line);margin-top:56px;pointer-events:none;user-select:none;text-align:left}
 #map{position:absolute;inset:0}
 .float{position:absolute;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.1)}
-.stats-chip{top:16px;left:16px;padding:12px 16px;font-size:14px;font-weight:500;transition:opacity .4s}
-.stats-chip .live{color:var(--live);font-weight:700}
-.stats-chip b{font-weight:700}
-.stats-chip small{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-weight:500}
-.list-chip{top:88px;left:16px;bottom:16px;width:300px;padding:14px;display:flex;flex-direction:column;gap:8px}
-.list-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.list-chip h3{margin:0;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.filters{display:flex;gap:4px;background:var(--soft);border-radius:100px;padding:3px}
-.filters span{font-size:11px;font-weight:600;padding:4px 9px;border-radius:100px;color:var(--muted);transition:background .25s,color .25s}
-.filters span.on{background:var(--text);color:var(--bg)}
-.list-scroll{overflow:hidden;display:flex;flex-direction:column;gap:6px;position:relative}
-.ev{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:var(--soft);transition:background .3s,transform .3s,opacity .3s}
-.ev.hl{background:#fff;box-shadow:0 0 0 2px var(--text)}
-.ev .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);flex:none}
-.ev.live .dot{background:var(--live)}
-.ev .txt{min-width:0;flex:1}
-.ev .t{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ev .m{font-size:12px;color:var(--muted)}
-.ev.out{opacity:0;transform:translateY(-4px);height:0;padding:0;margin:-3px 0}
-.empty{font-size:13px;color:var(--muted)}
+
+/* Compteur et filtre, en haut à droite */
+.stats-chip{top:16px;right:16px;padding:5px;display:flex;gap:4px}
+.seg span{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 12px;border-radius:12px;color:var(--muted);transition:background .25s,color .25s}
+.seg span b{font-weight:800;color:var(--text)}
+.seg span.live b{color:var(--live)}
+.seg span.on{background:var(--text);color:var(--bg)}
+.seg span.on b{color:var(--bg)}
+.seg span.live.on b{color:#fff}
+.seg span.dot{width:8px;height:8px;border-radius:50%;padding:0;background:var(--dot);display:inline-block;margin-right:2px}
+.seg span.live .dot{background:var(--live)}
 
 /* Points et halos */
-.event{position:relative;width:12px;height:12px;transition:transform .35s}
+.event{position:relative;width:12px;height:12px;transition:transform .35s,opacity .35s}
 .event.hot{transform:scale(1.6)}
+.event.dim{opacity:.22}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .event.live .pin{background:var(--live)}
 .halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,107,.5) 0%,rgba(255,59,107,0) 70%);animation:pulse 2.2s ease-out infinite;pointer-events:none}
 @keyframes pulse{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.6);opacity:0}}
 
-/* Curseur fictif et infobulle */
-.cursor{position:absolute;left:0;top:0;z-index:9;width:22px;height:22px;pointer-events:none;opacity:0;transition:opacity .4s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+/* Carte d'événement */
+.ecard{position:absolute;z-index:6;width:280px;max-width:calc(100% - 24px);background:#fff;border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.18);padding:16px;opacity:0;transform:translateY(6px) scale(.98);transition:opacity .25s,transform .25s;pointer-events:none}
+.ecard.show{opacity:1;transform:none}
+.org{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;flex-wrap:wrap}
+.badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:100px;white-space:nowrap}
+.badge.ent{background:#e3efff;color:#1f5fbf}
+.badge.mun{background:#e2f5ea;color:#17703d}
+.badge.par{background:#ececec;color:#6b6b6b}
+.ecard h4{font-size:17px;line-height:1.2;margin:10px 0 8px;letter-spacing:-.015em}
+.ecard .meta{font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.ecard .desc{font-size:13px;color:#444;margin:10px 0 0;line-height:1.45}
+.ticket{display:block;margin-top:12px;padding:9px 14px;border-radius:100px;background:var(--text);color:var(--bg);font-size:13px;font-weight:700;text-align:center}
+
+/* Curseur fictif et ronds de clic */
+.cursor{position:absolute;left:0;top:0;z-index:9;width:22px;height:22px;pointer-events:none;opacity:0;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
 .cursor svg{display:block;width:22px;height:22px}
 .cursor.down svg{transform:scale(.85);transform-origin:top left;transition:transform .12s}
 .ripple{position:absolute;z-index:8;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid var(--text);pointer-events:none;opacity:0}
 .ripple.go{animation:ripple .6s ease-out forwards}
 @keyframes ripple{0%{transform:scale(.3);opacity:.6}100%{transform:scale(1.6);opacity:0}}
-.tip{position:absolute;z-index:7;background:#fff;border-radius:12px;padding:10px 12px;box-shadow:0 8px 24px rgba(0,0,0,.15);font-size:13px;white-space:nowrap;opacity:0;transform:translate(-50%,-100%) translateY(-14px);transition:opacity .3s,transform .3s;pointer-events:none}
-.tip.show{opacity:1;transform:translate(-50%,-100%) translateY(-18px)}
-.tip b{display:block;font-size:14px}
-.tip span{color:var(--muted)}
 
 /* Sections */
 section{padding:88px 0;border-top:1px solid var(--line)}
@@ -173,8 +174,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 }
 @media (max-width:620px){
   .product{height:72vh;margin-top:40px}
-  .list-chip{top:auto;bottom:12px;left:12px;right:12px;width:auto;max-height:44%}
-  .stats-chip{top:12px;left:12px;right:12px}
+  .stats-chip{top:12px;right:12px}
   .audience{padding:28px}
 }
 @media (prefers-reduced-motion: reduce){
@@ -212,19 +212,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
-      <div class="float stats-chip" id="stats"></div>
-      <div class="float list-chip">
-        <div class="list-head">
-          <h3>Dans cette zone</h3>
-          <div class="filters" id="filters">
-            <span data-f="all" class="on">Tous</span>
-            <span data-f="live">En cours</span>
-            <span data-f="soon">À venir</span>
-          </div>
-        </div>
-        <div class="list-scroll" id="list"></div>
-      </div>
-      <div class="tip" id="tip"></div>
+      <div class="float stats-chip seg" id="stats"></div>
+      <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
       <div class="cursor" id="cursor">
         <svg viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.6L16 21l-3.2 1.3-3.6-8L4 17z" fill="#1a1a1a" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg>
@@ -399,26 +388,50 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script>
-// Données de démo fictives, coordonnées approximatives
+// Données de démo fictives, coordonnées approximatives.
+// type : "ent" (entreprise), "mun" (municipalité), "par" (particulier)
+// Pour les entreprises et municipalités vérifiées, on affiche la billetterie.
 const events = [
-  { title: "Set électro au Sucre", place: "Quai Saint-Antoine", lat: 45.7548, lng: 4.8298, time: "jusqu'à 2h", status: "live" },
-  { title: "Expo photo en plein air", place: "Place des Terreaux", lat: 45.7677, lng: 4.8337, time: "jusqu'à 22h", status: "live" },
-  { title: "Marché nocturne", place: "Place Bellecour", lat: 45.7578, lng: 4.8320, time: "demain 18h", status: "soon" },
-  { title: "Lecture de poésie", place: "Place des Cordeliers", lat: 45.7643, lng: 4.8352, time: "demain 20h", status: "soon" },
-  { title: "Concert jazz", place: "Quartier Ainay", lat: 45.7530, lng: 4.8270, time: "samedi 21h", status: "soon" },
-  { title: "Atelier street art", place: "Pentes de la Croix-Rousse", lat: 45.7700, lng: 4.8290, time: "ce soir 19h", status: "live" },
-  { title: "DJ set rooftop", place: "Presqu'île Sud", lat: 45.7590, lng: 4.8290, time: "ce soir 23h", status: "soon" },
-  { title: "Brunch vinyles", place: "Cordeliers", lat: 45.7625, lng: 4.8345, time: "dimanche 11h", status: "soon" }
+  { title: "Set électro au Sucre", lat: 45.7548, lng: 4.8298, status: "live",
+    org: { name: "Club Le Rivage", type: "ent", verified: true }, ticket: true,
+    date: "Samedi 17 oct.", hours: "23h – 2h", address: "Quai Saint-Antoine, Lyon 2e",
+    desc: "Une nuit de sets électro sur les quais, en plein air." },
+  { title: "Expo photo en plein air", lat: 45.7677, lng: 4.8337, status: "live",
+    org: { name: "Galerie Nord Sud", type: "ent", verified: true }, ticket: true,
+    date: "Jusqu'au 31 oct.", hours: "10h – 22h", address: "Place des Terreaux, Lyon 1er",
+    desc: "Vingt tirages grand format exposés sous les arcades." },
+  { title: "Marché nocturne", lat: 45.7578, lng: 4.8320, status: "soon",
+    org: { name: "Mairie de quartier", type: "mun", verified: true }, ticket: true,
+    date: "Demain", hours: "18h – 23h", address: "Place Bellecour, Lyon 2e",
+    desc: "Producteurs locaux, street food et musique live." },
+  { title: "Lecture de poésie", lat: 45.7643, lng: 4.8352, status: "soon",
+    org: { name: "Claire Martin", type: "par", verified: false }, ticket: false,
+    date: "Demain", hours: "20h – 21h30", address: "Place des Cordeliers, Lyon 2e",
+    desc: "Lecture informelle, entrée libre, apportez votre chaise." },
+  { title: "Concert jazz", lat: 45.7530, lng: 4.8270, status: "soon",
+    org: { name: "Jazz à Ainay", type: "ent", verified: true }, ticket: true,
+    date: "Samedi 17 oct.", hours: "21h – 23h", address: "Quartier Ainay, Lyon 2e",
+    desc: "Trio jazz dans une cour pavée, deux sets." },
+  { title: "Atelier street art", lat: 45.7700, lng: 4.8290, status: "live",
+    org: { name: "Hugo Dubois", type: "par", verified: false }, ticket: false,
+    date: "Ce soir", hours: "19h – 21h", address: "Pentes de la Croix-Rousse, Lyon 1er",
+    desc: "Initiation au pochoir, matériel fourni." },
+  { title: "DJ set rooftop", lat: 45.7590, lng: 4.8290, status: "soon",
+    org: { name: "Léa Fontaine", type: "par", verified: false }, ticket: false,
+    date: "Ce soir", hours: "23h – 1h", address: "Presqu'île Sud, Lyon 2e",
+    desc: "Set house sur un toit, places limitées." },
+  { title: "Brunch vinyles", lat: 45.7625, lng: 4.8345, status: "soon",
+    org: { name: "Tom Lefèvre", type: "par", verified: false }, ticket: false,
+    date: "Dimanche 18 oct.", hours: "11h – 15h", address: "Cordeliers, Lyon 2e",
+    desc: "Brunch et écoute de vinyles entre voisins." }
 ];
 
-const START = { center: [4.8318, 45.7575], zoom: 14.2 };
-const CROIX_ROUSSE = { center: [4.8300, 45.7690], zoom: 14.6 };
-
-// Carte non interactive : elle ne fait que tourner la démo
+// Carte fixe : aucune interaction, elle ne bouge pas
 const map = new maplibregl.Map({
   container: "map",
   style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-  ...START,
+  center: [4.8318, 45.7575],
+  zoom: 14.2,
   interactive: false,
   attributionControl: { compact: true }
 });
@@ -455,30 +468,64 @@ const $ = id => document.getElementById(id);
 const product = $("product");
 const cursor = $("cursor");
 const ripple = $("ripple");
-const tip = $("tip");
-let filter = "all";
+const ecard = $("ecard");
+let filter = null; // null, "live" ou "soon"
 
-// Liste et compteur : filtrés par le mode courant et la zone visible
-function render(highlight) {
-  const bounds = map.getBounds();
-  const visible = events.filter(e => bounds.contains([e.lng, e.lat]));
-  const live = visible.filter(e => e.status === "live");
-  const soon = visible.filter(e => e.status === "soon");
+const BADGES = {
+  ent: { cls: "ent", label: "Entreprise · vérifiée" },
+  mun: { cls: "mun", label: "Municipalité · vérifiée" },
+  par: { cls: "par", label: "Particulier · non vérifié" }
+};
 
-  $("stats").innerHTML =
-    `<span class="live">${live.length} en cours</span> · <b>${soon.length}</b> à venir<small>dans la zone affichée</small>`;
+// Compteur et filtre en haut à droite
+function renderStats() {
+  const live = events.filter(e => e.status === "live").length;
+  const soon = events.filter(e => e.status === "soon").length;
+  $("stats").innerHTML = `
+    <span class="live ${filter === "live" ? "on" : ""}" data-f="live"><span class="dot"></span>En cours <b>${live}</b></span>
+    <span class="${filter === "soon" ? "on" : ""}" data-f="soon">À venir <b>${soon}</b></span>`;
+}
 
-  const shown = [...live, ...soon].filter(e => filter === "all" || e.status === filter);
-  $("list").innerHTML = shown.length === 0
-    ? `<div class="empty">Aucun événement ici.</div>`
-    : shown.map(e => `
-    <div class="ev ${e.status} ${highlight === e.title ? "hl" : ""}" data-t="${e.title}">
-      <span class="dot"></span>
-      <div class="txt">
-        <div class="t">${e.title}</div>
-        <div class="m">${e.place} · ${e.time}</div>
-      </div>
-    </div>`).join("");
+// Filtre : on estompe les points qui ne correspondent pas
+function applyFilter() {
+  markers.forEach(m => {
+    const match = !filter || m.e.status === filter;
+    m.el.classList.toggle("dim", !match);
+  });
+  renderStats();
+}
+
+// Carte d'événement : ouverte sur le point cliqué
+function openCard(title) {
+  const m = markers.find(m => m.e.title === title);
+  const e = m.e;
+  const b = BADGES[e.org.type];
+  ecard.innerHTML = `
+    <div class="org"><span>${e.org.name}</span><span class="badge ${b.cls}">${b.label}</span></div>
+    <h4>${e.title}</h4>
+    <div class="meta">
+      <span>${e.date} · ${e.hours}</span>
+      <span>${e.address}</span>
+    </div>
+    <div class="desc">${e.desc}</div>
+    ${e.ticket ? '<span class="ticket">Billetterie</span>' : ""}`;
+
+  // Positionnement à côté du point, à l'intérieur de la démo
+  const p = rel(m.el);
+  const w = ecard.offsetWidth;
+  const h = ecard.offsetHeight;
+  const W = product.clientWidth;
+  const H = product.clientHeight;
+  const left = p.x > W / 2 ? p.x - 26 - w : p.x + 26;
+  const top = Math.min(Math.max(p.y - h / 2, 12), H - h - 12);
+  ecard.style.left = Math.max(12, left) + "px";
+  ecard.style.top = top + "px";
+  ecard.classList.add("show");
+  m.el.classList.add("hot");
+}
+function closeCard() {
+  ecard.classList.remove("show");
+  markers.forEach(m => m.el.classList.remove("hot"));
 }
 
 // Positions en pixels relatives à la démo
@@ -488,15 +535,14 @@ function rel(el) {
   return { x: r.left - p.left + r.width / 2, y: r.top - p.top + r.height / 2 };
 }
 function markerPos(title) {
-  const m = markers.find(m => m.e.title === title);
-  return rel(m.el);
-}
-function listPos(title) {
-  const el = document.querySelector(`.ev[data-t="${title}"]`);
-  return el ? rel(el) : { x: 150, y: 200 };
+  return rel(markers.find(m => m.e.title === title).el);
 }
 function chipPos(f) {
-  return rel(document.querySelector(`#filters [data-f="${f}"]`));
+  return rel(document.querySelector(`#stats [data-f="${f}"]`));
+}
+function ticketPos() {
+  const t = ecard.querySelector(".ticket");
+  return t ? rel(t) : null;
 }
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -520,35 +566,18 @@ async function click(p) {
   await wait(260);
 }
 
-function showTip(title) {
-  const m = markers.find(m => m.e.title === title);
-  const p = rel(m.el);
-  tip.innerHTML = `<b>${m.e.title}</b><span>${m.e.place} · ${m.e.time}</span>`;
-  tip.style.left = p.x + "px";
-  tip.style.top = p.y + "px";
-  tip.classList.add("show");
-  m.el.classList.add("hot");
-}
-function hideTip() {
-  tip.classList.remove("show");
-  markers.forEach(m => m.el.classList.remove("hot"));
-}
-
-function setFilter(f) {
-  filter = f;
-  document.querySelectorAll("#filters span").forEach(s => s.classList.toggle("on", s.dataset.f === f));
-  render();
-}
-
 function resetDemo() {
-  filter = "all";
-  hideTip();
-  render();
-  map.jumpTo(START);
+  filter = null;
+  closeCard();
+  applyFilter();
+  map.jumpTo({ center: [4.8318, 45.7575], zoom: 14.2 });
   cursor.style.transition = "none";
   cursor.style.opacity = 0;
-  cursor.style.transform = "translate(-40px, 380px)";
+  cursor.style.transform = `translate(${product.clientWidth - 40}px, ${product.clientHeight - 40}px)`;
 }
+
+// Point vide de la carte, pour fermer une carte d'événement
+const EMPTY = () => ({ x: 40, y: 60 });
 
 // Scénario en boucle
 async function loop() {
@@ -556,58 +585,70 @@ async function loop() {
     resetDemo();
     await wait(900);
 
-    // 1. Le curseur arrive sur un événement en cours
+    // 1. Un clic sur un événement en cours d'une entreprise
     await moveTo(markerPos("Expo photo en plein air"));
     await click(markerPos("Expo photo en plein air"));
-    showTip("Expo photo en plein air");
-    await wait(1700);
+    openCard("Expo photo en plein air");
+    await wait(2600);
 
-    // 2. Il sélectionne l'événement dans la liste
-    const item = listPos("Expo photo en plein air");
-    await moveTo(item, 800);
-    await click(item);
-    render("Expo photo en plein air");
-    await wait(900);
-    hideTip();
+    // 2. Le curseur va vers la billetterie
+    const t = ticketPos();
+    if (t) {
+      await moveTo(t, 800);
+      await click(t);
+      await wait(600);
+    }
 
-    // 3. Il filtre sur les événements en cours, puis revient à tous
-    await moveTo(chipPos("live"), 800);
-    await click(chipPos("live"));
-    setFilter("live");
+    // 3. Fermeture de la carte
+    await moveTo(EMPTY(), 700);
+    await click(EMPTY());
+    closeCard();
+    await wait(600);
+
+    // 4. Filtre « À venir » en haut à droite, puis retour à tous
+    await moveTo(chipPos("soon"), 800);
+    await click(chipPos("soon"));
+    filter = "soon";
+    applyFilter();
     await wait(1400);
-    await moveTo(chipPos("all"), 700);
-    await click(chipPos("all"));
-    setFilter("all");
-    await wait(700);
+    await moveTo(chipPos("soon"), 600);
+    await click(chipPos("soon"));
+    filter = null;
+    applyFilter();
+    await wait(600);
 
-    // 4. La carte se déplace vers la Croix-Rousse, le curseur suit
-    await moveTo({ x: product.clientWidth * 0.5, y: product.clientHeight * 0.2 }, 600);
-    await wait(200);
-    map.easeTo({ ...CROIX_ROUSSE, duration: 2200 });
-    await wait(2300);
-    render();
-    const target = markerPos("Atelier street art");
-    await moveTo(target, 1000);
-    await click(target);
-    showTip("Atelier street art");
-    await wait(1700);
-    hideTip();
+    // 5. Particulier, non vérifié, sans billetterie
+    await moveTo(markerPos("Lecture de poésie"), 900);
+    await click(markerPos("Lecture de poésie"));
+    openCard("Lecture de poésie");
+    await wait(2400);
+    await moveTo(EMPTY(), 700);
+    await click(EMPTY());
+    closeCard();
+    await wait(500);
 
-    // 5. Retour au point de départ, pause, puis on recommence
+    // 6. Municipalité vérifiée, avec billetterie
+    await moveTo(markerPos("Marché nocturne"), 900);
+    await click(markerPos("Marché nocturne"));
+    openCard("Marché nocturne");
+    await wait(2400);
+    await moveTo(EMPTY(), 700);
+    await click(EMPTY());
+    closeCard();
+    await wait(600);
+
+    // 7. Le curseur sort, pause, puis on recommence
     await moveTo({ x: product.clientWidth - 40, y: product.clientHeight - 40 }, 800);
     cursor.style.opacity = 0;
-    map.easeTo({ ...START, duration: 1800 });
-    await wait(2200);
+    await wait(2000);
   }
 }
 
 function start() {
+  renderStats();
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    render();
     return;
   }
-  map.on("moveend", () => render());
-  render();
   loop();
 }
 </script>
