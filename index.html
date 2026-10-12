@@ -315,6 +315,21 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .pricing-note{font-size:12px;color:var(--muted);margin-top:16px}
 @media (max-width:768px){.pricing{flex-direction:column}.demo-canvas{height:300px}}
 @media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;filter:none;transition:none}}
+/* Rangée de cartes qui défile seule, fondu sur les bords */
+.rail{overflow:hidden;padding:8px 0 32px;-webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent)}
+.rail-track{display:flex;gap:16px;width:max-content;animation:railScroll 48s linear infinite}
+.rail:hover .rail-track{animation-play-state:paused}
+@keyframes railScroll{to{transform:translateX(-50%)}}
+.rail-card{flex:0 0 248px;background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.rail-card.seen{opacity:.55}
+.rail-img{height:136px;background:var(--soft)}
+.rail-body{padding:16px;display:flex;flex-direction:column;gap:4px}
+.rail-body b{font-size:16px;font-weight:700}
+.rail-body span{font-size:14px;color:var(--muted)}
+.rail-badge{align-self:flex-start;font-size:12px;font-weight:700;padding:4px 8px;border-radius:100px;background:var(--soft);color:var(--muted);margin-bottom:4px}
+.rail-badge.boost{background:#4169E1;color:#fff}
+.rail-badge.seen{background:var(--line);color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.rail-track{animation:none}}
 </style>
 </head>
 <body>
@@ -372,13 +387,13 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 
 <section id="demo">
   <div class="wrap">
-    <div class="section-head" data-reveal><h2>Vos événements, en un coup d'œil.</h2></div>
-    <div class="demo-canvas" data-reveal id="demo-canvas">
-      <div class="demo-card" data-x="8" data-y="12"><b>Concert jazz</b><span>Quartier Ainay · Sam. 17 oct.</span></div>
-      <div class="demo-card" data-x="46" data-y="30"><b>Expo photo</b><span>Place des Terreaux · jusqu'au 31 oct.</span></div>
-      <div class="demo-card" data-x="20" data-y="62"><b>Brunch vinyles</b><span>Cordeliers · Dim. 18 oct.</span></div>
+    <div class="section-head" data-reveal>
+      <h2>Vos événements, sur la carte et en grille.</h2>
+      <p class="lead">Comme sur Airbnb, vos événements sont visibles sur la carte et dans la grille. Boostez votre visibilité pour être certain d'être vu par tout le monde.</p>
     </div>
-    <p class="pricing-note">Contenus de démonstration, à remplacer par de vrais événements.</p>
+  </div>
+  <div class="rail" aria-label="Exemples de cartes d'événements">
+    <div class="rail-track"><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Concert jazz</b><span>Sam. 17 oct. · Ainay</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Expo photo</b><span>Jusqu'au 31 oct. · Terreaux</span></div></div><div class="rail-card seen"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge seen">Déjà vu</span><b>Brunch vinyles</b><span>Dim. 18 oct. · Cordeliers</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Rave Against Fascism</b><span>Ven. 23 oct. · Le Sucre</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Projection en plein air</b><span>Ce soir · Célestins</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Cours de yoga</b><span>Ce soir · Saint-Antoine</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Concert jazz</b><span>Sam. 17 oct. · Ainay</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Expo photo</b><span>Jusqu'au 31 oct. · Terreaux</span></div></div><div class="rail-card seen"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge seen">Déjà vu</span><b>Brunch vinyles</b><span>Dim. 18 oct. · Cordeliers</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Rave Against Fascism</b><span>Ven. 23 oct. · Le Sucre</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><span class="rail-badge boost">Mise en avant</span><b>Projection en plein air</b><span>Ce soir · Célestins</span></div></div><div class="rail-card"><div class="rail-img"></div><div class="rail-body"><b>Cours de yoga</b><span>Ce soir · Saint-Antoine</span></div></div></div>
   </div>
 </section>
 
