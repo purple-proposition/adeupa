@@ -101,7 +101,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard-cover-box{padding:0;margin:0 0 16px;background:none}
 .ecard-cover{display:block;width:100%;aspect-ratio:16 / 9;max-height:240px;object-fit:cover;border-radius:12px;outline:1px solid var(--line);outline-offset:0}
 .ecard h4{font-size:24px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
-.ecard .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.ecard .meta{font-size:12px;color:var(--text);display:flex;flex-direction:column;gap:4px}
 .ecard .meta .line{display:flex;align-items:center;gap:8px}
 .ecard .meta svg{width:16px;height:16px;flex:none;color:var(--muted)}
 .ecard .desc{font-size:16px;color:#444;margin:8px 0 0;line-height:1.45;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
@@ -284,12 +284,13 @@ body{padding-top:40px}
 .promo-track span{display:inline-flex;align-items:center}
 .promo-mark{width:20px;height:20px;margin:0 16px;flex:none}
 @keyframes promoScroll{to{transform:translateX(-50%)}}
-/* Page du lieu */
+/* Page du lieu : boutons du même style que le CTA */
 .venue-counts{display:flex;gap:8px;margin-top:16px}
-.venue-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 16px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:700;background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:background-color .2s ease,color .2s ease,box-shadow .2s ease}
-.venue-btn.live{background:#4169E1;color:#fff;box-shadow:none}
-.venue-btn:hover{box-shadow:0 4px 12px rgba(0,0,0,.14)}
-.venue-btn{white-space:nowrap}
+.venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:100px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fff;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
+.venue-btn:hover{background:#3558CC;box-shadow:0 4px 12px rgba(0,0,0,.14)}
+.venue-list{display:flex;flex-direction:column;gap:8px}
+.venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:12px;background:rgba(0,0,0,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
+.venue-item:hover{background:rgba(0,0,0,.07)}
 </style>
 </head>
 <body>
@@ -421,6 +422,22 @@ const VENUES = {
 };
 
 const events = [
+  { title: "Fasme & Quadratschulz", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-10-16",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    date: "Vendredi 16 octobre", hours: "", address: "50 quai Rambaud, Lyon 2e",
+    desc: "Club avec Fasme (live) et Quadratschulz (live)." },
+  { title: "Camion Bazar, DJ Traytex", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-10-17",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    date: "Samedi 17 octobre", hours: "", address: "50 quai Rambaud, Lyon 2e",
+    desc: "EXT.12 : Camion Bazar, DJ Traytex, Eoin DJ b2b Maruwa, Minna-no-Kimochi." },
+  { title: "PETERBLUE, Mĳa, Kunawara", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-10-18",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    date: "Dimanche 18 octobre", hours: "", address: "50 quai Rambaud, Lyon 2e",
+    desc: "S.society : PETERBLUE, Mĳa, Kunawara." },
+  { title: "Rave Against Fascism", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-10-23",
+    org: { name: "Le Sucre", type: "ent", verified: false }, ticket: false,
+    date: "Vendredi 23 octobre", hours: "", address: "50 quai Rambaud, Lyon 2e",
+    desc: "Rave Against Fascism au Sucre." },
   { title: "Soirée au Ninkasi Cordeliers", lat: 45.76295, lng: 4.83782, status: "soon",
     org: { name: "Ninkasi Cordeliers", type: "ent", verified: false }, ticket: false,
     date: "À confirmer", hours: "À confirmer", address: "1 rue du Président Carnot, Lyon 2e",
@@ -429,7 +446,7 @@ const events = [
     org: { name: "Super5", type: "ent", verified: false }, ticket: false,
     date: "À confirmer", hours: "À confirmer", address: "2 rue de Savy, Lyon 1er",
     desc: "Soirée à confirmer." },
-  { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", image: "assets/magic-mardi-ra.png",
+  { title: "S.society", lat: 45.73664, lng: 4.81501, status: "soon", start: "2026-11-08", image: "assets/magic-mardi-ra.png",
     org: { name: "Le Sucre", type: "ent", verified: false }, ticket: true, ticketUrl: "https://shotgun.live/fr/events/s-society-8-novembre", minAge: 18,
     date: "Dim. 8 novembre de 18h à 23h", hours: "", address: "50 quai Rambaud, Lyon 2e",
     desc: "Membre de l’écurie Ed Banger, Myd cultive depuis son arrivée une élégance décontractée, signe d’une french touch élégante et insolente. Porté par des titres comme The Sun ayant connus un succès mondial, il s’est aussi produit dans les clubs et festivals les plus prestigieux. A ses côtés, Pedro Bertho dont les racines brésiliennes et les rythmes africains façonnent le son qui célèbre la diversité et l’échange culturel." },
@@ -649,13 +666,21 @@ function openVenue(name) {
     <div class="meta"><span class="line">${ICON_PIN}${v.address}</span></div>
     <div class="desc-wrap"><div class="desc">${v.desc}</div></div>
     <div class="venue-counts">
-      <button class="venue-btn live" type="button" data-f="live">${live} en cours</button>
-      <button class="venue-btn" type="button" data-f="soon">${soon} à venir</button>
+      <button class="venue-btn" type="button" data-s="live">${live} en cours</button>
+      <button class="venue-btn" type="button" data-s="soon">${soon} à venir</button>
     </div>`;
   ecard.style.left = "16px";
   ecard.style.top = "16px";
   ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
-  ecard.querySelectorAll(".venue-btn").forEach(b => b.addEventListener("click", (ev) => { ev.stopPropagation(); pick(b.dataset.f); }));
+  ecard.querySelectorAll(".venue-btn").forEach(b => b.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    const key = b.dataset.s;
+    const list = events
+      .filter(x => x.org.name === name && x.status === key)
+      .sort((x, y) => new Date(x.start || 0) - new Date(y.start || 0));
+    if (list.length === 1) openCard(list[0].title, true);
+    else if (list.length > 1) openVenueList(name, key, list);
+  }));
   [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
   const dsc = ecard.querySelector(".desc");
   dsc.style.maxHeight = "none";
@@ -663,14 +688,29 @@ function openVenue(name) {
   markers.forEach(m => m.el.classList.toggle("hot", m.e.org.name === name));
 }
 
+// Liste des événements d'un lieu pour un statut donné (ordre chronologique)
+function openVenueList(name, key, list) {
+  ecard.innerHTML = `
+    <div class="org"><span>${name}</span><button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+    <div class="venue-list">
+      ${list.map(x => `<button class="venue-item" type="button" data-t="${x.title}">${x.title}</button>`).join("")}
+    </div>`;
+  ecard.style.left = "16px";
+  ecard.style.top = "16px";
+  ecard.querySelector(".ecard-close").addEventListener("click", (ev) => { ev.stopPropagation(); closeCard(); });
+  ecard.querySelectorAll(".venue-item").forEach(b => b.addEventListener("click", (ev) => { ev.stopPropagation(); openCard(b.dataset.t, true); }));
+  [...ecard.children].forEach((el, i) => el.style.setProperty("--i", i));
+  ecard.classList.add("show");
+}
+
 // Carte d'événement : ouverte sur le point cliqué
 let openTitle = null;
-function openCard(title) {
+function openCard(title, direct) {
   openTitle = title;
   // (le bouton de fermeture est ajouté dans le gabarit ci-dessous)
   const m = markers.find(m => m.e.title === title);
   const e = m.e;
-  if (VENUES[e.org.name]) return openVenue(e.org.name);
+  if (!direct && VENUES[e.org.name]) return openVenue(e.org.name);
   ecard.innerHTML = `
     ${e.image ? `<div class="ecard-cover-box"><img class="ecard-cover" src="${e.image}" alt=""></div>` : ""}
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
