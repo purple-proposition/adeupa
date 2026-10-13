@@ -721,23 +721,25 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 (() => {
   const btns = document.querySelectorAll(".billing-btn");
   const motion = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const OUT = { duration: 160, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "forwards" };
+  const OUT = { duration: 160, easing: "cubic-bezier(0.55, 0, 1, 0.45)", fill: "none" };
   const IN = { duration: 240, easing: "cubic-bezier(0.22, 1, 0.36, 1)" };
   const fromTop = [{ opacity: 1, transform: "none", filter: "none" }, { opacity: 0, transform: "translateY(-8px)", filter: "blur(8px)" }];
   const fromBottom = [{ opacity: 0, transform: "translateY(8px)", filter: "blur(8px)" }, { opacity: 1, transform: "none", filter: "none" }];
   // Remplace un texte : sortie, puis entrée avec le nouveau texte
   const swapText = (el, text) => {
     if (!motion) { el.textContent = text; return; }
+    // Annule l'animation précédente : deux clics rapides ne se superposent pas
+    el.getAnimations().forEach(a => a.cancel());
     el.animate(fromTop, OUT).finished.then(() => {
       el.textContent = text;
       el.animate(fromBottom, IN);
-    });
+    }).catch(() => {});
   };
   // Affiche ou masque une ligne en fondu, sans saut de mise en page après l'animation
   const toggleLine = (el, show, text) => {
     if (show) {
       el.hidden = false; el.textContent = text;
-      if (motion) el.animate(fromBottom, { duration: 240, easing: IN.easing });
+      if (motion) { el.getAnimations().forEach(a => a.cancel()); el.animate(fromBottom, { duration: 240, easing: IN.easing }); }
     } else if (!el.hidden) {
       const done = () => { el.hidden = true; };
       if (motion) el.animate(fromTop, OUT).finished.then(done); else done();
