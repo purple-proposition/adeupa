@@ -29,9 +29,8 @@ a{color:inherit;text-decoration:none}
 
 /* Navigation */
 /* Logo et CTA uniques : positionnés par JS entre le hero et la barre du haut */
-#brand,#cta{position:fixed;top:24px;z-index:30;opacity:0;transform:translateY(-16px);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+#brand,#cta{position:fixed;top:20px;z-index:36;opacity:1;transform:none;pointer-events:auto}
 #brand{left:48px}#cta{right:48px}
-#brand.show,#cta.show{opacity:1;transform:none;pointer-events:auto}
 .brand-inline{display:flex;width:max-content;align-items:center;gap:16px;font-weight:800;font-size:36px;letter-spacing:-.02em;color:#4169E1;text-decoration:none}
 .brand-inline .brand-mark{width:48px;height:48px}
 #cta{background:rgba(65,105,225,.92);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 20px rgba(10,10,10,.08)}
@@ -328,13 +327,12 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .faq-item.open .faq-a-in{opacity:1;transform:none;transition:opacity 320ms cubic-bezier(.34,1.36,.64,1) 40ms,transform 320ms cubic-bezier(.34,1.36,.64,1) 40ms}
 /* Bandeau promo : défile en boucle, fixé en haut */
 /* Menu fixe : liens au centre, qui font défiler la page jusqu'à la section */
-.menu{position:fixed;top:0;left:0;right:0;z-index:35;height:64px;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,rgba(250,250,250,.96),rgba(250,250,250,0));backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent);mask-image:linear-gradient(to bottom,#000 60%,transparent);opacity:0;transform:translateY(-8px);transition:opacity 240ms cubic-bezier(0.22,1,0.36,1),transform 240ms cubic-bezier(0.22,1,0.36,1);pointer-events:none}
-.menu.show{opacity:1;transform:none;pointer-events:auto}
+.menu{position:fixed;top:0;left:0;right:0;z-index:35;height:80px;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,rgba(250,250,250,.96),rgba(250,250,250,0));backdrop-filter:blur(16px) saturate(120%);-webkit-backdrop-filter:blur(16px) saturate(120%);-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent);mask-image:linear-gradient(to bottom,#000 60%,transparent);pointer-events:none}
 .menu-links{display:flex;gap:32px;list-style:none;margin:0;padding:0}
 .menu-links a{font-size:16px;font-weight:500;color:var(--muted);text-decoration:none;transition:color 160ms ease-out}
 .menu-links a:hover{color:var(--text)}
 html{scroll-behavior:smooth}
-section{scroll-margin-top:64px}
+section{scroll-margin-top:80px}
 .promo{position:relative;height:40px;z-index:40;background:#4169E1;color:#fff;overflow:hidden;display:flex;align-items:center}
 .promo-track{display:flex;width:max-content;white-space:nowrap;font-size:16px;font-weight:600;animation:promoScroll 60s linear infinite}
 .promo-track span{display:inline-flex;align-items:center}
@@ -354,11 +352,11 @@ section{scroll-margin-top:64px}
 .venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:8px;background:rgba(10,10,10,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
 .venue-item:hover{background:rgba(10,10,10,.07)}
 /* Bouton de connexion, toujours visible en haut à droite (connexion, création de compte et publication à venir) */
-#login{position:fixed;top:56px;right:48px;z-index:31;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);color:var(--text);border:1px solid var(--line)}
+#login{position:fixed;top:20px;right:48px;z-index:36;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(255,255,255,.72);backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);color:var(--text);border:1px solid var(--line)}
 #login:hover{background:#fff;box-shadow:none}
 @media (max-width:768px){#login{right:16px}}
 @media (max-width:768px){.menu-links{gap:16px}.menu-links a{font-size:14px}.menu-links li:nth-child(4){display:none}}
-.scrolled #login{top:24px}
+
 /* Animations au défilement (rythme repris de Causal) */
 :root{--ease-emerge:cubic-bezier(.22,1,.36,1);--ease-glide:cubic-bezier(.33,1,.68,1);--dur-enter:800ms;--dur-hover:150ms;--dur-press:100ms;--dur-swap:260ms;--stagger:120ms}
 [data-reveal]{opacity:0;transform:translateY(16px);filter:blur(6px);transition:opacity var(--dur-enter) var(--ease-emerge),transform var(--dur-enter) var(--ease-emerge),filter var(--dur-enter) var(--ease-emerge);transition-delay:calc(var(--i,0) * var(--stagger))}
@@ -1292,7 +1290,6 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 </script>
 <script>
 // Menu : le flou du haut apparaît dès qu'on a défilé
-window.addEventListener("scroll", () => document.getElementById("menu").classList.toggle("show", window.scrollY > 40), { passive: true });
 // Apparition au défilement et cartes de démo qui glissent avec la page
 (() => {
   const io = new IntersectionObserver((entries) => {
@@ -1326,7 +1323,7 @@ window.addEventListener("scroll", () => document.getElementById("menu").classLis
   spin.finished.then(() => new Promise(r => setTimeout(r, 250))).then(() => {
     // Cible mesurée à l'arrivée : si la page a été rechargée en défilé, le logo fixe en haut à gauche est visible, sinon le titre du haut de page
     const scrolled = window.scrollY > 40;
-    const target = document.querySelector(scrolled ? "#brand .brand-mark" : ".brand-inline .brand-mark");
+    const target = document.querySelector("#brand .brand-mark");
     const tr = target ? target.getBoundingClientRect() : { left: 48, top: 24, height: 48, width: 48 };
     const end = { left: tr.left, top: tr.top, w: tr.width };
     const move = mark.animate(
