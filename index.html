@@ -448,14 +448,12 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .rail-card .ticket{margin-top:auto;display:block;padding:8px 16px;border-radius:24px;background:#4169E1;border:1px solid var(--line);color:#fafafa;font-size:16px;font-weight:600;text-align:center}
 
 /* Variante B : glissement horizontal avec téléphone penché */
+.pb-slide::before{content:"";position:absolute;top:0;bottom:0;right:0;width:70%;z-index:-1;background:url("assets/fourviere.jpg") center/cover no-repeat;-webkit-mask-image:linear-gradient(to left,#000 0%,#000 30%,transparent 100%);mask-image:linear-gradient(to left,#000 0%,#000 30%,transparent 100%);opacity:.9}
 .pb-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:0}
 .pb-track::-webkit-scrollbar{display:none}
-.pb-section{position:relative;overflow:hidden}
-.pb-wrap{position:relative;z-index:1}
-.pb-bg{position:absolute;top:0;bottom:0;right:0;width:70%;background:url("assets/fourviere.jpg") center/cover no-repeat;-webkit-mask-image:linear-gradient(to left,#000 0%,#000 30%,transparent 100%);mask-image:linear-gradient(to left,#000 0%,#000 30%,transparent 100%);opacity:.9;pointer-events:none}
 .pb-credit{margin:24px 0 0;font-size:12px;color:var(--muted);text-align:right}
 .pb-credit a{color:var(--muted)}
-.pb-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--grid-gutter);align-items:center;padding:48px;background:rgba(250,250,250,.72);border:1px solid var(--line);border-radius:32px;box-sizing:border-box;min-height:480px}
+.pb-slide{position:relative;overflow:hidden;isolation:isolate;flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--grid-gutter);align-items:center;padding:48px;background:var(--surface);border:1px solid var(--line);border-radius:32px;box-sizing:border-box;min-height:480px}
 .pb-text h3{margin:0 0 16px;font-size:36px;line-height:1.1;font-weight:800}
 .pb-q{font-size:24px;color:var(--text);margin:0 0 16px;line-height:1.3}
 .pb-text p:last-child{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
@@ -716,8 +714,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
   </div>
 </section>
 
-<section id="portee-b" class="pb-section">
-  <div class="pb-bg" aria-hidden="true"></div>
+<section id="portee-b">
   <div class="wrap pb-wrap">
     <div class="section-head" data-reveal>
       <h2>Votre événement ne s’arrête pas là</h2>
