@@ -459,12 +459,12 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-device{display:flex;justify-content:center;perspective:1200px}
 .pb-device{display:flex;justify-content:center;perspective:1600px;position:relative}
 .pb-device{position:relative}
-.pb-float{position:absolute;z-index:2;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--text);animation:pbFloat 4.8s ease-in-out infinite}
-.pb-float svg{width:24px;height:24px}
-.pb-float.pf1{top:8%;left:4%}
-.pb-float.pf2{top:18%;right:2%;animation-delay:-1.2s}
-.pb-float.pf3{bottom:14%;left:8%;animation-delay:-2.4s}
-.pb-float.pf4{bottom:6%;right:10%;animation-delay:-3.6s}
+.pb-float{position:absolute;z-index:2;border-radius:50%;background:var(--blue);color:#fafafa;display:grid;place-items:center;animation:pbFloat 4.8s ease-in-out infinite}
+.pb-float svg{width:50%;height:50%}
+.pb-float.pf1{width:56px;height:56px;top:8%;left:4%}
+.pb-float.pf2{width:40px;height:40px;top:18%;right:2%;animation-delay:-1.2s}
+.pb-float.pf3{width:48px;height:48px;bottom:14%;left:8%;animation-delay:-2.4s}
+.pb-float.pf4{width:32px;height:32px;bottom:6%;right:10%;animation-delay:-3.6s}
 @keyframes pbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 @media (prefers-reduced-motion:reduce){.pb-float{animation:none}}
 
