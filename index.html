@@ -409,6 +409,11 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 @media (max-width:768px){.price-card{grid-template-columns:1fr}}
 .rail{overflow:hidden;padding:8px 0 32px;pointer-events:none;user-select:none;--fade-in:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));-webkit-mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)));mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)))}
 .rail-track{display:flex;gap:16px;width:max-content;will-change:transform}
+.reach-card{flex:0 0 288px;height:320px;display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
+.reach-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;color:var(--text);flex:none}
+.reach-icon svg{width:24px;height:24px}
+.reach-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
+.reach-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
 .rail-card{flex:0 0 288px;height:480px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:16px;overflow:hidden}
 .rail-cover-box{position:relative;margin:0 0 16px}
 .rail-cover{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:16px}
@@ -630,6 +635,39 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <h3>Le strict nécessaire</h3>
         <p>Votre e-mail, le nom de votre structure et son type, plus une empreinte bancaire de 0 € saisie chez notre prestataire de paiement. Détails dans la politique de confidentialité.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="portee">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Votre événement ne s’arrête pas là</h2>
+      <p class="lead">Quatre freins qui limitent sa portée, et la façon dont Adeupa les lève.</p>
+    </div>
+  </div>
+  <div class="rail" aria-hidden="false">
+    <div class="rail-track">
+      <article class="reach-card">
+        <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h3>Vos abonnés</h3>
+        <p>Et si vos futurs participants ne vous suivaient pas encore ? Ne parlez pas seulement à ceux qui vous suivent.</p>
+      </article>
+      <article class="reach-card">
+        <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+        <h3>Votre newsletter</h3>
+        <p>Et si vos futurs participants n’étaient pas abonnés ? Faites découvrir votre événement au moment où votre public cherche quoi faire.</p>
+      </article>
+      <article class="reach-card">
+        <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+        <h3>Votre budget pub</h3>
+        <p>Et si votre visibilité durait plus longtemps que votre campagne ? Donnez à votre événement une visibilité qui dure.</p>
+      </article>
+      <article class="reach-card">
+        <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <h3>Votre quartier</h3>
+        <p>Et si vous visiez plus loin que votre quartier ? Votre événement mérite d’être vu, et pas seulement par ceux qui passent devant.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -1367,34 +1405,37 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 // Ne lit jamais la mise en page pendant l'animation (largeur mesurée au redimensionnement),
 // borne le delta de temps (pas de saut après un onglet masqué) et s'arrête hors écran.
 (() => {
-  const rail = document.querySelector(".rail");
-  const track = document.getElementById("rail-track");
-  if (!rail || !track) return;
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const SPEED = 40; // pixels par seconde
-  let x = 0, step = 0, last = 0, inView = false, running = false;
-  const measure = () => {
-    const first = track.firstElementChild;
-    if (first) step = first.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+  const init = (rail, track) => {
+    let x = 0, step = 0, last = 0, inView = false, running = false;
+    const measure = () => {
+      const first = track.firstElementChild;
+      if (first) step = first.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
+    };
+    const frame = (now) => {
+      if (!running) return;
+      const dt = Math.min((now - last) / 1000, 0.05); last = now;
+      x -= SPEED * dt;
+      while (step > 0 && -x >= step) { track.appendChild(track.firstElementChild); x += step; }
+      track.style.transform = `translate3d(${x}px,0,0)`;
+      requestAnimationFrame(frame);
+    };
+    const sync = () => {
+      const should = inView && !document.hidden && !reduce;
+      if (should === running) return;
+      running = should;
+      if (running) { last = performance.now(); requestAnimationFrame(frame); }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    document.addEventListener("visibilitychange", sync);
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }).observe(rail);
   };
-  const frame = (now) => {
-    if (!running) return;
-    const dt = Math.min((now - last) / 1000, 0.05); last = now;
-    x -= SPEED * dt;
-    while (step > 0 && -x >= step) { track.appendChild(track.firstElementChild); x += step; }
-    track.style.transform = `translate3d(${x}px,0,0)`;
-    requestAnimationFrame(frame);
-  };
-  const sync = () => {
-    const should = inView && !document.hidden && !reduce;
-    if (should === running) return;
-    running = should;
-    if (running) { last = performance.now(); requestAnimationFrame(frame); }
-  };
-  measure();
-  window.addEventListener("resize", measure);
-  document.addEventListener("visibilitychange", sync);
-  new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }).observe(rail);
+  document.querySelectorAll(".rail").forEach(rail => {
+    const track = rail.querySelector(".rail-track");
+    if (track) init(rail, track);
+  });
 })();
 </script>
 <script>
