@@ -69,7 +69,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .pill b{font-weight:700}
 .card{grid-column:span 2;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
 /* illustration sans photo : un dégradé par catégorie (couleurs de la charte) */
-.cover{width:100%;aspect-ratio:16/9;border-radius:16px;outline:1px solid var(--line);outline-offset:0}
+.cover{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px}
+.cover .tags{position:absolute;top:12px;right:12px;left:12px;justify-content:flex-end;margin:0}
 .g-musique{background:linear-gradient(135deg,#4169E1 0%,#171717 100%)}
 .g-culture{background:linear-gradient(135deg,#e5e5e5 0%,#737373 100%)}
 .g-sport{background:linear-gradient(135deg,#171717 0%,#4169E1 100%)}
@@ -274,7 +275,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <h2 id="add-title">Ajouter mon événement</h2>
 
     <div class="field">
-      <span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>Image de l'événement</span>
+      <span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>Image de l'événement (obligatoire)</span>
       <label class="dropzone" id="drop" for="f-image">
         <span class="dz-empty" id="dz-empty">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>
@@ -388,11 +389,10 @@ function renderGrid() {
   $("n-total").textContent = EVENTS.length;
   $("grid").innerHTML = shuffled(EVENTS).map(e => `
     <article class="card">
-      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"></div>
-      <div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div>
+      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${e.org}</span>
       <h3>${e.title}</h3>
-      <div class="meta"><span>${e.date}${e.hours ? " · " + e.hours : ""}</span><span>${e.address}</span></div>
+      <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
       <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">class="lucide lucide-chart-column" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>Statistiques</button>
     </article>`).join("");
@@ -541,6 +541,35 @@ function DatePickerRange(root) {
 }
 const dates = DatePickerRange($("dp-range"));
 
+// Image de l'événement : obligatoire, 10 Mo maximum, images ou PDF
+const MAX_IMG = 10 * 1024 * 1024;
+let imgUrl = null, imgFile = null;
+function setImage(file) {
+  $("img-err").textContent = "";
+  if (!file) return;
+  if (file.size > MAX_IMG) { $("img-err").textContent = "Fichier trop lourd : 10 Mo maximum."; return; }
+  if (!/^image\//.test(file.type) && !/\.pdf$/i.test(file.name)) { $("img-err").textContent = "Format non accepté : image ou PDF."; return; }
+  if (imgUrl) URL.revokeObjectURL(imgUrl);
+  imgFile = file;
+  imgUrl = /^image\//.test(file.type) ? URL.createObjectURL(file) : null;
+  $("dz-empty").hidden = true; $("dz-preview").hidden = false;
+  if (imgUrl) $("dz-img").src = imgUrl;
+  else { $("dz-img").removeAttribute("src"); $("dz-preview").querySelectorAll(".dz-name").forEach(n => n.remove()); $("dz-preview").insertAdjacentHTML("beforeend", '<span class="dz-title dz-name" style="position:absolute;left:16px;bottom:16px">' + file.name + '</span>'); }
+}
+function clearImage() {
+  if (imgUrl) URL.revokeObjectURL(imgUrl);
+  imgUrl = null; imgFile = null; $("f-image").value = "";
+  $("dz-preview").querySelectorAll(".dz-name").forEach(n => n.remove());
+  $("dz-img").removeAttribute("src");
+  $("dz-empty").hidden = false; $("dz-preview").hidden = true;
+}
+$("f-image").addEventListener("change", e => setImage(e.target.files[0]));
+$("dz-remove").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); clearImage(); });
+const drop = $("drop");
+["dragenter", "dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) setImage(f); });
+
 let chosenCat = null;
 function renderCatPicker() {
   $("f-cat").innerHTML = CATS.map(c => `<button type="button" class="pick${chosenCat === c ? " on" : ""}" data-c="${c}">${svgIcon(CAT_ICON[c])}${c}</button>`).join("");
@@ -563,6 +592,7 @@ $("add-modal").addEventListener("click", e => { if (e.target === $("add-modal"))
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAdd(); closeStats(); } });
 $("add-form").addEventListener("submit", e => {
   e.preventDefault();
+  if (!imgFile) { $("img-err").textContent = "L'image est obligatoire."; $("drop").scrollIntoView({ block: "center" }); return; }
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   $("add-modal").classList.remove("open");
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage();
