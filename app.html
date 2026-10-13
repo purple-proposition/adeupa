@@ -114,12 +114,16 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .modal-box textarea:focus{border-color:var(--blue)}
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 /* sélecteur de date */
-.dp{position:relative}
+.dp-range{position:relative}
+.dp-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
+.dp-range.open .dp-trigger{border-color:var(--text)}
+.dp-range.open .dp-trigger[data-k="start"],.dp-range.open .dp-trigger[data-k="end"]{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.dp-day.in{background:var(--soft);border-radius:0}
 .dp-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;text-align:left;cursor:pointer;transition:border-color .2s ease}
 .dp-trigger:hover,.dp-trigger[aria-expanded="true"]{border-color:var(--muted)}
 .dp-trigger .ph{color:#a3a3a3}
 .dp-trigger svg{width:16px;height:16px;flex:none;color:var(--muted)}
-.dp-pop{position:absolute;top:calc(100% + 8px);left:0;z-index:20;width:296px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 16px 40px rgba(10,10,10,.14);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1)}
+.dp-pop{position:absolute;top:100%;left:0;right:0;z-index:20;background:var(--surface);border:1px solid var(--text);border-top:0;border-radius:0 0 16px 16px;padding:16px;box-shadow:0 16px 40px rgba(10,10,10,.14);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1)}
 .dp-pop.open{opacity:1;transform:none;pointer-events:auto}
 .dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .dp-head b{font-size:16px;font-weight:700;text-transform:capitalize}
@@ -248,15 +252,13 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     </div>
 
     <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/> <line x1="9" x2="15" y1="20" y2="20"/> <line x1="12" x2="12" y1="4" y2="20"/></svg>Titre</span><input id="f-title" required></div>
-    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/></svg>Date de début</span><div class="dp" id="dp-start"></div></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/></svg>Dates</span><div class="dp-range" id="dp-range"></div></div>
     <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/> <polyline points="12 6 12 12 16 14"/></svg>Horaires</span>
       <div class="row">
         <input class="time-in" id="f-start-time" type="time" aria-label="Heure de début" required>
         <input class="time-in" id="f-end-time" type="time" aria-label="Heure de fin" required>
       </div>
     </div>
-    <label class="check"><input type="checkbox" id="f-multi"> L'événement se déroule sur plusieurs jours</label>
-    <div class="field" id="end-field" hidden><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/> <path d="M8 14h.01"/> <path d="M12 14h.01"/> <path d="M16 14h.01"/> <path d="M8 18h.01"/> <path d="M12 18h.01"/> <path d="M16 18h.01"/></svg>Date de fin</span><div class="dp" id="dp-end"></div></div>
     <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/> <circle cx="12" cy="10" r="3"/></svg>Adresse</span><input id="f-address" required></div>
     <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 12H3"/> <path d="M17 18H3"/> <path d="M21 6H3"/></svg>Description</span><textarea id="f-desc"></textarea></div>
     <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/> <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>Catégorie</span><div class="pills" id="f-cat"></div></div>
@@ -423,12 +425,26 @@ const WEEK = ["lun.","mar.","mer.","jeu.","ven.","sam.","dim."];
 const ICON_CAL = svgIcon('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>');
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-function DatePicker(host, { label, minDate = startOfDay(new Date()), onChange }) {
-  let value = null;
+function DatePickerRange(root) {
+  let start = null, end = null, active = "start", open = false;
+  const minDate = startOfDay(new Date());
   let view = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-  host.innerHTML = `<button type="button" class="dp-trigger" aria-haspopup="dialog" aria-expanded="false"><span class="val"><span class="ph">${label}</span></span>${ICON_CAL}</button><div class="dp-pop" role="dialog" aria-label="${label}"></div>`;
-  const trigger = host.querySelector(".dp-trigger"), pop = host.querySelector(".dp-pop");
-  const setOpen = o => { pop.classList.toggle("open", o); trigger.setAttribute("aria-expanded", String(o)); };
+  root.innerHTML = `<div class="dp-row">
+      <button type="button" class="dp-trigger" data-k="start" aria-label="Date de début"><span class="val"></span>${ICON_CAL}</button>
+      <button type="button" class="dp-trigger" data-k="end" aria-label="Date de fin, optionnelle"><span class="val"></span>${ICON_CAL}</button>
+    </div>
+    <div class="dp-pop" role="dialog" aria-label="Choisir les dates"></div>`;
+  const pop = root.querySelector(".dp-pop");
+  const triggers = [...root.querySelectorAll(".dp-trigger")];
+  function refresh() {
+    triggers.forEach(t => {
+      const k = t.dataset.k, v = k === "start" ? start : end;
+      t.querySelector(".val").innerHTML = v ? `<span>${fmt(v)}</span>` : `<span class="ph">${k === "start" ? "Date de début" : "Date de fin (optionnelle)"}</span>`;
+      t.classList.toggle("active", open && active === k);
+    });
+    root.classList.toggle("open", open);
+    pop.classList.toggle("open", open);
+  }
   function render() {
     const first = new Date(view.getFullYear(), view.getMonth(), 1);
     const offset = (first.getDay() + 6) % 7;
@@ -439,52 +455,53 @@ function DatePicker(host, { label, minDate = startOfDay(new Date()), onChange })
     for (let i = 0; i < offset; i++) cells += "<span></span>";
     for (let d = 1; d <= days; d++) {
       const date = new Date(view.getFullYear(), view.getMonth(), d);
-      const cls = ["dp-day", value && +date === +value ? "sel" : "", +date === +today ? "today" : ""].join(" ");
-      cells += `<button type="button" class="${cls}" data-d="${d}" ${date < minDate ? "disabled" : ""}>${d}</button>`;
+      const dis = date < minDate || (active === "end" && start && date < start);
+      const isSel = (start && +date === +start) || (end && +date === +end);
+      const inRange = start && end && date > start && date < end;
+      const cls = ["dp-day", isSel ? "sel" : "", inRange ? "in" : "", +date === +today ? "today" : ""].join(" ");
+      cells += `<button type="button" class="${cls}" data-d="${d}" ${dis ? "disabled" : ""}>${d}</button>`;
     }
     pop.innerHTML = `<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1" ${prevDisabled ? "disabled" : ""} aria-label="Mois précédent">‹</button><b>${MONTHS[view.getMonth()]} ${view.getFullYear()}</b><button type="button" class="dp-nav" data-nav="1" aria-label="Mois suivant">›</button></div>
       <div class="dp-week">${WEEK.map(x => `<span>${x}</span>`).join("")}</div><div class="dp-days">${cells}</div>
-      <div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><span></span></div>`;
+      <div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><button type="button" data-clear-end ${end ? "" : "hidden"}>Retirer la date de fin</button></div>`;
     pop.querySelectorAll("[data-nav]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); view = new Date(view.getFullYear(), view.getMonth() + +b.dataset.nav, 1); render(); }));
-    pop.querySelectorAll(".dp-day").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); choose(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); }));
-    pop.querySelector("[data-today]").addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); choose(today); });
+    pop.querySelectorAll(".dp-day").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); pick(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); }));
+    pop.querySelector("[data-today]").addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); pick(today); });
+    pop.querySelector("[data-clear-end]").addEventListener("click", e => { e.stopPropagation(); end = null; active = "end"; render(); refresh(); });
   }
-  function choose(d) { value = d; trigger.querySelector(".val").innerHTML = `<span>${fmt(d)}</span>`; setOpen(false); onChange && onChange(d); }
-  trigger.addEventListener("click", e => { e.stopPropagation(); const o = !pop.classList.contains("open"); if (o) { const b = value || minDate; view = new Date(b.getFullYear(), b.getMonth(), 1); render(); } setOpen(o); });
+  // Aller puis retour, comme un billet de train : le premier clic fixe le début, le second la fin
+  function pick(d) {
+    if (active === "start") {
+      start = d;
+      if (end && end < start) end = null;
+      active = "end";
+    } else {
+      if (start && d < start) return;
+      end = d;
+      open = false;
+    }
+    render(); refresh();
+  }
+  function setOpen(o, k) {
+    open = o;
+    if (k) active = k;
+    if (o) { const base = (active === "end" && start) ? start : minDate; view = new Date(base.getFullYear(), base.getMonth(), 1); }
+    render(); refresh();
+  }
+  triggers.forEach(t => t.addEventListener("click", e => {
+    e.stopPropagation();
+    const k = t.dataset.k;
+    if (open && active === k) setOpen(false); else setOpen(true, k);
+  }));
   pop.addEventListener("click", e => e.stopPropagation());
-  document.addEventListener("click", () => setOpen(false));
-  return { get value() { return value; }, set minDate(d) { minDate = startOfDay(d); }, reset() { value = null; trigger.querySelector(".val").innerHTML = `<span class="ph">${label}</span>`; } };
+  document.addEventListener("click", e => { if (open && !root.contains(e.target)) setOpen(false); });
+  render(); refresh();
+  return {
+    get start() { return start; }, get end() { return end; },
+    reset() { start = null; end = null; active = "start"; open = false; render(); refresh(); },
+  };
 }
-const startPicker = DatePicker($("dp-start"), { label: "Choisir une date", onChange: d => { if (endPicker.value && endPicker.value < d) endPicker.reset(); endPicker.minDate = d; } });
-const endPicker = DatePicker($("dp-end"), { label: "Choisir une date" });
-$("f-multi").addEventListener("change", e => { $("end-field").hidden = !e.target.checked; if (!e.target.checked) endPicker.reset(); });
-
-// Image de l'événement : 10 Mo maximum, images ou PDF
-const MAX_IMG = 10 * 1024 * 1024;
-let imgUrl = null;
-function setImage(file) {
-  $("img-err").textContent = "";
-  if (!file) return;
-  if (file.size > MAX_IMG) { $("img-err").textContent = "Fichier trop lourd : 10 Mo maximum."; return; }
-  if (!/^image\//.test(file.type) && !/\.pdf$/i.test(file.name)) { $("img-err").textContent = "Format non accepté : image ou PDF."; return; }
-  if (imgUrl) URL.revokeObjectURL(imgUrl);
-  imgUrl = /^image\//.test(file.type) ? URL.createObjectURL(file) : null;
-  $("dz-empty").hidden = true; $("dz-preview").hidden = false;
-  if (imgUrl) $("dz-img").src = imgUrl; else { $("dz-img").removeAttribute("src"); $("dz-preview").insertAdjacentHTML("beforeend", '<span class="dz-title" style="position:absolute;left:16px;bottom:16px">' + file.name + '</span>'); }
-}
-function clearImage() {
-  if (imgUrl) URL.revokeObjectURL(imgUrl);
-  imgUrl = null; $("f-image").value = "";
-  $("dz-preview").querySelectorAll(".dz-title").forEach(n => n.remove());
-  $("dz-img").removeAttribute("src");
-  $("dz-empty").hidden = false; $("dz-preview").hidden = true;
-}
-$("f-image").addEventListener("change", e => setImage(e.target.files[0]));
-$("dz-remove").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); clearImage(); });
-const drop = $("drop");
-["dragenter","dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
-["dragleave","drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
-drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) setImage(f); });
+const dates = DatePickerRange($("dp-range"));
 
 let chosenCat = null;
 function renderCatPicker() {
@@ -497,7 +514,7 @@ $("add-form").addEventListener("submit", e => {
   e.preventDefault();
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   $("add-modal").classList.remove("open");
-  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true; chosenCat = null; clearImage();
+  $("add-form").reset(); dates.reset(); chosenCat = null; clearImage();
   alert("Démonstration : votre événement n'est pas enregistré.");
 });
 
