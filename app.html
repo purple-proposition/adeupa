@@ -411,6 +411,7 @@ function setSignup(on) {
   $("login-title").textContent = on ? "Créer mon compte" : "Connexion";
   $("login-submit").textContent = on ? "Créer mon compte" : "Me connecter";
   $("signup-fields").hidden = !on;
+  $("signup-type").hidden = !on;
   $("switch-text").innerHTML = on
     ? 'Vous avez déjà un compte ? <button type="button" class="link" id="go-login">Connectez-vous</button>'
     : 'Vous n\'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button>';
