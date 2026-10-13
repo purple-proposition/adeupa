@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="assets/devices.min.css">
 <style>
-:root{--blue:#4169E1;--blue-hover:#3558CC;
+:root{--accent:#9fd6db;--blue:#4169E1;--blue-hover:#3558CC;
   --bg:#f5f5f5;
   --surface:#fafafa;
   --soft:#f5f5f5;
@@ -413,7 +413,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .reach-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
 @media (max-width:768px){.reach-grid{grid-template-columns:1fr}}
 .reach-card{display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
-.reach-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;color:var(--text);flex:none}
+.reach-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;color:var(--text);background:var(--accent);flex:none}
 .reach-icon svg{width:24px;height:24px}
 .reach-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
 .reach-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
@@ -454,7 +454,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-text p:last-child{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
 .pb-device{display:flex;justify-content:center;perspective:1200px}
 .pb-device{display:flex;justify-content:center;perspective:1600px}
-.ph-tilt{width:257px;height:521px;transform:rotateX(14deg) rotateY(-20deg) rotateZ(12deg)}
+.ph-tilt{position:relative;width:257px;height:521px;transform-style:preserve-3d;transform:rotateX(14deg) rotateY(-28deg) rotateZ(12deg)}
+.ph-tilt::before,.ph-tilt::after{content:"";position:absolute;inset:0;border-radius:41px}
+.ph-tilt::before{background:linear-gradient(135deg,#d4d4d4 0%,#737373 60%,#525252 100%);transform:translateZ(-7px)}
+.ph-tilt::after{background:#525252;transform:translateZ(-14px)}
 .ph-tilt .device{transform:scale(.6);transform-origin:0 0}
 .device .ph-screen{background:#fafafa;padding:72px 20px 24px;display:flex!important;flex-direction:column;gap:16px;overflow:hidden;font-family:"Manrope",sans-serif;color:#171717}
 .ph-top{display:flex!important;justify-content:space-between;align-items:center}
@@ -685,22 +688,22 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <article class="reach-card">
         <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
         <h3>Vos abonnés</h3>
-        <p>Et si vos futurs participants ne vous suivaient pas encore ? Ne parlez pas seulement à ceux qui vous suivent.</p>
+        <p>Ils vous connaissent déjà. Les 100 000 visiteurs qui consultent la carte chaque mois, pas encore : vos prochains participants sont parmi eux.</p>
       </article>
       <article class="reach-card">
         <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
         <h3>Votre newsletter</h3>
-        <p>Et si vos futurs participants n’étaient pas abonnés ? Faites découvrir votre événement au moment où votre public cherche quoi faire.</p>
+        <p>Elle touche les inscrits, le jour de l’envoi. Sur la carte, votre événement apparaît au moment précis où quelqu’un cherche quoi faire ce soir.</p>
       </article>
       <article class="reach-card">
         <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
         <h3>Votre budget pub</h3>
-        <p>Et si votre visibilité durait plus longtemps que votre campagne ? Donnez à votre événement une visibilité qui dure.</p>
+        <p>Une campagne s’arrête quand le budget s’épuise. Votre fiche reste en ligne jusqu’au jour J, sans payer au clic.</p>
       </article>
       <article class="reach-card">
         <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
         <h3>Votre quartier</h3>
-        <p>Et si vous visiez plus loin que votre quartier ? Votre événement mérite d’être vu, et pas seulement par ceux qui passent devant.</p>
+        <p>L’affiche en vitrine parle aux passants de votre rue. La carte parle à toute la métropole, de la Croix-Rousse à Gerland.</p>
       </article>
     </div>
   </div>
@@ -717,8 +720,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="pb-slide">
         <div class="pb-text">
           <h3>Vos abonnés</h3>
-          <p class="pb-q">Et si vos futurs participants ne vous suivaient pas encore ?</p>
-          <p>Ne parlez pas seulement à ceux qui vous suivent. Donnez envie à ceux qui ne vous connaissent pas encore.</p>
+          <p class="pb-q">Ils vous connaissent déjà.</p>
+          <p>Les 100 000 visiteurs qui consultent la carte chaque mois, pas encore : vos prochains participants sont parmi eux.</p>
         </div>
         <div class="pb-device">
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
@@ -732,8 +735,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="pb-slide">
         <div class="pb-text">
           <h3>Votre newsletter</h3>
-          <p class="pb-q">Et si vos futurs participants n’étaient pas abonnés ?</p>
-          <p>Faites découvrir votre événement au moment où votre public cherche quoi faire.</p>
+          <p class="pb-q">Elle touche les inscrits, le jour de l’envoi.</p>
+          <p>Sur la carte, votre événement apparaît au moment précis où quelqu’un cherche quoi faire ce soir.</p>
         </div>
         <div class="pb-device">
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
@@ -747,8 +750,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="pb-slide">
         <div class="pb-text">
           <h3>Votre budget pub</h3>
-          <p class="pb-q">Et si votre visibilité durait plus longtemps que votre campagne ?</p>
-          <p>Donnez à votre événement une visibilité qui dure, sans dépendre d’un budget publicitaire.</p>
+          <p class="pb-q">Une campagne s’arrête quand le budget s’épuise.</p>
+          <p>Votre fiche reste en ligne jusqu’au jour J, sans payer au clic.</p>
         </div>
         <div class="pb-device">
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
@@ -762,8 +765,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="pb-slide">
         <div class="pb-text">
           <h3>Votre quartier</h3>
-          <p class="pb-q">Et si vous visiez plus loin que votre quartier ?</p>
-          <p>Votre événement mérite d’être vu, et pas seulement par ceux qui passent devant.</p>
+          <p class="pb-q">L’affiche en vitrine parle aux passants de votre rue.</p>
+          <p>La carte parle à toute la métropole, de la Croix-Rousse à Gerland.</p>
         </div>
         <div class="pb-device">
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
