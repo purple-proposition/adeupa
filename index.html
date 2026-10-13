@@ -103,7 +103,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .dc-cursor.on{opacity:1}
 .dc-cursor{transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
 .dc-guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 4}
-.dc-marker{fill:var(--text);stroke:#fff;stroke-width:2}
+.dc-marker{fill:var(--text)}
 .dc-tip{position:absolute;left:0;top:0;pointer-events:none;display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:8px;background:var(--text);color:#fff;font-size:12px;line-height:1.4;white-space:nowrap;opacity:0;margin:-56px 0 0 12px;transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
 .dc-tip.on{opacity:1}
 .dc-tip b{font-weight:700}
@@ -1441,7 +1441,8 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     cursor.style.transform = `translate(${x}px, ${y}px)`;
     const guide = cursor.querySelector(".dc-guide");
     guide.setAttribute("y1", Y1 - y); guide.setAttribute("y2", Y0 - y);
-    tip.innerHTML = `<b>Jour ${day}</b><span>${v} vues</span>`;
+    const mois = new Date().toLocaleDateString("fr-FR", { month: "long" });
+    tip.innerHTML = `<b>${day} ${mois}</b><span>${v} vues</span>`;
     tip.style.transform = `translate(${x / 800 * r.width}px, ${y / 380 * r.height}px)`;
     tip.classList.add("on");
     cursor.classList.add("on");
