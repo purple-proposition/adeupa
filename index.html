@@ -409,7 +409,9 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 @media (max-width:768px){.price-card{grid-template-columns:1fr}}
 .rail{overflow:hidden;padding:8px 0 32px;pointer-events:none;user-select:none;--fade-in:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));-webkit-mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)));mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)))}
 .rail-track{display:flex;gap:16px;width:max-content;will-change:transform}
-.reach-card{flex:0 0 288px;height:320px;display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
+.reach-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
+@media (max-width:768px){.reach-grid{grid-template-columns:1fr}}
+.reach-card{display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
 .reach-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;color:var(--text);flex:none}
 .reach-icon svg{width:24px;height:24px}
 .reach-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
@@ -646,8 +648,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <p class="lead">Quatre freins qui limitent sa portée, et la façon dont Adeupa les lève.</p>
     </div>
   </div>
-  <div class="rail" aria-hidden="false">
-    <div class="rail-track">
+  <div class="wrap">
+    <div class="reach-grid">
       <article class="reach-card">
         <span class="reach-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
         <h3>Vos abonnés</h3>
