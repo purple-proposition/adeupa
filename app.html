@@ -95,9 +95,21 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 /* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
-.modal-box{background:var(--surface);border-radius:16px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.modal-box{background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:min(720px,calc(100vw - 2 * var(--grid-margin)));max-height:90vh;overflow:auto}
+.lbl{display:flex;align-items:center;gap:8px}
+.ic{width:16px;height:16px;flex:none}
+.dropzone{position:relative;display:block;aspect-ratio:16/9;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
+.dropzone:hover,.dropzone.over{border-color:var(--text);background:var(--surface)}
+.dz-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;color:var(--muted)}
+.dz-empty .ic{width:32px;height:32px;color:var(--text)}
+.dz-title{font-size:16px;font-weight:600;color:var(--text)}
+.dz-spec{font-size:12px;max-width:440px}
+.dz-preview{position:absolute;inset:0}
+.dz-preview img{width:100%;height:100%;object-fit:cover;display:block}
+.dz-remove{position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:16px;background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.dz-remove .ic{width:16px;height:16px}
 .modal-box h2{font-size:24px;margin:0 0 16px;letter-spacing:-.015em}
-.modal-box .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-box .row{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
 .modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;width:100%}
 .modal-box textarea:focus{border-color:var(--blue)}
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
@@ -217,19 +229,38 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 <div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
   <form class="modal-box" id="add-form">
     <h2 id="add-title">Ajouter mon événement</h2>
-    <div class="field"><span class="lbl">Catégorie</span><div class="pills" id="f-cat"></div></div>
-    <div class="field"><label for="f-title">Titre</label><input id="f-title" required></div>
-    <div class="field"><span class="lbl">Date de début</span><div class="dp" id="dp-start"></div></div>
-    <div class="field"><span class="lbl">Horaires</span>
+
+    <div class="field">
+      <span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>Image de l'événement</span>
+      <label class="dropzone" id="drop" for="f-image">
+        <span class="dz-empty" id="dz-empty">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>
+          <span class="dz-title">Ajouter une image</span>
+          <span class="dz-spec">Format 16:9 · 1600 × 900 px recommandé · 800 × 450 px minimum · JPG, PNG, WebP ou PDF · 10 Mo maximum</span>
+        </span>
+        <span class="dz-preview" id="dz-preview" hidden>
+          <img id="dz-img" alt="">
+          <button type="button" class="dz-remove" id="dz-remove" aria-label="Retirer l'image"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/> <path d="m6 6 12 12"/></svg></button>
+        </span>
+        <input type="file" id="f-image" accept="image/*,.pdf" hidden>
+      </label>
+      <p class="err" id="img-err" role="alert"></p>
+    </div>
+
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 7 4 4 20 4 20 7"/> <line x1="9" x2="15" y1="20" y2="20"/> <line x1="12" x2="12" y1="4" y2="20"/></svg>Titre</span><input id="f-title" required></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/></svg>Date de début</span><div class="dp" id="dp-start"></div></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/> <polyline points="12 6 12 12 16 14"/></svg>Horaires</span>
       <div class="row">
         <input class="time-in" id="f-start-time" type="time" aria-label="Heure de début" required>
         <input class="time-in" id="f-end-time" type="time" aria-label="Heure de fin" required>
       </div>
     </div>
     <label class="check"><input type="checkbox" id="f-multi"> L'événement se déroule sur plusieurs jours</label>
-    <div class="field" id="end-field" hidden><span class="lbl">Date de fin</span><div class="dp" id="dp-end"></div></div>
-    <div class="field"><label for="f-address">Adresse</label><input id="f-address" required></div>
-    <div class="field"><label for="f-desc">Description</label><textarea id="f-desc"></textarea></div>
+    <div class="field" id="end-field" hidden><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/> <path d="M16 2v4"/> <rect width="18" height="18" x="3" y="4" rx="2"/> <path d="M3 10h18"/> <path d="M8 14h.01"/> <path d="M12 14h.01"/> <path d="M16 14h.01"/> <path d="M8 18h.01"/> <path d="M12 18h.01"/> <path d="M16 18h.01"/></svg>Date de fin</span><div class="dp" id="dp-end"></div></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/> <circle cx="12" cy="10" r="3"/></svg>Adresse</span><input id="f-address" required></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 12H3"/> <path d="M17 18H3"/> <path d="M21 6H3"/></svg>Description</span><textarea id="f-desc"></textarea></div>
+    <div class="field"><span class="lbl"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/> <circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>Catégorie</span><div class="pills" id="f-cat"></div></div>
+
     <div class="actions">
       <button class="btn" type="button" id="close-add">Annuler</button>
       <button class="btn btn-primary" type="submit">Publier</button>
@@ -428,6 +459,33 @@ const startPicker = DatePicker($("dp-start"), { label: "Choisir une date", onCha
 const endPicker = DatePicker($("dp-end"), { label: "Choisir une date" });
 $("f-multi").addEventListener("change", e => { $("end-field").hidden = !e.target.checked; if (!e.target.checked) endPicker.reset(); });
 
+// Image de l'événement : 10 Mo maximum, images ou PDF
+const MAX_IMG = 10 * 1024 * 1024;
+let imgUrl = null;
+function setImage(file) {
+  $("img-err").textContent = "";
+  if (!file) return;
+  if (file.size > MAX_IMG) { $("img-err").textContent = "Fichier trop lourd : 10 Mo maximum."; return; }
+  if (!/^image\//.test(file.type) && !/\.pdf$/i.test(file.name)) { $("img-err").textContent = "Format non accepté : image ou PDF."; return; }
+  if (imgUrl) URL.revokeObjectURL(imgUrl);
+  imgUrl = /^image\//.test(file.type) ? URL.createObjectURL(file) : null;
+  $("dz-empty").hidden = true; $("dz-preview").hidden = false;
+  if (imgUrl) $("dz-img").src = imgUrl; else { $("dz-img").removeAttribute("src"); $("dz-preview").insertAdjacentHTML("beforeend", '<span class="dz-title" style="position:absolute;left:16px;bottom:16px">' + file.name + '</span>'); }
+}
+function clearImage() {
+  if (imgUrl) URL.revokeObjectURL(imgUrl);
+  imgUrl = null; $("f-image").value = "";
+  $("dz-preview").querySelectorAll(".dz-title").forEach(n => n.remove());
+  $("dz-img").removeAttribute("src");
+  $("dz-empty").hidden = false; $("dz-preview").hidden = true;
+}
+$("f-image").addEventListener("change", e => setImage(e.target.files[0]));
+$("dz-remove").addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); clearImage(); });
+const drop = $("drop");
+["dragenter","dragover"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave","drop"].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) setImage(f); });
+
 let chosenCat = null;
 function renderCatPicker() {
   $("f-cat").innerHTML = CATS.map(c => `<button type="button" class="pick${chosenCat === c ? " on" : ""}" data-c="${c}">${svgIcon(CAT_ICON[c])}${c}</button>`).join("");
@@ -439,7 +497,7 @@ $("add-form").addEventListener("submit", e => {
   e.preventDefault();
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   $("add-modal").classList.remove("open");
-  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true; chosenCat = null;
+  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true; chosenCat = null; clearImage();
   alert("Démonstration : votre événement n'est pas enregistré.");
 });
 
