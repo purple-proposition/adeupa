@@ -54,6 +54,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .field input:focus,.field select:focus{border-color:var(--blue)}
 .field input[readonly]{background:var(--soft);color:var(--muted)}
 .auth .btn{width:100%}
+.switch{margin:16px 0 0;font-size:14px;color:var(--muted);text-align:center}
+.link{border:0;background:none;padding:0;font:inherit;font-weight:600;color:var(--text);text-decoration:underline;cursor:pointer}
 .err{color:#b42318;font-size:14px;min-height:20px;margin:0 0 8px}
 .demo{margin-top:24px;padding:16px;border-radius:16px;background:var(--soft);font-size:14px;color:var(--muted)}
 .demo b{color:var(--text)}
@@ -210,12 +212,15 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
       <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6"><circle cx="50" cy="20" r="11"/><circle cx="50" cy="80" r="11"/><circle cx="20" cy="35" r="11"/><circle cx="80" cy="65" r="11"/><circle cx="20" cy="65" r="11"/><circle cx="80" cy="35" r="11"/></g><circle cx="50" cy="50" r="18" fill="currentColor"/></svg>
       Adeupa
     </a>
-    <h1>Connexion</h1>
+    <h1 id="login-title">Connexion</h1>
     <p class="lead">Accédez à votre espace organisateur.</p>
     <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
     <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
     <p class="err" id="login-err" role="alert"></p>
-    <button class="btn btn-dark" type="submit">Me connecter</button>
+    <div class="field" id="signup-fields" hidden><label for="s-name">Nom de la structure</label><input id="s-name"></div>
+    <div class="field" id="signup-type" hidden><label for="s-type">Type de structure</label><select id="s-type"><option>Une association</option><option>Un lieu</option><option>Un organisateur professionnel</option></select></div>
+    <button class="btn btn-dark" type="submit" id="login-submit">Me connecter</button>
+    <p class="switch" id="switch-text">Vous n'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button></p>
     <div class="demo">Compte de test : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b></div>
   </form>
 </main>
@@ -384,12 +389,39 @@ function showLogin() {
 }
 $("login-form").addEventListener("submit", e => {
   e.preventDefault();
+  if (signupMode) {
+    // Démonstration : le compte est créé dans cette session seulement, rien n'est envoyé
+    profile = { ...profile, name: $("s-name").value.trim() || profile.name, type: $("s-type").value || profile.type, email: $("email").value.trim() };
+    saveProfile(profile);
+    try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
+    setSignup(false);
+    showApp();
+    return;
+  }
   const ok = $("email").value.trim().toLowerCase() === DEMO.email && $("password").value === DEMO.password;
   if (!ok) { $("login-err").textContent = "E-mail ou mot de passe incorrect."; return; }
   $("login-err").textContent = "";
   try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
   showApp();
 });
+let signupMode = false;
+function setSignup(on) {
+  signupMode = on;
+  $("login-form").dataset.mode = on ? "signup" : "login";
+  $("login-title").textContent = on ? "Créer mon compte" : "Connexion";
+  $("login-submit").textContent = on ? "Créer mon compte" : "Me connecter";
+  $("signup-fields").hidden = !on;
+  $("switch-text").innerHTML = on
+    ? 'Vous avez déjà un compte ? <button type="button" class="link" id="go-login">Connectez-vous</button>'
+    : 'Vous n\'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button>';
+  $("login-err").textContent = "";
+  bindSwitch();
+}
+function bindSwitch() {
+  const b = document.getElementById(signupMode ? "go-login" : "go-signup");
+  b.addEventListener("click", () => setSignup(!signupMode));
+}
+bindSwitch();
 $("logout").addEventListener("click", () => { try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {} showLogin(); });
 
 // Onglets
