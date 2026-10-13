@@ -621,7 +621,6 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
     <figure class="data-chart" data-reveal>
           <div id="stats-chart"></div>
-      <figcaption>Chaque point est une journée : plus il est haut, plus l’événement a été vu ce jour-là ; plus il est à droite, plus la date est proche.</figcaption>
     </figure>
   </div>
 </section>
@@ -1369,7 +1368,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 (() => {
   const host = document.getElementById("stats-chart");
   if (!host) return;
-  const data = [[1,120],[4,210],[6,180],[9,340],[12,260],[14,480],[17,420],[19,610],[22,520],[25,740],[27,690],[30,880]];
+  const data = [[1,120],[4,210],[6,180],[9,340],[12,260],[13,300],[14,480],[17,420],[19,610],[22,520],[25,740],[27,690],[30,880]];
   const today = new Date().getDate();
   const X0 = 72, X1 = 760, Y0 = 300, Y1 = 40, vmax = 1000, dmin = 1, dmax = 31;
   const px = d => X0 + (X1 - X0) * (d - dmin) / (dmax - dmin);
