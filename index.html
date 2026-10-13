@@ -101,6 +101,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .data-chart.in .dc-line{stroke-dashoffset:0}
 @media (prefers-reduced-motion:reduce){.data-chart .dc-line{transition:none;stroke-dashoffset:0}}
 .data-chart .dc-line.dc-hot{stroke:#4169E1}
+.data-chart .dc-today{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}
 .data-chart figcaption{margin-top:16px;font-size:14px;color:var(--muted);text-align:center}
 /* Points et halos */
 .event{position:absolute;top:0;left:0;width:12px;height:12px;transition:opacity .32s}
@@ -614,17 +615,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <p class="lead">Pour chaque événement, voyez combien de personnes ont consulté votre fiche, jour après jour.</p>
     </div>
     <figure class="data-chart" data-reveal>
-          <svg viewBox="0 0 800 360" role="img" aria-labelledby="st-title st-desc">
-            <title id="st-title">Nombre de vues par jour, sur un mois</title>
-            <desc id="st-desc">Chaque point est une journée, placée selon sa date (de gauche à droite) et son nombre de vues (de bas en haut).</desc>
-            <line x1="72" x2="760" y1="300.0" y2="300.0" class="dc-grid"/><text x="60" y="305.0" class="dc-tick" text-anchor="end">0</text><line x1="72" x2="760" y1="235.0" y2="235.0" class="dc-grid"/><text x="60" y="240.0" class="dc-tick" text-anchor="end">250</text><line x1="72" x2="760" y1="170.0" y2="170.0" class="dc-grid"/><text x="60" y="175.0" class="dc-tick" text-anchor="end">500</text><line x1="72" x2="760" y1="105.0" y2="105.0" class="dc-grid"/><text x="60" y="110.0" class="dc-tick" text-anchor="end">750</text><line x1="72" x2="760" y1="40.0" y2="40.0" class="dc-grid"/><text x="60" y="45.0" class="dc-tick" text-anchor="end">1000</text>
-            <line x1="72" x2="72" y1="40" y2="300" class="dc-axis"/>
-            <line x1="72" x2="760" y1="300" y2="300" class="dc-axis"/>
-            <line x1="72.0" x2="72.0" y1="300" y2="306" class="dc-axis"/><text x="72.0" y="324" class="dc-tick" text-anchor="middle">1</text><line x1="232.5" x2="232.5" y1="300" y2="306" class="dc-axis"/><text x="232.5" y="324" class="dc-tick" text-anchor="middle">8</text><line x1="393.1" x2="393.1" y1="300" y2="306" class="dc-axis"/><text x="393.1" y="324" class="dc-tick" text-anchor="middle">15</text><line x1="553.6" x2="553.6" y1="300" y2="306" class="dc-axis"/><text x="553.6" y="324" class="dc-tick" text-anchor="middle">22</text><line x1="714.1" x2="714.1" y1="300" y2="306" class="dc-axis"/><text x="714.1" y="324" class="dc-tick" text-anchor="middle">29</text>
-            <line x1="72.0" y1="268.8" x2="140.8" y2="245.4" class="dc-line" pathLength="1" style="--i:0"/><line x1="140.8" y1="245.4" x2="186.7" y2="253.2" class="dc-line" pathLength="1" style="--i:1"/><line x1="186.7" y1="253.2" x2="255.5" y2="211.6" class="dc-line" pathLength="1" style="--i:2"/><line x1="255.5" y1="211.6" x2="324.3" y2="232.4" class="dc-line" pathLength="1" style="--i:3"/><line x1="324.3" y1="232.4" x2="370.1" y2="175.2" class="dc-line" pathLength="1" style="--i:4"/><line x1="370.1" y1="175.2" x2="438.9" y2="190.8" class="dc-line" pathLength="1" style="--i:5"/><line x1="438.9" y1="190.8" x2="484.8" y2="141.4" class="dc-line" pathLength="1" style="--i:6"/><line x1="484.8" y1="141.4" x2="553.6" y2="164.8" class="dc-line" pathLength="1" style="--i:7"/><line x1="553.6" y1="164.8" x2="622.4" y2="107.6" class="dc-line" pathLength="1" style="--i:8"/><line x1="622.4" y1="107.6" x2="668.3" y2="120.6" class="dc-line dc-hot" pathLength="1" style="--i:9"/><line x1="668.3" y1="120.6" x2="737.1" y2="71.2" class="dc-line dc-hot" pathLength="1" style="--i:10"/>
-            <text x="72" y="24" class="dc-label">Vues</text>
-            <text x="760" y="352" class="dc-label" text-anchor="end">Jour du mois</text>
-          </svg>
+          <div id="stats-chart"></div>
       <figcaption>Chaque point est une journée : plus il est haut, plus l’événement a été vu ce jour-là ; plus il est à droite, plus la date est proche.</figcaption>
     </figure>
   </div>
@@ -1366,6 +1357,40 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
+})();
+</script>
+<script>
+// Graphique des vues : le tracé s'arrête au jour actuel, avec une annotation « Aujourd’hui »
+(() => {
+  const host = document.getElementById("stats-chart");
+  if (!host) return;
+  const data = [[1,120],[4,210],[6,180],[9,340],[12,260],[14,480],[17,420],[19,610],[22,520],[25,740],[27,690],[30,880]];
+  const today = new Date().getDate();
+  const X0 = 72, X1 = 760, Y0 = 300, Y1 = 40, vmax = 1000, dmin = 1, dmax = 31;
+  const px = d => X0 + (X1 - X0) * (d - dmin) / (dmax - dmin);
+  const py = v => Y0 - (Y0 - Y1) * v / vmax;
+  const pts = data.filter(([d]) => d <= today);
+  const grid = [0,250,500,750,1000].map(v => `<line x1="${X0}" x2="${X1}" y1="${py(v)}" y2="${py(v)}" class="dc-grid"/><text x="${X0-12}" y="${py(v)+5}" class="dc-tick" text-anchor="end">${v}</text>`).join("");
+  const ticks = [1,8,15,22,29].map(d => `<line x1="${px(d)}" x2="${px(d)}" y1="${Y0}" y2="${Y0+6}" class="dc-axis"/><text x="${px(d)}" y="${Y0+24}" class="dc-tick" text-anchor="middle">${d}</text>`).join("");
+  let segs = "";
+  pts.slice(1).forEach(([d,v], i) => {
+    const [pd, pv] = pts[i];
+    segs += `<line x1="${px(pd)}" y1="${py(pv)}" x2="${px(d)}" y2="${py(v)}" class="dc-line" pathLength="1" style="--i:${i}"/>`;
+  });
+  const [td] = [today];
+  const todayX = px(today);
+  host.innerHTML = `<svg viewBox="0 0 800 380" role="img" aria-labelledby="st-title st-desc">
+    <title id="st-title">Nombre de vues par jour, sur le mois en cours</title>
+    <desc id="st-desc">Chaque point est une journée, placée selon sa date et son nombre de vues. Le tracé s’arrête à aujourd’hui.</desc>
+    ${grid}
+    <line x1="${X0}" x2="${X0}" y1="${Y1}" y2="${Y0}" class="dc-axis"/>
+    <line x1="${X0}" x2="${X1}" y1="${Y0}" y2="${Y0}" class="dc-axis"/>
+    ${ticks}
+    <line x1="${todayX}" x2="${todayX}" y1="${Y1}" y2="${Y0}" class="dc-today"/>
+    ${segs}
+    <text x="${todayX}" y="${Y0+52}" class="dc-label" text-anchor="middle">Aujourd’hui</text>
+    <text x="${X1}" y="${Y0+52}" class="dc-label" text-anchor="end">Jour du mois</text>
+  </svg>`;
 })();
 </script>
 </body>
