@@ -8,67 +8,95 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
-:root{--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717}
+:root{--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717;--dot:#171717;--live:#4169E1;--grid-gutter:24px;--grid-margin:24px}
+@media (max-width:1024px){:root{--grid-gutter:16px;--grid-margin:16px}}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Manrope",ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
-button,input{font:inherit}
+button,input,textarea,select{font:inherit}
+[hidden]{display:none!important}
+.wrap{margin:0 auto;padding:0 var(--grid-margin)}
+/* grille 12 colonnes : mêmes marges et gouttières que la landing */
+.g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter);row-gap:var(--grid-gutter)}
 .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:24px;color:var(--blue);letter-spacing:-.02em;text-decoration:none}
 .brand svg{width:40px;height:40px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .btn:hover{border-color:var(--muted)}
 .btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}
 .btn-primary:hover{background:#3558CC;border-color:#3558CC}
 .btn-dark{background:var(--dark);border-color:var(--dark);color:#fff}
 .btn-dark:hover{background:#0a0a0a;border-color:#0a0a0a}
-.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
-@media (min-width:1025px){.wrap{padding:0 24px}}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+.btn-ghost{background:transparent}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;grid-column:1/-1}
+.topnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tabs{display:flex;gap:4px}
 /* connexion */
 #login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
 .auth{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:32px}
 .auth h1{font-size:24px;line-height:1.2;margin:24px 0 8px;letter-spacing:-.015em}
 .auth p.lead{color:var(--muted);margin:0 0 24px;font-size:16px}
-.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;min-width:0}
 .field label,.field .lbl{font-size:12px;font-weight:600;color:var(--muted)}
-.field[hidden]{display:none}
-.field input{padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none}
-.field input:focus{border-color:var(--blue)}
+.field input,.field select{padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none;width:100%}
+.field input:focus,.field select:focus{border-color:var(--blue)}
+.field input[readonly]{background:var(--soft);color:var(--muted)}
 .auth .btn{width:100%}
-.auth .err{color:#b42318;font-size:14px;min-height:20px;margin:0 0 8px}
-.auth .demo{margin-top:24px;padding:16px;border-radius:16px;background:var(--soft);font-size:14px;color:var(--muted)}
-.auth .demo b{color:var(--text)}
+.err{color:#b42318;font-size:14px;min-height:20px;margin:0 0 8px}
+.demo{margin-top:24px;padding:16px;border-radius:16px;background:var(--soft);font-size:14px;color:var(--muted)}
+.demo b{color:var(--text)}
 /* espace connecté */
-#app-view{display:none}
-.map-box{position:relative;height:min(560px,62vh);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--soft)}
+#app-view{display:none;padding-bottom:64px}
+#app-view.show{display:block}
+.section-title{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:32px 0 0;flex-wrap:wrap}
+.section-title h2{font-size:24px;line-height:1.2;margin:0;letter-spacing:-.015em}
+.map-box{grid-column:1/-1;position:relative;height:min(560px,62vh);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--soft)}
 #map{position:absolute;inset:0}
-.map-bar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:2}
-.pill{pointer-events:auto;padding:12px 16px;border-radius:16px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);font-size:14px;color:var(--text)}
+.event{position:absolute;top:0;left:0;width:12px;height:12px}
+.pin{position:absolute;inset:0;border-radius:50%;background:var(--dot)}
+.event.live .pin{background:var(--live)}
+.halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);animation:haloBreathe 3.2s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
+@keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
+.pill{position:absolute;top:16px;left:16px;z-index:2;padding:12px 16px;border-radius:16px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);font-size:14px}
 .pill b{font-weight:700}
-.marker{width:14px;height:14px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 1px 4px rgba(10,10,10,.2);cursor:pointer}
-.marker.soon{background:var(--dark)}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:40px 0 16px;flex-wrap:wrap}
-.section-head h2{font-size:24px;line-height:1.2;margin:0;letter-spacing:-.015em}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding-bottom:64px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card{grid-column:span 4;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+@media (min-width:1025px){.card{grid-column:span 3}}
 .card .cover{width:100%;aspect-ratio:16/9;border-radius:16px;object-fit:cover;background:var(--soft);outline:1px solid var(--line)}
 .card .org{font-size:12px;font-weight:600;color:var(--muted)}
 .card h3{font-size:16px;margin:0;line-height:1.3}
 .card .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
 .card .stat{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
 .card .stat b{color:var(--text);font-weight:700}
-.tag{align-self:flex-start;font-size:12px;font-weight:600;padding:4px 8px;border-radius:16px;background:var(--soft);color:var(--muted)}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:600;padding:4px 8px;border-radius:16px;background:var(--soft);color:var(--muted)}
 .tag.live{background:var(--blue);color:#fff}
-/* modale d'ajout */
+.tag.cat{background:var(--surface);border:1px solid var(--line);color:var(--text)}
+/* profil */
+.panel{grid-column:span 6;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;min-width:0}
+@media (max-width:1024px){.panel{grid-column:1/-1}}
+.panel h3{font-size:16px;margin:0 0 16px}
+.status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:16px;font-size:14px;font-weight:600;background:var(--soft)}
+.status.ok{background:var(--blue);color:#fff}
+.status .d{width:8px;height:8px;border-radius:50%;background:currentColor}
+.plans{display:flex;flex-direction:column;gap:8px}
+.plan{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px}
+.plan.on{border-color:var(--text)}
+.plan b{display:block;font-size:16px}
+.plan span{font-size:14px;color:var(--muted)}
+.note{font-size:12px;color:var(--muted);margin:16px 0 0}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pick{padding:8px 14px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:16px;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.pick:hover{border-color:var(--muted)}
+.pick.on{background:var(--text);border-color:var(--text);color:#fff}
+.pick svg{width:16px;height:16px}
+/* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
 .modal-box{background:var(--surface);border-radius:16px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
 .modal-box h2{font-size:24px;margin:0 0 16px;letter-spacing:-.015em}
-.modal-box .row{display:flex;gap:8px}
-.modal-box .row .field{flex:1}
-.modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;font-family:inherit}
+.modal-box .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;width:100%}
 .modal-box textarea:focus{border-color:var(--blue)}
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-.note{font-size:12px;color:var(--muted);margin:0 0 16px}
+/* sélecteur de date */
 .dp{position:relative}
 .dp-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;text-align:left;cursor:pointer;transition:border-color .2s ease}
 .dp-trigger:hover,.dp-trigger[aria-expanded="true"]{border-color:var(--muted)}
@@ -78,7 +106,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .dp-pop.open{opacity:1;transform:none;pointer-events:auto}
 .dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .dp-head b{font-size:16px;font-weight:700;text-transform:capitalize}
-.dp-nav{width:32px;height:32px;border:0;border-radius:16px;background:transparent;color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.dp-nav{width:32px;height:32px;border:0;border-radius:16px;background:transparent;color:var(--text);cursor:pointer;font-size:16px}
 .dp-nav:hover{background:var(--soft)}
 .dp-nav:disabled{color:#d4d4d4;cursor:default;background:transparent}
 .dp-week,.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
@@ -91,11 +119,11 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .dp-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .dp-foot button{border:0;background:transparent;font-size:14px;font-weight:600;color:var(--blue);cursor:pointer;padding:8px 12px;border-radius:16px}
 .dp-foot button:hover{background:var(--soft)}
-.times{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .time-in{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none;font-family:inherit}
 .time-in:focus{border-color:var(--blue)}
 .check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);margin:0 0 16px;cursor:pointer}
 .check input{width:16px;height:16px;accent-color:var(--dark)}
+/* grille de mise en page (touche G) */
 #grid-overlay{position:fixed;inset:0;z-index:80;pointer-events:none;display:none}
 #grid-overlay.on{display:block}
 .go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
@@ -116,48 +144,66 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
     </a>
     <h1>Connexion</h1>
     <p class="lead">Accédez à votre espace organisateur.</p>
-    <div class="field">
-      <label for="email">E-mail</label>
-      <input id="email" type="email" autocomplete="username" required>
-    </div>
-    <div class="field">
-      <label for="password">Mot de passe</label>
-      <input id="password" type="password" autocomplete="current-password" required>
-    </div>
+    <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
     <p class="err" id="login-err" role="alert"></p>
     <button class="btn btn-dark" type="submit">Me connecter</button>
-    <div class="demo">
-      Compte de démonstration : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b>
-    </div>
+    <div class="demo">Compte de démonstration : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b></div>
   </form>
 </main>
 
 <!-- Espace connecté -->
 <div id="app-view">
-  <div class="wrap">
+  <div class="wrap g12">
     <header class="top">
       <a class="brand" href="app.html">
         <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6"><circle cx="50" cy="20" r="11"/><circle cx="50" cy="80" r="11"/><circle cx="20" cy="35" r="11"/><circle cx="80" cy="65" r="11"/><circle cx="20" cy="65" r="11"/><circle cx="80" cy="35" r="11"/></g><circle cx="50" cy="50" r="18" fill="currentColor"/></svg>
         Adeupa
       </a>
-      <div style="display:flex;gap:8px;align-items:center">
+      <div class="topnav">
+        <button class="btn btn-ghost" id="tab-events" type="button">Événements</button>
+        <button class="btn btn-ghost" id="tab-profile" type="button">Mon profil</button>
         <button class="btn btn-primary" id="open-add" type="button">Ajouter mon événement</button>
         <button class="btn" id="logout" type="button">Déconnexion</button>
       </div>
     </header>
 
-    <section class="map-box" aria-label="Carte des événements">
-      <div id="map"></div>
-      <div class="map-bar">
+    <!-- Vue événements -->
+    <div id="view-events" class="g12" style="grid-column:1/-1">
+      <section class="map-box" aria-label="Carte des événements">
+        <div id="map"></div>
         <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
-      </div>
-    </section>
-
-    <div class="section-head">
-      <h2>Vos événements</h2>
-      <span class="note">Données de démonstration</span>
+      </section>
+      <div class="section-title"><h2>Vos événements</h2><span class="note" style="margin:0">Données de démonstration</span></div>
+      <div id="grid" class="g12" style="grid-column:1/-1"></div>
     </div>
-    <div class="grid" id="grid"></div>
+
+    <!-- Vue profil -->
+    <div id="view-profile" class="g12" style="grid-column:1/-1" hidden>
+      <div class="section-title" style="margin-top:0"><h2>Mon profil</h2></div>
+      <form class="panel" id="profile-form">
+        <h3>Informations</h3>
+        <div class="field"><label for="p-name">Nom de la structure</label><input id="p-name" required></div>
+        <div class="field"><span class="lbl">Type de structure</span>
+          <div class="pills" id="p-type"></div>
+        </div>
+        <div class="field"><label for="p-email">E-mail</label><input id="p-email" type="email" readonly></div>
+        <div class="field"><label for="p-phone">Téléphone</label><input id="p-phone" type="tel" placeholder="06 00 00 00 00"></div>
+        <button class="btn btn-dark" type="submit">Enregistrer</button>
+        <p class="note" id="p-saved" role="status"></p>
+      </form>
+      <div class="panel" style="grid-column:span 6">
+        <h3>Statut du compte</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+          <span class="status" id="p-status"><span class="d"></span><span></span></span>
+          <button class="btn" id="p-confirm" type="button">Simuler la confirmation</button>
+        </div>
+        <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés. Le bouton « Simuler la confirmation » n'existe que dans cette démonstration.</p>
+        <h3 style="margin-top:32px">Abonnement</h3>
+        <div class="plans" id="plans"></div>
+        <p class="note">Formules proposées, à valider : aucun tarif n'est encore engagé dans cette démonstration.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -165,10 +211,11 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 <div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
   <form class="modal-box" id="add-form">
     <h2 id="add-title">Ajouter mon événement</h2>
+    <div class="field"><span class="lbl">Catégorie</span><div class="pills" id="f-cat"></div></div>
     <div class="field"><label for="f-title">Titre</label><input id="f-title" required></div>
     <div class="field"><span class="lbl">Date de début</span><div class="dp" id="dp-start"></div></div>
     <div class="field"><span class="lbl">Horaires</span>
-      <div class="times">
+      <div class="row">
         <input class="time-in" id="f-start-time" type="time" aria-label="Heure de début" required>
         <input class="time-in" id="f-end-time" type="time" aria-label="Heure de fin" required>
       </div>
@@ -186,10 +233,17 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 
 <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <script>
-// Compte de démonstration : aucune donnée réelle, rien n'est envoyé à un serveur
-const DEMO_ACCOUNT = { email: "demo@adeupa.fr", password: "demo-adeupa" };
-
-// Événements de démonstration, sans ordre particulier (fictifs)
+// Données de démonstration (fictives) et catégories
+const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier"];
+const CAT_ICON = {
+  "Musique": '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+  "Culture": '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+  "Sport": '<path d="M14.4 14.4 9.6 9.6"/><path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/>',
+  "Brocante": '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>',
+  "Fête": '<path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/>',
+  "Atelier": '<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>',
+};
+const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 const EVENTS = [
   { title: "Apéro jazz au Rhône", org: "Quai Jazz Club", cat: "Musique", date: "Ce soir", hours: "18h à 22h", address: "1 quai Fulchiron, 69005 Lyon", lat: 45.75938, lng: 4.82748, status: "live", tickets: 14, interested: 52 },
   { title: "Marché nocturne", org: "Galerie Nord Sud", cat: "Brocante", date: "Samedi 17 octobre", hours: "19h à 23h", address: "1 place Bellecour, 69002 Lyon", lat: 45.75889, lng: 4.83092, status: "soon", tickets: 0, interested: 88 },
@@ -200,42 +254,58 @@ const EVENTS = [
   { title: "Open mic", org: "Club Le Rivage", cat: "Musique", date: "Jeudi 22 octobre", hours: "20h à 23h", address: "1 place de la Croix-Rousse, 69004 Lyon", lat: 45.77479, lng: 4.83158, status: "soon", tickets: 4, interested: 12 },
   { title: "Projection en plein air", org: "Cinéma Comoedia", cat: "Culture", date: "Ce soir", hours: "21h", address: "1 place des Célestins, 69002 Lyon", lat: 45.76010, lng: 4.83183, status: "live", tickets: 40, interested: 118 },
 ];
+const PLANS = [
+  { key: "lancement", name: "Lancement", desc: "1 mois offert, puis −50 % sur le trimestre suivant (43,50 € au lieu de 87 €)" },
+  { key: "standard", name: "Standard", desc: "29 € par mois, sans engagement" },
+  { key: "mise-en-avant", name: "Mise en avant", desc: "Option sur un abonnement : à définir" },
+];
+const TYPES = ["Une association", "Un lieu", "Un organisateur professionnel"];
 
 const $ = id => document.getElementById(id);
+const DEMO = { email: "demo@adeupa.fr", password: "demo-adeupa" };
+const DEFAULT_PROFILE = { name: "Club Le Rivage", type: TYPES[1], email: DEMO.email, phone: "", confirmed: false, plan: "lancement" };
+const loadProfile = () => { try { return { ...DEFAULT_PROFILE, ...JSON.parse(sessionStorage.getItem("adeupa-profile") || "{}") }; } catch (_) { return { ...DEFAULT_PROFILE }; } };
+const saveProfile = p => { try { sessionStorage.setItem("adeupa-profile", JSON.stringify(p)); } catch (_) {} };
+let profile = loadProfile();
 
-// Connexion de démonstration : l'état est gardé pour l'onglet seulement
+// Connexion de démonstration
 function showApp() {
   $("login-view").style.display = "none";
-  $("app-view").style.display = "block";
-  renderAll();
-  initMap();
+  $("app-view").classList.add("show");
+  renderGrid(); renderProfile(); initMap(); showTab("events");
 }
 function showLogin() {
-  $("app-view").style.display = "none";
+  $("app-view").classList.remove("show");
   $("login-view").style.display = "flex";
 }
 $("login-form").addEventListener("submit", e => {
   e.preventDefault();
-  const ok = $("email").value.trim().toLowerCase() === DEMO_ACCOUNT.email && $("password").value === DEMO_ACCOUNT.password;
+  const ok = $("email").value.trim().toLowerCase() === DEMO.email && $("password").value === DEMO.password;
   if (!ok) { $("login-err").textContent = "E-mail ou mot de passe incorrect."; return; }
   $("login-err").textContent = "";
   try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
   showApp();
 });
-$("logout").addEventListener("click", () => {
-  try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {}
-  showLogin();
-});
+$("logout").addEventListener("click", () => { try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {} showLogin(); });
 
-// Liste en vrac : ordre mélangé à chaque affichage
-function shuffled(list) {
-  return list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
+// Onglets
+function showTab(t) {
+  $("view-events").hidden = t !== "events";
+  $("view-profile").hidden = t !== "profile";
+  $("tab-events").classList.toggle("btn-dark", t === "events");
+  $("tab-profile").classList.toggle("btn-dark", t === "profile");
+  if (t === "events" && mapRef) mapRef.resize();
 }
-function renderAll() {
+$("tab-events").addEventListener("click", () => showTab("events"));
+$("tab-profile").addEventListener("click", () => showTab("profile"));
+
+// Cartes d'événements, dans un ordre mélangé à chaque affichage
+const shuffled = list => list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
+function renderGrid() {
   $("n-total").textContent = EVENTS.length;
   $("grid").innerHTML = shuffled(EVENTS).map(e => `
     <article class="card">
-      <span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span>
+      <div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${e.cat}</span></div>
       <span class="org">${e.org}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " · " + e.hours : ""}</span><span>${e.address}</span></div>
@@ -243,39 +313,82 @@ function renderAll() {
     </article>`).join("");
 }
 
-// Carte : même fond que la landing
-let mapReady = false;
+// Carte : même fond, mêmes points et halos que la landing, cadrage fixe, sans zoom ni déplacement
+const HIDE_SYMBOL = /^(poi_|roadname_minor|roadname_sec|housenumber|waterway_label|watername_|place_city|place_capital)/;
+const HIDE_LINE = /^(road_service|road_path|bridge_service|bridge_path|tunnel_service|tunnel_path|aeroway|rail|boundary_)/;
+const HIDE_FILL = /^(building|park_|landuse_residential)/;
+const VIEW_BOUNDS = [[4.8115, 45.7335], [4.8415, 45.7715]];
+let mapRef = null;
 function initMap() {
-  if (mapReady || typeof maplibregl === "undefined") return;
-  mapReady = true;
+  if (mapRef || typeof maplibregl === "undefined") return;
   const map = new maplibregl.Map({
     container: "map",
     style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
-    center: [4.8318, 45.7575],
+    center: [4.8270, 45.7530],
     zoom: 13.2,
+    interactive: true,
+    dragPan: false, scrollZoom: false, doubleClickZoom: false, touchZoomRotate: false, dragRotate: false, keyboard: false,
     attributionControl: { compact: true },
   });
-  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
-  EVENTS.forEach(e => {
+  mapRef = map;
+  map.on("load", () => {
+    map.getStyle().layers.forEach(l => {
+      if (l.id === "background") map.setPaintProperty(l.id, "background-color", "#f5f5f5");
+      if (HIDE_SYMBOL.test(l.id) || HIDE_LINE.test(l.id) || HIDE_FILL.test(l.id)) map.setLayoutProperty(l.id, "visibility", "none");
+    });
+    map.setPaintProperty("water", "fill-color", "#e5e5e5");
+    map.setPaintProperty("waterway", "line-color", "#e5e5e5");
+    map.setPaintProperty("water_shadow", "fill-color", "#e5e5e5");
+    map.fitBounds(VIEW_BOUNDS, { padding: 24, animate: false });
+  });
+  window.addEventListener("resize", () => { map.resize(); map.fitBounds(VIEW_BOUNDS, { padding: 24, animate: false }); });
+  // Un point par lieu ; halo bleu pour les points en cours, noir pour les points à venir
+  const byPlace = new Map();
+  EVENTS.forEach(e => { const k = e.lat + "," + e.lng; if (!byPlace.has(k)) byPlace.set(k, []); byPlace.get(k).push(e); });
+  byPlace.forEach(list => {
+    const hasLive = list.some(e => e.status === "live");
     const el = document.createElement("div");
-    el.className = "marker" + (e.status === "soon" ? " soon" : "");
-    el.title = e.title;
-    new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
+    el.className = "event" + (hasLive ? " live" : "");
+    el.innerHTML = `${hasLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+    el.title = list.map(e => e.title).join(", ");
+    new maplibregl.Marker({ element: el }).setLngLat([list[0].lng, list[0].lat]).addTo(map);
   });
 }
 
-// Sélecteur de date : popover calendrier, dates passées désactivées, bouton « Aujourd'hui »
+// Profil
+function renderProfile() {
+  $("p-name").value = profile.name;
+  $("p-email").value = profile.email;
+  $("p-phone").value = profile.phone || "";
+  $("p-type").innerHTML = TYPES.map(t => `<button type="button" class="pick${profile.type === t ? " on" : ""}" data-t="${t}">${t}</button>`).join("");
+  $("p-type").querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { profile.type = b.dataset.t; saveProfile(profile); renderProfile(); }));
+  const st = $("p-status");
+  st.classList.toggle("ok", profile.confirmed);
+  st.querySelector("span:last-child").textContent = profile.confirmed ? "Compte confirmé" : "Compte non confirmé";
+  $("p-confirm").textContent = profile.confirmed ? "Annuler la confirmation" : "Simuler la confirmation";
+  $("plans").innerHTML = PLANS.map(p => `<div class="plan${profile.plan === p.key ? " on" : ""}"><div><b>${p.name}</b><span>${p.desc}</span></div>${profile.plan === p.key ? '<span class="tag live">Actuel</span>' : `<button class="btn" type="button" data-plan="${p.key}">Choisir</button>`}</div>`).join("");
+  $("plans").querySelectorAll("[data-plan]").forEach(b => b.addEventListener("click", () => { profile.plan = b.dataset.plan; saveProfile(profile); renderProfile(); }));
+}
+$("profile-form").addEventListener("submit", e => {
+  e.preventDefault();
+  profile.name = $("p-name").value.trim();
+  profile.phone = $("p-phone").value.trim();
+  saveProfile(profile);
+  $("p-saved").textContent = "Profil enregistré.";
+  renderProfile();
+});
+$("p-confirm").addEventListener("click", () => { profile.confirmed = !profile.confirmed; saveProfile(profile); renderProfile(); });
+
+// Ajout d'un événement : catégorie, dates, horaires, plusieurs jours
 const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
-const DAYS = ["lun.","mar.","mer.","jeu.","ven.","sam.","dim."];
-const ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>';
+const WEEK = ["lun.","mar.","mer.","jeu.","ven.","sam.","dim."];
+const ICON_CAL = svgIcon('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>');
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-function DatePicker(host, { label, minDate = startOfDay(new Date()), showToday = true, onChange }) {
+function DatePicker(host, { label, minDate = startOfDay(new Date()), onChange }) {
   let value = null;
   let view = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-  host.innerHTML = `<button type="button" class="dp-trigger" aria-haspopup="dialog" aria-expanded="false">
-      <span class="val"><span class="ph">${label}</span></span>${ICON_CAL}</button>
-    <div class="dp-pop" role="dialog" aria-label="${label}"></div>`;
+  host.innerHTML = `<button type="button" class="dp-trigger" aria-haspopup="dialog" aria-expanded="false"><span class="val"><span class="ph">${label}</span></span>${ICON_CAL}</button><div class="dp-pop" role="dialog" aria-label="${label}"></div>`;
   const trigger = host.querySelector(".dp-trigger"), pop = host.querySelector(".dp-pop");
   const setOpen = o => { pop.classList.toggle("open", o); trigger.setAttribute("aria-expanded", String(o)); };
   function render() {
@@ -288,60 +401,53 @@ function DatePicker(host, { label, minDate = startOfDay(new Date()), showToday =
     for (let i = 0; i < offset; i++) cells += "<span></span>";
     for (let d = 1; d <= days; d++) {
       const date = new Date(view.getFullYear(), view.getMonth(), d);
-      const dis = date < minDate;
       const cls = ["dp-day", value && +date === +value ? "sel" : "", +date === +today ? "today" : ""].join(" ");
-      cells += `<button type="button" class="${cls}" data-d="${d}" ${dis ? "disabled" : ""}>${d}</button>`;
+      cells += `<button type="button" class="${cls}" data-d="${d}" ${date < minDate ? "disabled" : ""}>${d}</button>`;
     }
-    pop.innerHTML = `<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1" ${prevDisabled ? "disabled" : ""} aria-label="Mois précédent">‹</button>
-        <b>${MONTHS[view.getMonth()]} ${view.getFullYear()}</b>
-        <button type="button" class="dp-nav" data-nav="1" aria-label="Mois suivant">›</button></div>
-      <div class="dp-week">${DAYS.map(x => `<span>${x}</span>`).join("")}</div>
-      <div class="dp-days">${cells}</div>
-      ${showToday ? `<div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><span></span></div>` : ""}`;
+    pop.innerHTML = `<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1" ${prevDisabled ? "disabled" : ""} aria-label="Mois précédent">‹</button><b>${MONTHS[view.getMonth()]} ${view.getFullYear()}</b><button type="button" class="dp-nav" data-nav="1" aria-label="Mois suivant">›</button></div>
+      <div class="dp-week">${WEEK.map(x => `<span>${x}</span>`).join("")}</div><div class="dp-days">${cells}</div>
+      <div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><span></span></div>`;
     pop.querySelectorAll("[data-nav]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); view = new Date(view.getFullYear(), view.getMonth() + +b.dataset.nav, 1); render(); }));
     pop.querySelectorAll(".dp-day").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); choose(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); }));
-    const t = pop.querySelector("[data-today]");
-    if (t) t.addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); choose(today); });
+    pop.querySelector("[data-today]").addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); choose(today); });
   }
-  function choose(d) {
-    value = d;
-    trigger.querySelector(".val").innerHTML = `<span>${fmt(d)}</span>`;
-    setOpen(false);
-    onChange && onChange(d);
-  }
-  trigger.addEventListener("click", e => { e.stopPropagation(); const o = !pop.classList.contains("open"); if (o) { view = new Date((value || minDate).getFullYear(), (value || minDate).getMonth(), 1); render(); } setOpen(o); });
+  function choose(d) { value = d; trigger.querySelector(".val").innerHTML = `<span>${fmt(d)}</span>`; setOpen(false); onChange && onChange(d); }
+  trigger.addEventListener("click", e => { e.stopPropagation(); const o = !pop.classList.contains("open"); if (o) { const b = value || minDate; view = new Date(b.getFullYear(), b.getMonth(), 1); render(); } setOpen(o); });
   pop.addEventListener("click", e => e.stopPropagation());
   document.addEventListener("click", () => setOpen(false));
   return { get value() { return value; }, set minDate(d) { minDate = startOfDay(d); }, reset() { value = null; trigger.querySelector(".val").innerHTML = `<span class="ph">${label}</span>`; } };
 }
 const startPicker = DatePicker($("dp-start"), { label: "Choisir une date", onChange: d => { if (endPicker.value && endPicker.value < d) endPicker.reset(); endPicker.minDate = d; } });
-const endPicker = DatePicker($("dp-end"), { label: "Choisir une date", minDate: startOfDay(new Date()) });
+const endPicker = DatePicker($("dp-end"), { label: "Choisir une date" });
 $("f-multi").addEventListener("change", e => { $("end-field").hidden = !e.target.checked; if (!e.target.checked) endPicker.reset(); });
 
-// Ajout d'un événement : démonstration, rien n'est publié
-$("open-add").addEventListener("click", () => $("add-modal").classList.add("open"));
+let chosenCat = null;
+function renderCatPicker() {
+  $("f-cat").innerHTML = CATS.map(c => `<button type="button" class="pick${chosenCat === c ? " on" : ""}" data-c="${c}">${svgIcon(CAT_ICON[c])}${c}</button>`).join("");
+  $("f-cat").querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { chosenCat = b.dataset.c; renderCatPicker(); }));
+}
+$("open-add").addEventListener("click", () => { renderCatPicker(); $("add-modal").classList.add("open"); });
 $("close-add").addEventListener("click", () => $("add-modal").classList.remove("open"));
 $("add-form").addEventListener("submit", e => {
   e.preventDefault();
+  if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   $("add-modal").classList.remove("open");
-  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true;
+  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true; chosenCat = null;
   alert("Démonstration : votre événement n'est pas enregistré.");
 });
 
-// Touche G : affiche la grille de mise en page (mêmes valeurs que la landing)
+// Touche G : grille de mise en page (mêmes valeurs que la landing)
 (() => {
-  const go = document.getElementById("grid-overlay");
+  const go = $("grid-overlay");
   function placeGrid() {
     if (!go.classList.contains("on")) return;
     const w = innerWidth;
     const [n, gap, pad] = w <= 768 ? [4, 16, 16] : w <= 1024 ? [12, 16, 16] : [12, 24, 24];
-    go.style.setProperty("--go-n", n);
-    go.style.setProperty("--go-gap", gap + "px");
-    go.style.setProperty("--go-pad", pad + "px");
+    go.style.setProperty("--go-n", n); go.style.setProperty("--go-gap", gap + "px"); go.style.setProperty("--go-pad", pad + "px");
     go.querySelector(".go-cols").innerHTML = "<i></i>".repeat(n);
     go.querySelector(".go-tag").textContent = `${n} colonnes · gouttière ${gap} px · marge ${pad} px`;
   }
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key !== "g" && e.key !== "G") return;
     if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.("input, textarea, select, [contenteditable]")) return;
     go.classList.toggle("on"); placeGrid();
@@ -349,7 +455,6 @@ $("add-form").addEventListener("submit", e => {
   window.addEventListener("resize", placeGrid);
 })();
 
-// Retour direct sur l'espace si la session de démonstration existe déjà
 try { if (sessionStorage.getItem("adeupa-demo") === "1") showApp(); } catch (_) {}
 </script>
 </body>
