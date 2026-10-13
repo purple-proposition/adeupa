@@ -216,7 +216,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
     <p class="err" id="login-err" role="alert"></p>
     <button class="btn btn-dark" type="submit">Me connecter</button>
-    <div class="demo">Compte de démonstration : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b></div>
+    <div class="demo">Compte de test : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b></div>
   </form>
 </main>
 
@@ -241,7 +241,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
         <div id="map"></div>
         <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
       </section>
-      <div class="section-title"><h2>Vos événements en cours</h2><span class="note" style="margin:0">Données de démonstration</span></div>
+      <div class="section-title"><h2>Vos événements en cours</h2></div>
       <div id="grid-live" class="g6 in-6"></div>
       <div class="section-title"><h2>Vos événements à venir</h2></div>
       <div id="grid-soon" class="g6 in-6"></div>
@@ -268,10 +268,10 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <span class="status" id="p-status"><span class="d"></span><span></span></span>
           <button class="btn" id="p-confirm" type="button">Simuler la confirmation</button>
         </div>
-        <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés. Le bouton « Simuler la confirmation » n'existe que dans cette démonstration.</p>
+        <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés.</p>
         <h3 style="margin-top:32px">Abonnement</h3>
         <div class="plans" id="plans"></div>
-        <p class="note">Formules proposées, à valider : aucun tarif n'est encore engagé dans cette démonstration.</p>
+        <p class="note">Formules proposées.</p>
       </div>
       </div>
     </div>
@@ -654,7 +654,7 @@ $("add-form").addEventListener("submit", e => {
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   $("add-modal").classList.remove("open");
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage();
-  alert("Démonstration : votre événement n'est pas enregistré.");
+  alert("Publication indisponible pour le moment.");
 });
 
 // Touche G : grille de mise en page (mêmes valeurs que la landing)
