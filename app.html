@@ -390,7 +390,7 @@ function renderGrid() {
   $("grid").innerHTML = shuffled(EVENTS).map(e => `
     <article class="card">
       <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
-      <span class="org">${e.org}</span>
+      <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
