@@ -1426,11 +1426,11 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     <line x1="${X0}" x2="${X0}" y1="${Y1}" y2="${Y0}" class="dc-axis"/>
     <line x1="${X0}" x2="${X1}" y1="${Y0}" y2="${Y0}" class="dc-axis"/>
     ${ticks}
-    <line x1="${todayX}" x2="${todayX}" y1="${Y1}" y2="${Y0}" class="dc-today"/>
     ${segs}
     <text x="${todayX}" y="${Y0+52}" class="dc-label" text-anchor="middle">Aujourd’hui</text>
     <text x="${X1}" y="${Y0+52}" class="dc-label" text-anchor="end">Jour du mois</text>
     <g class="dc-cursor"><line x1="0" x2="0" y1="0" y2="0" class="dc-guide"/><circle r="6" cx="0" cy="0" class="dc-marker"/></g>
+    <line x1="${todayX}" x2="${todayX}" y1="${Y1}" y2="${Y0}" class="dc-today"/>
   </svg>
   <div class="dc-tip" aria-hidden="true"></div>`;
   host.style.position = "relative";
