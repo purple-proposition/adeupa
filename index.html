@@ -97,7 +97,9 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .data-chart .dc-axis{stroke:var(--muted);stroke-width:1}
 .data-chart .dc-tick{font-size:14px;fill:var(--muted);font-family:inherit}
 .data-chart .dc-label{font-size:14px;font-weight:600;fill:var(--text);font-family:inherit}
-.data-chart .dc-line{stroke:var(--text);stroke-width:3;stroke-linecap:round;fill:none}
+.data-chart .dc-line{stroke:var(--text);stroke-width:3;stroke-linecap:round;fill:none;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 640ms cubic-bezier(0.22,1,0.36,1);transition-delay:calc(var(--i,0) * 160ms)}
+.data-chart.in .dc-line{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){.data-chart .dc-line{transition:none;stroke-dashoffset:0}}
 .data-chart .dc-line.dc-hot{stroke:#4169E1}
 .data-chart figcaption{margin-top:16px;font-size:14px;color:var(--muted);text-align:center}
 /* Points et halos */
