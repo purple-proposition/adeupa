@@ -16,7 +16,7 @@
   --soft:#f5f5f5;
   --text:#171717;
   --muted:#525252;
-  --line:#545454;
+  --line:#737373;
   --dot:#171717;
   --live:#4169E1;
   --radius:24px;
@@ -54,7 +54,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 /* Démo produit en boucle : rien n'est cliquable pour le visiteur */
 .product{position:relative;height:min(64vh,600px);border-radius:32px;overflow:hidden;background:var(--soft);border:1px solid var(--line);margin-top:64px;pointer-events:auto;user-select:none;text-align:left}
 #map{position:absolute;inset:0}
-.float{position:absolute;z-index:5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid #545454;border-radius:32px;}
+.float{position:absolute;z-index:5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid #737373;border-radius:32px;}
 
 /* Compteur et filtre, en haut à droite */
 .cat-chip{left:16px;bottom:16px;right:16px;display:flex;gap:4px;padding:4px;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 32px);pointer-events:auto}
@@ -64,7 +64,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .cat-btn{flex:none;padding:8px 12px;border:0;border-radius:24px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
 .cat-btn.on{background:var(--text);color:#fafafa}
-.filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid #545454;border-radius:24px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
+.filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid #737373;border-radius:24px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
 .filter-btn[aria-expanded="true"]{background:var(--text);color:#fafafa}
 .cat-chip{display:flex;top:80px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 /* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
@@ -77,7 +77,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .cat-chip .cat-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--live);flex:none}
 .cat-chip .cat-btn.on .dot{background:#fafafa}
 .stats-live .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:8px;vertical-align:middle}
-.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #545454;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
+.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #737373;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
 .cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fafafa}
 .cat-chip .cat-btn:hover:not(.on){background:var(--soft)}
 .seg-pill.live{background:var(--live)}
@@ -122,7 +122,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 @keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
 
 /* Carte d'événement */
-.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:calc((100% - 7 * var(--grid-gutter)) / 4 + var(--grid-gutter));max-width:calc(100% - 24px);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid #545454;border-radius:32px;padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.34,1.3,.64,1);pointer-events:auto}
+.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:calc((100% - 7 * var(--grid-gutter)) / 4 + var(--grid-gutter));max-width:calc(100% - 24px);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid #737373;border-radius:32px;padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.34,1.3,.64,1);pointer-events:auto}
 .ecard.show{opacity:1;transform:none;pointer-events:auto}
 .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
 .badge{font-size:12px;font-weight:700;padding:4px 8px;border-radius:12px;white-space:nowrap;border:1px solid var(--line)}
@@ -373,7 +373,7 @@ section{scroll-margin-top:128px}
 .plan-list .pv b{font-weight:700}
 .tag.rec{color:var(--blue);font-weight:600}
 .tag-spacer{display:inline-block;height:24px}
-.plan-btn{display:flex;align-items:center;justify-content:center;width:100%;height:40px;border-radius:24px;border:1px solid #545454;background:var(--surface);color:var(--text);font-size:16px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease}
+.plan-btn{display:flex;align-items:center;justify-content:center;width:100%;height:40px;border-radius:24px;border:1px solid #737373;background:var(--surface);color:var(--text);font-size:16px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease}
 .plan-btn:hover{background:var(--soft)}
 .plan-card.featured .plan-btn{background:var(--blue);border-color:var(--blue);color:#fafafa}
 .plan-card.featured .plan-btn:hover{background:var(--blue-hover)}
