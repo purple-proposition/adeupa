@@ -166,7 +166,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
         Adeupa
       </a>
       <div class="topnav">
-        <button class="btn btn-ghost" id="tab-events" type="button">Événements</button>
         <button class="btn btn-ghost" id="tab-profile" type="button">Mon profil</button>
         <button class="btn btn-primary" id="open-add" type="button">Ajouter mon événement</button>
         <button class="btn" id="logout" type="button">Déconnexion</button>
@@ -299,11 +298,12 @@ $("logout").addEventListener("click", () => { try { sessionStorage.removeItem("a
 function showTab(t) {
   $("view-events").hidden = t !== "events";
   $("view-profile").hidden = t !== "profile";
-  $("tab-events").classList.toggle("tab-on", t === "events");
   $("tab-profile").classList.toggle("tab-on", t === "profile");
+  document.querySelector("header.top .brand").setAttribute("href", "app.html");
   if (t === "events" && mapRef) mapRef.resize();
 }
-$("tab-events").addEventListener("click", () => showTab("events"));
+// Le logo ramène à la liste des événements
+document.querySelector("header.top .brand").addEventListener("click", e => { e.preventDefault(); showTab("events"); });
 $("tab-profile").addEventListener("click", () => showTab("profile"));
 
 // Cartes d'événements, dans un ordre mélangé à chaque affichage
