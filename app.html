@@ -371,13 +371,16 @@ $("logout").addEventListener("click", () => { try { sessionStorage.removeItem("a
 function showTab(t) {
   $("view-events").hidden = t !== "events";
   $("view-profile").hidden = t !== "profile";
+  // Le même bouton change de sens : « Mon profil » depuis la liste, « Mes événements » depuis le profil
   $("tab-profile").classList.toggle("tab-on", t === "profile");
+  $("tab-profile").textContent = t === "profile" ? "Mes événements" : "Mon profil";
+  $("tab-profile").dataset.go = t === "profile" ? "events" : "profile";
   document.querySelector("header.top .brand").setAttribute("href", "app.html");
   if (t === "events" && mapRef) mapRef.resize();
 }
 // Le logo ramène à la liste des événements
 document.querySelector("header.top .brand").addEventListener("click", e => { e.preventDefault(); showTab("events"); });
-$("tab-profile").addEventListener("click", () => showTab("profile"));
+$("tab-profile").addEventListener("click", () => showTab($("tab-profile").dataset.go || "profile"));
 
 // Cartes d'événements, dans un ordre mélangé à chaque affichage
 const shuffled = list => list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
