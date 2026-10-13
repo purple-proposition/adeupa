@@ -64,7 +64,14 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .pill{position:absolute;top:16px;left:16px;z-index:2;padding:12px 16px;border-radius:16px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);font-size:14px}
 .pill b{font-weight:700}
 .card{grid-column:span 2;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.card .cover{width:100%;aspect-ratio:16/9;border-radius:16px;object-fit:cover;background:var(--soft);outline:1px solid var(--line)}
+/* illustration sans photo : un dégradé par catégorie (couleurs de la charte) */
+.cover{width:100%;aspect-ratio:16/9;border-radius:16px;outline:1px solid var(--line);outline-offset:0}
+.g-musique{background:linear-gradient(135deg,#4169E1 0%,#171717 100%)}
+.g-culture{background:linear-gradient(135deg,#e5e5e5 0%,#737373 100%)}
+.g-sport{background:linear-gradient(135deg,#171717 0%,#4169E1 100%)}
+.g-brocante{background:linear-gradient(135deg,#d4d4d4 0%,#404040 100%)}
+.g-fete{background:linear-gradient(135deg,#4169E1 0%,#a3a3a3 100%)}
+.g-atelier{background:linear-gradient(135deg,#f5f5f5 0%,#171717 100%)}
 .card .org{font-size:12px;font-weight:600;color:var(--muted)}
 .card h3{font-size:16px;margin:0;line-height:1.3}
 .card .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
@@ -73,7 +80,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .tags{display:flex;gap:8px;flex-wrap:wrap}
 .tag{font-size:12px;font-weight:600;padding:4px 8px;border-radius:16px;background:var(--soft);color:var(--muted)}
 .tag.live{background:var(--blue);color:#fff}
-.tag.cat{background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.tag.cat{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);color:var(--text)}
+.tag.cat svg{width:16px;height:16px;flex:none}
 /* profil */
 .panel{grid-column:span 3;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;min-width:0}
 @media (max-width:768px){.panel{grid-column:1/-1}}
@@ -291,6 +299,7 @@ const CAT_ICON = {
   "Fête": '<path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/>',
   "Atelier": '<path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>',
 };
+const CAT_CLASS = { "Musique": "musique", "Culture": "culture", "Sport": "sport", "Brocante": "brocante", "Fête": "fete", "Atelier": "atelier" };
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 const EVENTS = [
   { title: "Apéro jazz au Rhône", org: "Quai Jazz Club", cat: "Musique", date: "Ce soir", hours: "18h à 22h", address: "1 quai Fulchiron, 69005 Lyon", lat: 45.75938, lng: 4.82748, status: "live", tickets: 14, interested: 52 },
@@ -354,7 +363,8 @@ function renderGrid() {
   $("n-total").textContent = EVENTS.length;
   $("grid").innerHTML = shuffled(EVENTS).map(e => `
     <article class="card">
-      <div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${e.cat}</span></div>
+      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"></div>
+      <div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div>
       <span class="org">${e.org}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " · " + e.hours : ""}</span><span>${e.address}</span></div>
