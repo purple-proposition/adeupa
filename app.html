@@ -219,8 +219,10 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
         <div id="map"></div>
         <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
       </section>
-      <div class="section-title"><h2>Vos événements</h2><span class="note" style="margin:0">Données de démonstration</span></div>
-      <div id="grid" class="g6 in-6"></div>
+      <div class="section-title"><h2>Vos événements en cours</h2><span class="note" style="margin:0">Données de démonstration</span></div>
+      <div id="grid-live" class="g6 in-6"></div>
+      <div class="section-title"><h2>Vos événements à venir</h2></div>
+      <div id="grid-soon" class="g6 in-6"></div>
     </div>
 
     <!-- Vue profil -->
@@ -387,16 +389,20 @@ $("tab-profile").addEventListener("click", () => showTab($("tab-profile").datase
 const shuffled = list => list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
 function renderGrid() {
   $("n-total").textContent = EVENTS.length;
-  $("grid").innerHTML = shuffled(EVENTS).map(e => `
+  const card = e => `
     <article class="card">
       <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
-      <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">class="lucide lucide-chart-column" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M3 3v16a2 2 0 0 0 2 2h16" /> <path d="M18 17V9" /> <path d="M13 17V5" /> <path d="M8 17v-3" /></svg>Statistiques</button>
-    </article>`).join("");
-  $("grid").querySelectorAll("[data-stats]").forEach(b => b.addEventListener("click", () => openStats(EVENTS[+b.dataset.stats])));
+      <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>
+    </article>`;
+  const live = shuffled(EVENTS.filter(e => e.status === "live"));
+  const soon = shuffled(EVENTS.filter(e => e.status === "soon"));
+  $("grid-live").innerHTML = live.map(card).join("");
+  $("grid-soon").innerHTML = soon.map(card).join("");
+  document.querySelectorAll("[data-stats]").forEach(b => b.addEventListener("click", () => openStats(EVENTS[+b.dataset.stats])));
 }
 
 // Carte : même fond, mêmes points et halos que la landing, cadrage fixe, sans zoom ni déplacement
