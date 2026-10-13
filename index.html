@@ -362,9 +362,11 @@ section{scroll-margin-top:128px}
 .plan-list li{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.5}
 .plan-list svg{width:16px;height:16px;flex:none;margin-top:4px}
 .billing-wrap{display:flex;justify-content:center;margin:0 0 32px}
-.billing{display:inline-flex;gap:4px;padding:4px;margin:0;border:1px solid var(--line);border-radius:32px;background:var(--soft);display:flex;width:max-content}
-.billing-btn{border:0;border-radius:24px;padding:8px 16px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:background-color 240ms cubic-bezier(0.22,1,0.36,1),color 160ms ease-out}
-.billing-btn.on{background:var(--surface);color:var(--text)}
+.billing{position:relative;padding:4px;margin:0;border:1px solid var(--line);border-radius:32px;background:#e5e5e5;display:flex;width:max-content}
+.billing-thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:24px;background:var(--surface);transition:transform 240ms cubic-bezier(0.22,1,0.36,1)}
+.billing[data-mode="y"] .billing-thumb{transform:translateX(100%)}
+.billing-btn{position:relative;z-index:1;flex:1 1 0;border:0;border-radius:24px;padding:8px 16px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:background-color 240ms cubic-bezier(0.22,1,0.36,1),color 160ms ease-out}
+.billing-btn.on{color:var(--text)}
 .plan-save{margin:4px 0 0;font-size:16px;color:var(--muted)}
 .plan-list li{min-height:24px;align-items:flex-start}
 .plan-list li{color:var(--text)}
@@ -681,7 +683,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Une formule adaptée à votre rythme</h2>
       <p class="lead">Commencez gratuitement, passez à Pro quand vos événements se multiplient.</p>
     </div>
-    <div class="billing-wrap" data-reveal><div class="billing" role="group" aria-label="Période de facturation">
+    <div class="billing-wrap" data-reveal><div class="billing" data-mode="m" role="group" aria-label="Période de facturation"><span class="billing-thumb" aria-hidden="true"></span>
       <button type="button" class="billing-btn on" data-b="m" aria-pressed="true">Mensuel</button>
       <button type="button" class="billing-btn" data-b="y" aria-pressed="false">Annuel</button>
     </div></div>
@@ -781,7 +783,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       toggleLine(save, saving, saving ? "Économisez " + save.dataset.save + " € par an" : "");
     });
   };
-  btns.forEach(b => b.addEventListener("click", () => set(b.dataset.b)));
+  btns.forEach(b => b.addEventListener("click", () => { b.closest(".billing").dataset.mode = b.dataset.b; set(b.dataset.b); }));
 })();
 </script>
 </section>
