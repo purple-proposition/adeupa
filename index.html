@@ -88,7 +88,7 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .stats-chip{height:48px;top:16px;right:140px;padding:4px;display:flex;gap:4px;pointer-events:auto}
 .stats-chip [data-f]{cursor:pointer}
 .seg{position:absolute;display:flex;padding:4px;gap:0;user-select:none;touch-action:pan-y}
-.seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:16px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
+.seg-pill{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:8px;background:var(--text);transition:transform .45s cubic-bezier(.34,1.3,.64,1),width .45s cubic-bezier(.34,1.3,.64,1),background .3s ease}
 .seg-pill.live{background:var(--live)}
 .seg-pill.soon{background:var(--dot)}
 .seg-btn{position:relative;z-index:1;display:flex;align-items:center;gap:8px;padding:8px 16px;border:0;border-radius:8px;background:none;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:color .3s ease}
@@ -263,7 +263,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 #grid-overlay.on{display:block}
 .go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
 .go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
-.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:16px}
+.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:8px}
 /* Grille : 12 colonnes, gouttière et marge de 24 px (16 px sous 1024 px), comme la touche G */
 :root{--grid-gutter:24px;--grid-margin:24px}
 .steps,.audiences,.feature{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter)}

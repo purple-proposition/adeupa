@@ -103,7 +103,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .panel{grid-column:span 3;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;min-width:0}
 @media (max-width:768px){.panel{grid-column:1/-1}}
 .panel h3{font-size:16px;margin:0 0 16px}
-.status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:16px;font-size:14px;font-weight:600;background:var(--soft)}
+.status{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:600;background:var(--soft)}
 .status.ok{background:var(--blue);color:#fff}
 .status .d{width:8px;height:8px;border-radius:50%;background:currentColor}
 .plans{display:flex;flex-direction:column;gap:8px}
@@ -141,7 +141,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .modal-x .ic{width:20px;height:20px}
 .modal-box h2{font-size:24px;margin:0 0 16px;letter-spacing:-.015em}
 .modal-box .row{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
-.modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;width:100%}
+.modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:8px;font-size:16px;min-height:96px;resize:vertical;outline:none;width:100%}
 .modal-box textarea:focus{border-color:var(--blue)}
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 /* sélecteur de date */
@@ -180,7 +180,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 #grid-overlay.on{display:block}
 .go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
 .go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
-.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:16px}
+.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:8px}
 /* Tablette (769 à 1024 px) : contenu sur 10 colonnes, carte en pleine largeur, fenêtre sur 8 colonnes */
 @media (max-width:1024px) and (min-width:769px){
   header.top,.section-title,.in-6{grid-column:2/span 10}
