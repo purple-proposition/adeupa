@@ -139,9 +139,9 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 /* sélecteur de date */
 .dp-range{position:relative}
-.dp-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
+.dp-range .dp-trigger{width:100%}
 .dp-range.open .dp-trigger{border-color:var(--text)}
-.dp-range.open .dp-trigger[data-k="start"],.dp-range.open .dp-trigger[data-k="end"]{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.dp-range.open .dp-trigger{border-bottom-left-radius:0;border-bottom-right-radius:0}
 .dp-day.in{background:var(--soft);border-radius:0}
 .dp-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;text-align:left;cursor:pointer;transition:border-color .2s ease}
 .dp-trigger:hover,.dp-trigger[aria-expanded="true"]{border-color:var(--muted)}
@@ -472,24 +472,23 @@ const ICON_CAL = svgIcon('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" 
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 function DatePickerRange(root) {
-  let start = null, end = null, active = "start", open = false;
+  let start = null, end = null, open = false;
   const minDate = startOfDay(new Date());
   let view = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-  root.innerHTML = `<div class="dp-row">
-      <button type="button" class="dp-trigger" data-k="start" aria-label="Date de début"><span class="val"></span>${ICON_CAL}</button>
-      <button type="button" class="dp-trigger" data-k="end" aria-label="Date de fin, optionnelle"><span class="val"></span>${ICON_CAL}</button>
-    </div>
-    <div class="dp-pop" role="dialog" aria-label="Choisir les dates"></div>`;
+  const label = () => {
+    if (!start) return `<span class="ph">Choisir une date ou une période</span>`;
+    if (!end || +end === +start) return `<span>${fmt(start)}</span>`;
+    return `<span>${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} → ${fmt(end)}</span>`;
+  };
+  root.innerHTML = `<button type="button" class="dp-trigger" aria-haspopup="dialog" aria-expanded="false"><span class="val"></span>${ICON_CAL}</button>
+    <div class="dp-pop" role="dialog" aria-label="Choisir la date ou la période"></div>`;
+  const trigger = root.querySelector(".dp-trigger");
   const pop = root.querySelector(".dp-pop");
-  const triggers = [...root.querySelectorAll(".dp-trigger")];
   function refresh() {
-    triggers.forEach(t => {
-      const k = t.dataset.k, v = k === "start" ? start : end;
-      t.querySelector(".val").innerHTML = v ? `<span>${fmt(v)}</span>` : `<span class="ph">${k === "start" ? "Date de début" : "Date de fin (optionnelle)"}</span>`;
-      t.classList.toggle("active", open && active === k);
-    });
+    trigger.querySelector(".val").innerHTML = label();
     root.classList.toggle("open", open);
     pop.classList.toggle("open", open);
+    trigger.setAttribute("aria-expanded", String(open));
   }
   function render() {
     const first = new Date(view.getFullYear(), view.getMonth(), 1);
@@ -501,50 +500,43 @@ function DatePickerRange(root) {
     for (let i = 0; i < offset; i++) cells += "<span></span>";
     for (let d = 1; d <= days; d++) {
       const date = new Date(view.getFullYear(), view.getMonth(), d);
-      const dis = date < minDate || (active === "end" && start && date < start);
-      const isSel = (start && +date === +start) || (end && +date === +end);
+      const isEdge = (start && +date === +start) || (end && +date === +end);
       const inRange = start && end && date > start && date < end;
-      const cls = ["dp-day", isSel ? "sel" : "", inRange ? "in" : "", +date === +today ? "today" : ""].join(" ");
-      cells += `<button type="button" class="${cls}" data-d="${d}" ${dis ? "disabled" : ""}>${d}</button>`;
+      const cls = ["dp-day", isEdge ? "sel" : "", inRange ? "in" : "", +date === +today ? "today" : ""].join(" ");
+      cells += `<button type="button" class="${cls}" data-d="${d}" ${date < minDate ? "disabled" : ""}>${d}</button>`;
     }
     pop.innerHTML = `<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1" ${prevDisabled ? "disabled" : ""} aria-label="Mois précédent">‹</button><b>${MONTHS[view.getMonth()]} ${view.getFullYear()}</b><button type="button" class="dp-nav" data-nav="1" aria-label="Mois suivant">›</button></div>
       <div class="dp-week">${WEEK.map(x => `<span>${x}</span>`).join("")}</div><div class="dp-days">${cells}</div>
-      <div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><button type="button" data-clear-end ${end ? "" : "hidden"}>Retirer la date de fin</button></div>`;
+      <div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><button type="button" data-single ${start ? "" : "hidden"}>Une seule journée</button></div>`;
     pop.querySelectorAll("[data-nav]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); view = new Date(view.getFullYear(), view.getMonth() + +b.dataset.nav, 1); render(); }));
     pop.querySelectorAll(".dp-day").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); pick(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); }));
     pop.querySelector("[data-today]").addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); pick(today); });
-    pop.querySelector("[data-clear-end]").addEventListener("click", e => { e.stopPropagation(); end = null; active = "end"; render(); refresh(); });
+    pop.querySelector("[data-single]").addEventListener("click", e => { e.stopPropagation(); end = null; render(); refresh(); });
   }
-  // Aller puis retour, comme un billet de train : le premier clic fixe le début, le second la fin
+  // Un clic = une journée. Un second clic plus tard = fin de période (comme cocher le retour).
   function pick(d) {
-    if (active === "start") {
-      start = d;
-      if (end && end < start) end = null;
-      active = "end";
+    if (!start || (start && end) || d < start) {
+      start = d; end = null;
+    } else if (+d === +start) {
+      end = null;
     } else {
-      if (start && d < start) return;
       end = d;
       open = false;
     }
     render(); refresh();
   }
-  function setOpen(o, k) {
-    open = o;
-    if (k) active = k;
-    if (o) { const base = (active === "end" && start) ? start : minDate; view = new Date(base.getFullYear(), base.getMonth(), 1); }
-    render(); refresh();
-  }
-  triggers.forEach(t => t.addEventListener("click", e => {
+  trigger.addEventListener("click", e => {
     e.stopPropagation();
-    const k = t.dataset.k;
-    if (open && active === k) setOpen(false); else setOpen(true, k);
-  }));
+    open = !open;
+    if (open) { const base = start || minDate; view = new Date(base.getFullYear(), base.getMonth(), 1); }
+    render(); refresh();
+  });
   pop.addEventListener("click", e => e.stopPropagation());
-  document.addEventListener("click", e => { if (open && !root.contains(e.target)) setOpen(false); });
+  document.addEventListener("click", e => { if (open && !root.contains(e.target)) { open = false; refresh(); } });
   render(); refresh();
   return {
     get start() { return start; }, get end() { return end; },
-    reset() { start = null; end = null; active = "start"; open = false; render(); refresh(); },
+    reset() { start = null; end = null; open = false; render(); refresh(); },
   };
 }
 const dates = DatePickerRange($("dp-range"));
