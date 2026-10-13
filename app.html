@@ -15,9 +15,9 @@ body{margin:0;font-family:"Manrope",ui-sans-serif,system-ui,sans-serif;backgroun
 button,input,textarea,select{font:inherit}
 [hidden]{display:none!important}
 /* espaces verticaux de la landing : sections 96 px (64 px sur mobile), pied de page 48 px */
-.app-section{padding:96px 0}
+.app-section{padding:32px 0 96px}
 .app-footer{padding:48px 0;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
-@media (max-width:1024px){.app-section{padding:64px 0}}
+@media (max-width:1024px){.app-section{padding:24px 0 64px}}
 .wrap{margin:0 auto;padding:0 var(--grid-margin)}
 /* même règle que la landing : carte avec 2 colonnes de marge, le reste avec 3 colonnes de marge */
 .g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:var(--grid-gutter);row-gap:var(--grid-gutter)}
@@ -391,7 +391,7 @@ function renderGrid() {
   $("n-total").textContent = EVENTS.length;
   const card = e => `
     <article class="card">
-      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags"><span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span><span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
+      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
