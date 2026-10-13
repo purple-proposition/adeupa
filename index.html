@@ -10,13 +10,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <style>
-:root{--blue:#4169E1;
-  --bg:#fafafa;
-  --surface:#ffffff;
+:root{--blue:#4169E1;--blue-hover:#3558CC;
+  --bg:#f5f5f5;
+  --surface:#fafafa;
   --soft:#f5f5f5;
   --text:#171717;
-  --muted:#737373;
-  --line:#e5e5e5;
+  --muted:#525252;
+  --line:var(--line);
   --dot:#171717;
   --live:#4169E1;
   --radius:16px;
@@ -34,7 +34,7 @@ a{color:inherit;text-decoration:none}
 #brand .brand-word{display:none}#cta{right:48px}
 .brand-inline{display:flex;width:max-content;align-items:center;gap:16px;font-weight:800;font-size:36px;letter-spacing:-.02em;color:#4169E1;text-decoration:none}
 .brand-inline .brand-mark{width:48px;height:48px}
-#cta{background:rgba(65,105,225,.92);border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 20px rgba(10,10,10,.08)}
+#cta{background:rgba(65,105,225,.92);border:1px solid rgba(250,250,250,.12);}
 #brand{display:inline-flex;align-items:center;gap:16px;font-weight:800;font-size:36px;letter-spacing:-.02em;color:#4169E1;white-space:nowrap;text-decoration:none}
 .brand-mark{width:48px;height:48px;display:block;flex:none}
 #cta{margin:0;color:var(--bg)}
@@ -43,7 +43,7 @@ a{color:inherit;text-decoration:none}
 #brand-slot{margin-bottom:32px}
 
 .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:16px;font-size:16px;font-weight:600;border:1px solid transparent;cursor:pointer;font-family:inherit;transition:opacity .15s}
-.btn-dark{background:#4169E1;color:#fff}
+.btn-dark{background:#4169E1;color:#fafafa}
 .btn:hover{opacity:.85}
 
 /* Hero */
@@ -52,51 +52,51 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .sub{font-size:24px;color:var(--muted);max-width:580px;margin:0 auto 32px}
 
 /* Démo produit en boucle : rien n'est cliquable pour le visiteur */
-.product{position:relative;height:min(64vh,600px);border-radius:24px;overflow:hidden;background:var(--soft);box-shadow:0 32px 80px -30px rgba(10,10,10,.25),0 0 0 1px var(--line);margin-top:64px;pointer-events:auto;user-select:none;text-align:left}
+.product{position:relative;height:min(64vh,600px);border-radius:16px;overflow:hidden;background:var(--soft);margin-top:64px;pointer-events:auto;user-select:none;text-align:left}
 #map{position:absolute;inset:0}
-.float{position:absolute;z-index:5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);border-radius:8px;box-shadow:0 8px 28px rgba(10,10,10,.1)}
+.float{position:absolute;z-index:5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);border-radius:8px;}
 
 /* Compteur et filtre, en haut à droite */
 .cat-chip{left:16px;bottom:16px;right:16px;display:flex;gap:4px;padding:4px;overflow-x:auto;scrollbar-width:none;max-width:calc(100% - 32px);pointer-events:auto}
 .cat-chip::-webkit-scrollbar{display:none}
 .cat-demo .cat-btn{border:1px solid var(--line);background:var(--surface);padding:8px 16px;font-size:16px;color:var(--text)}
-.cat-demo .cat-btn.on{background:var(--text);border-color:var(--text);color:#fff}
-.cat-btn{flex:none;padding:8px 12px;border:0;border-radius:8px;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
+.cat-demo .cat-btn.on{background:var(--text);border-color:var(--text);color:#fafafa}
+.cat-btn{flex:none;padding:8px 12px;border:0;border-radius:8px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
-.cat-btn.on{background:var(--text);color:#fff}
+.cat-btn.on{background:var(--text);color:#fafafa}
 .filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid rgba(10,10,10,.08);border-radius:16px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
-.filter-btn[aria-expanded="true"]{background:var(--text);color:#fff}
-.cat-chip{display:flex;top:80px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.filter-btn[aria-expanded="true"]{background:var(--text);color:#fafafa}
+.cat-chip{display:flex;top:80px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 /* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
 .cat-chip .cat-btn{opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.22,1,.36,1),background-color .25s ease,color .25s ease;transition-delay:calc(var(--i,0) * 40ms)}
 .cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
 .cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:8px;max-width:min(760px,calc(100% - 32px))}
 .filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:100%}
-.filter-pills{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding:12px 2px;margin:-12px -2px}
+.filter-pills{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;scrollbar-width:none;max-width:100%;padding:12px 4px;margin:-12px -4px}
 .filter-pills::-webkit-scrollbar{display:none}
 .cat-chip .cat-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--live);flex:none}
-.cat-chip .cat-btn.on .dot{background:#fff}
+.cat-chip .cat-btn.on .dot{background:#fafafa}
 .stats-live .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:8px;vertical-align:middle}
-.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(10,10,10,.08);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
-.cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fff}
+.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid rgba(10,10,10,.08);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
+.cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fafafa}
 .cat-chip .cat-btn:hover:not(.on){background:var(--soft)}
 .seg-pill.live{background:var(--live)}
 .seg-pill.soon{background:var(--dot)}
 .seg-btn.on{color:var(--bg)}
-.seg-btn.live.on b{color:#fff}
+.seg-btn.live.on b{color:#fafafa}
 .seg-btn:not(.on) b{color:var(--text)}
 .seg-btn.live:not(.on) b{color:var(--live)}
 .seg-btn.soon:not(.on) b{color:var(--dot)}
 .seg-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--dot)}
 .seg-btn.live .dot{background:var(--live)}
-.seg-btn.live.on .dot{background:#fff}
+.seg-btn.live.on .dot{background:#fafafa}
 
 .data-chart{margin:48px 0 0}
 .data-chart svg{display:block;width:100%;height:auto;overflow:visible}
 .data-chart .dc-grid{stroke:var(--line);stroke-width:1}
 .data-chart .dc-axis{stroke:var(--muted);stroke-width:1}
-.data-chart .dc-tick{font-size:14px;fill:var(--muted);font-family:inherit}
-.data-chart .dc-label{font-size:14px;font-weight:600;fill:var(--text);font-family:inherit}
+.data-chart .dc-tick{font-size:16px;fill:var(--muted);font-family:inherit}
+.data-chart .dc-label{font-size:16px;font-weight:600;fill:var(--text);font-family:inherit}
 .data-chart .dc-line{stroke:#4169E1;stroke-width:3;stroke-linecap:round;fill:none;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 640ms cubic-bezier(0.22,1,0.36,1);transition-delay:calc(var(--i,0) * 160ms)}
 .data-chart.in .dc-line{stroke-dashoffset:0}
 .dc-cursor{opacity:0;transition:opacity 160ms ease-out}
@@ -104,13 +104,13 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .dc-cursor{transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
 .dc-guide{stroke:#d4d4d4;stroke-width:1;stroke-dasharray:4 4}
 .dc-marker{fill:#4169E1}
-.dc-tip{position:absolute;left:0;top:0;pointer-events:none;display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:8px;background:#4169E1;color:#fff;font-size:12px;line-height:1.4;white-space:nowrap;opacity:0;margin:-56px 0 0 12px;transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
+.dc-tip{position:absolute;left:0;top:0;pointer-events:none;display:flex;flex-direction:column;gap:4px;padding:8px 12px;border-radius:8px;background:#4169E1;color:#fafafa;font-size:12px;line-height:1.4;white-space:nowrap;opacity:0;margin:-56px 0 0 12px;transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
 .dc-tip.on{opacity:1}
 .dc-tip b{font-weight:700}
 @media (prefers-reduced-motion:reduce){.data-chart .dc-line{transition:none;stroke-dashoffset:0}}
 .data-chart .dc-line.dc-hot{stroke:#4169E1}
 .data-chart .dc-today{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}
-.data-chart figcaption{margin-top:16px;font-size:14px;color:var(--muted);text-align:center}
+.data-chart figcaption{margin-top:16px;font-size:16px;color:var(--muted);text-align:center}
 /* Points et halos */
 .event{position:absolute;top:0;left:0;width:12px;height:12px;transition:opacity .32s}
 .event.hot{}
@@ -122,16 +122,16 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 @keyframes haloBreathe{0%{transform:scale(.6);opacity:0}30%{opacity:.85}60%{transform:scale(1.35);opacity:.35}100%{transform:scale(1.7);opacity:0}}
 
 /* Carte d'événement */
-.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:calc((100% - 7 * var(--grid-gutter)) / 4 + var(--grid-gutter));max-width:calc(100% - 24px);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);border-radius:24px;box-shadow:0 16px 40px rgba(10,10,10,.14),inset 0 1px 0 rgba(255,255,255,.6);padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.34,1.3,.64,1);pointer-events:auto}
+.ecard{position:absolute;z-index:6;overscroll-behavior:contain;width:calc((100% - 7 * var(--grid-gutter)) / 4 + var(--grid-gutter));max-width:calc(100% - 24px);background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);border-radius:16px;padding:16px;opacity:0;transform:translateX(-calc(100% + 32px));transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.34,1.3,.64,1);pointer-events:auto}
 .ecard.show{opacity:1;transform:none;pointer-events:auto}
 .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
 .badge{font-size:12px;font-weight:700;padding:4px 8px;border-radius:8px;white-space:nowrap}
 .badge{display:inline-flex;align-items:center;gap:4px}
 .seal{display:inline-flex}
 .seal svg{width:16px;height:16px;display:block}
-.badge.ent{background:#e3f7ea;color:#15803d}
-.badge.mun{background:#e3efff;color:#1f5fbf}
-.badge.par{background:#e5e5e5;color:#737373}
+.badge.ent{}
+.badge.mun{}
+.badge.par{background:var(--line);color:var(--muted)}
 .ecard-close{margin-left:auto;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer}
 .ecard-close:hover{background:rgba(10,10,10,.06);color:var(--text)}
 .ecard-close svg{width:16px;height:16px}
@@ -141,16 +141,16 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard-cover .cat-tag svg{width:16px;height:16px;flex:none}
 /* illustrations en dégradé par catégorie, couleurs de la charte */
 .g-musique{background:linear-gradient(135deg,#4169E1 0%,#171717 100%)}
-.g-culture{background:linear-gradient(135deg,#e5e5e5 0%,#737373 100%)}
+.g-culture{background:linear-gradient(135deg,var(--line) 0%,var(--muted) 100%)}
 .g-sport{background:linear-gradient(135deg,#171717 0%,#4169E1 100%)}
-.g-brocante{background:linear-gradient(135deg,#d4d4d4 0%,#404040 100%)}
+.g-brocante{background:linear-gradient(135deg,#d4d4d4 0%,var(--muted) 100%)}
 .g-fete{background:linear-gradient(135deg,#4169E1 0%,#a3a3a3 100%)}
 .g-atelier{background:linear-gradient(135deg,#f5f5f5 0%,#171717 100%)}
 .ecard h4{font-size:24px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
 .ecard .meta{font-size:12px;color:var(--text);display:flex;flex-direction:column;gap:4px}
 .ecard .meta .line{display:flex;align-items:center;gap:8px}
 .ecard .meta svg{width:16px;height:16px;flex:none;color:var(--muted)}
-.ecard .desc{font-size:16px;color:#404040;margin:8px 0 0;line-height:1.45;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
+.ecard .desc{font-size:16px;color:var(--muted);margin:8px 0 0;line-height:1.45;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
 .ecard .desc::-webkit-scrollbar{display:none}
 .desc-wrap{position:relative}
 .desc-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(250,250,250,0),rgba(250,250,250,.95));opacity:0;transition:opacity .4s ease;pointer-events:none}
@@ -159,10 +159,10 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .ecard-stat{font-size:12px;color:var(--muted);text-align:center}
 .ecard-stat b{display:block;font-size:12px;font-weight:700;color:var(--text);line-height:1.55}
 .ecard-stat-sep{width:1px;height:32px;background:var(--line);flex:none}
-.ticket{display:block;margin-top:16px;padding:8px 16px;border-radius:8px;background:#4169E1;color:#fff;font-size:16px;font-weight:700;text-align:center}
+.ticket{display:block;margin-top:16px;padding:8px 16px;border-radius:8px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:700;text-align:center}
 
 /* Curseur fictif et ronds de clic */
-.cursor{position:absolute;left:0;top:0;z-index:9;width:24px;height:24px;pointer-events:none;opacity:0;filter:drop-shadow(0 2px 4px rgba(10,10,10,.3))}
+.cursor{position:absolute;left:0;top:0;z-index:9;width:24px;height:24px;pointer-events:none;opacity:0;)}
 .cursor svg{display:block;width:24px;height:24px}
 .cursor.down svg{transform:scale(.85);transform-origin:top left;transition:transform .12s}
 .ripple{position:absolute;z-index:8;width:36px;height:36px;margin:-17px 0 0 -17px;border-radius:50%;border:2px solid var(--text);pointer-events:none;opacity:0}
@@ -195,7 +195,7 @@ h2{font-size:36px;line-height:1.1;letter-spacing:-.03em;margin:0 0 16px;font-wei
 
 /* Étapes */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.step{padding:32px;border-radius:16px;background:var(--surface);box-shadow:0 0 0 1px var(--line)}
+.step{padding:32px;border-radius:16px;background:var(--surface);}
 .step .n{width:36px;height:36px;border-radius:50%;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:24px}
 .step h3{margin:0 0 8px;font-size:24px;letter-spacing:-.015em;font-weight:800}
 .step p{margin:0;color:var(--muted);font-size:16px}
@@ -231,8 +231,8 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 #grid-overlay{position:fixed;inset:0;z-index:80;pointer-events:none;display:none}
 #grid-overlay.on{display:block}
 .go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
-.go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
-.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:8px}
+.go-cols i{background:rgba(65,105,225,.08);}
+.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fafafa;padding:4px 8px;border-radius:8px}
 /* Grille : 12 colonnes, gouttière et marge de 24 px (16 px sous 1024 px), comme la touche G */
 :root{--grid-gutter:24px;--grid-margin:24px}
 .steps,.audiences,.feature{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter)}
@@ -256,9 +256,9 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .btn,.ticket,.seg-btn,.link,.ecard-close{transition:background-color .2s ease,color .2s ease,opacity .2s ease,transform .2s ease}
 .btn:hover,.ticket:hover{box-shadow:none}
 .btn-dark:hover,.btn-light:hover{opacity:1}
-.btn-dark:hover{background:#3558CC}
+.btn-dark:hover{background:var(--blue-hover)}
 #cta:hover{background:rgba(54,88,204,.95)}
-.ticket:hover{background:#3558CC}
+.ticket:hover{background:var(--blue-hover)}
 .seg-btn:hover:not(.on){color:var(--text)}
 .link:hover{opacity:.7}
 /* Apparition en cascade des éléments de la carte d'événement */
@@ -278,7 +278,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .faq{max-width:none}
 .faq-item{border-bottom:1px solid var(--line)}
 .faq-item:first-child{border-top:1px solid var(--line)}
-.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0;border:0;background:none;font:inherit;font-size:20px;font-weight:700;color:var(--text);text-align:left;cursor:pointer;transition:opacity 160ms cubic-bezier(.22,1,.36,1)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:24px 0;border:0;background:none;font:inherit;font-size:24px;font-weight:700;color:var(--text);text-align:left;cursor:pointer;transition:opacity 160ms cubic-bezier(.22,1,.36,1)}
 .faq-q:hover{opacity:.7}
 .chev{flex:none;width:24px;height:24px;color:var(--muted);transition:transform 240ms cubic-bezier(.34,1.36,.64,1)}
 .faq-item.open .chev{transform:rotate(180deg)}
@@ -321,22 +321,22 @@ section{scroll-margin-top:128px}
 @keyframes promoScroll{to{transform:translateX(-50%)}}
 /* Page du lieu : boutons du même style que le CTA */
 .venue-counts{display:flex;gap:8px;margin-top:16px}
-.venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 18px;border-radius:16px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fff;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
+.venue-btn{flex:1;display:flex;align-items:center;justify-content:center;padding:8px 16px;border-radius:16px;border:0;font:inherit;font-size:16px;font-weight:600;background:#4169E1;color:#fafafa;cursor:pointer;white-space:nowrap;transition:background-color .2s ease,box-shadow .2s ease}
 .venue-cover{margin:0 0 16px;width:100%;aspect-ratio:16/9;border-radius:16px}
 .venue-cover img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;outline:1px solid var(--line);outline-offset:0}
 .venue-btn.live{background:#4169E1}
-.venue-btn.live:hover{background:#3558CC}
+.venue-btn.live:hover{background:var(--blue-hover)}
 .venue-btn.soon{background:#171717}
 .venue-btn.soon:hover{background:#0a0a0a}
-.venue-btn:hover{background:#3558CC;box-shadow:none}
+.venue-btn:hover{background:var(--blue-hover);box-shadow:none}
 .venue-list{display:flex;flex-direction:column;gap:8px}
 .venue-item{display:block;width:100%;padding:12px 16px;border:0;border-radius:8px;background:rgba(10,10,10,.035);font:inherit;font-size:16px;font-weight:600;color:var(--text);text-align:left;cursor:pointer;transition:background-color .2s ease}
 .venue-item:hover{background:rgba(10,10,10,.07)}
 /* Bouton de connexion, toujours visible en haut à droite (connexion, création de compte et publication à venir) */
-#login{position:fixed;top:24px;right:48px;z-index:36;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(255,255,255,.72);color:var(--text);border:1px solid var(--line)}
-#login:hover{background:#fff;box-shadow:none}
+#login{position:fixed;top:24px;right:48px;z-index:36;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(250,250,250,.72);color:var(--text);border:1px solid var(--line)}
+#login:hover{background:#fafafa;box-shadow:none}
 @media (max-width:768px){#login{right:16px}}
-@media (max-width:768px){.menu-links{gap:16px}.menu-links a{font-size:14px}.menu-links li:nth-child(4){display:none}}
+@media (max-width:768px){.menu-links{gap:16px}.menu-links a{font-size:16px}.menu-links li:nth-child(4){display:none}}
 
 /* Animations au défilement (rythme repris de Causal) */
 :root{--ease-emerge:cubic-bezier(.22,1,.36,1);--ease-glide:cubic-bezier(.33,1,.68,1);--dur-enter:800ms;--dur-hover:150ms;--dur-press:100ms;--dur-swap:260ms;--stagger:120ms}
@@ -344,28 +344,28 @@ section{scroll-margin-top:128px}
 [data-reveal].in{opacity:1;transform:none}
 .btn:active,.venue-btn:active,.ticket:active{transform:scale(.98);transition-duration:var(--dur-press)}
 .btn,.venue-btn,.ticket{transition-duration:var(--dur-hover)}
-.demo-canvas{position:relative;height:360px;border-radius:16px;background:var(--soft);overflow:hidden;box-shadow:0 0 0 1px var(--line)}
-.demo-card{position:absolute;width:240px;background:#fff;border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(10,10,10,.08);transition:transform .8s var(--ease-glide)}
+.demo-canvas{position:relative;height:360px;border-radius:16px;background:var(--soft);overflow:hidden;}
+.demo-card{position:absolute;width:240px;background:#fafafa;border-radius:16px;padding:16px;transition:transform .8s var(--ease-glide)}
 .demo-card b{display:block;font-size:16px;margin-bottom:4px}
 .demo-card span{font-size:12px;color:var(--text)}
 .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter);align-items:stretch}
-.plan-card{display:flex;flex-direction:column;gap:16px;padding:16px;border:1px solid var(--line);border-radius:24px;background:var(--surface)}
+.plan-card{display:flex;flex-direction:column;gap:16px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
 .plan-card{border:1px solid var(--line)}
 .plan-card.plan-card.featured{border:1px solid var(--blue)!important;background:var(--surface)}
 .plan-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .plan-head b{font-size:24px;font-weight:700}
 .plan-price{margin:0;font-size:16px}
-.plan-price span{font-size:48px;font-weight:800;letter-spacing:-.02em;line-height:1}
-.plan-price small{font-size:14px;color:var(--muted)}
-.plan-note{margin:0;font-size:14px;line-height:1.55;color:var(--muted);height:calc(2 * 1.55em);overflow:hidden}
+.plan-price span{font-size:56px;font-weight:800;letter-spacing:-.02em;line-height:1}
+.plan-price small{font-size:16px;color:var(--muted)}
+.plan-note{margin:0;font-size:16px;line-height:1.55;color:var(--muted);height:calc(2 * 1.55em);overflow:hidden}
 .plan-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;flex:1}
-.plan-list li{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.plan-list li{display:flex;gap:8px;align-items:flex-start;font-size:16px}
 .plan-list svg{width:16px;height:16px;flex:none;margin-top:4px}
 .billing-wrap{display:flex;justify-content:center;margin:0 0 32px}
-.billing{display:inline-flex;gap:4px;padding:4px;margin:0;border:1px solid var(--line);border-radius:24px;background:var(--soft);display:flex;width:max-content}
-.billing-btn{border:0;border-radius:16px;padding:8px 16px;background:transparent;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;transition:background-color 240ms cubic-bezier(0.22,1,0.36,1),color 160ms ease-out}
+.billing{display:inline-flex;gap:4px;padding:4px;margin:0;border:1px solid var(--line);border-radius:16px;background:var(--soft);display:flex;width:max-content}
+.billing-btn{border:0;border-radius:16px;padding:8px 16px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:background-color 240ms cubic-bezier(0.22,1,0.36,1),color 160ms ease-out}
 .billing-btn.on{background:var(--surface);color:var(--text)}
-.plan-save{margin:4px 0 0;font-size:14px;color:var(--muted)}
+.plan-save{margin:4px 0 0;font-size:16px;color:var(--muted)}
 .plan-list li{min-height:24px;align-items:flex-start}
 .plan-list li{color:var(--text)}
 .plan-list li.off{color:var(--muted)}
@@ -375,8 +375,8 @@ section{scroll-margin-top:128px}
 .tag-spacer{display:inline-block;height:24px}
 .plan-btn{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease}
 .plan-btn:hover{background:var(--soft)}
-.plan-card.featured .plan-btn{background:var(--blue);border-color:var(--blue);color:#fff}
-.plan-card.featured .plan-btn:hover{background:#3558CC}
+.plan-card.featured .plan-btn{background:var(--blue);border-color:var(--blue);color:#fafafa}
+.plan-card.featured .plan-btn:hover{background:var(--blue-hover)}
 @media (max-width:768px){.plans-grid{grid-template-columns:1fr}}
 @media (max-width:768px){.pricing{flex-direction:column}.demo-canvas{height:300px}}
 @media (prefers-reduced-motion:reduce){[data-reveal]{opacity:1;transform:none;filter:none;transition:none}}
@@ -385,10 +385,10 @@ section{scroll-margin-top:128px}
 .rail-card .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
 .rail-card .seal{display:inline-flex}
 .rail-card .seal svg{width:16px;height:16px}
-.rail-card .meta{font-size:14px;color:var(--text);display:flex;flex-direction:column;gap:4px}
+.rail-card .meta{font-size:16px;color:var(--text);display:flex;flex-direction:column;gap:4px}
 .rail-card .meta .line{display:flex;align-items:center;gap:8px}
 .rail-card .meta svg{width:14px;height:14px;flex:none;color:var(--text)}
-.rail-card .ticket{margin-top:auto;display:block;padding:8px 18px;border-radius:8px;background:#4169E1;color:#fff;font-size:16px;font-weight:600;text-align:center}
+.rail-card .ticket{margin-top:auto;display:block;padding:8px 16px;border-radius:8px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:600;text-align:center}
 /* Introduction : le logo apparaît au centre puis laisse place à la page (une fois par session) */
 #intro{position:fixed;inset:0;z-index:100;background:#fafafa;display:flex;align-items:center;justify-content:center;transition:opacity .5s cubic-bezier(.4,0,.2,1)}
 #intro.out{opacity:0;pointer-events:none}
@@ -398,12 +398,12 @@ section{scroll-margin-top:128px}
 body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibility:hidden}
 /* FAQ : titre à gauche, questions à droite, chevrons */
 .faq-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:24px;align-items:start}
-.faq-title{font-size:clamp(28px,3.6vw,40px);line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:800}
+.faq-title{font-size:36px;line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:800}
 .faq-layout .faq{max-width:none}
-.faq-q{font-size:20px;font-weight:600;padding:24px 0}
+.faq-q{font-size:24px;font-weight:600;padding:24px 0}
 @media (max-width:768px){.faq-layout{grid-template-columns:1fr;row-gap:32px}}
 @media (max-width:768px){.ecard{width:calc(100% - 32px);max-width:none}}
-.micro{text-align:center;font-size:14px;color:var(--muted);margin:16px 0 0}
+.micro{text-align:center;font-size:16px;color:var(--muted);margin:16px 0 0}
 .micro b{color:var(--text);font-weight:700}
 .price{font-size:16px;margin:0}
 .price b{font-size:56px;line-height:1;letter-spacing:-.02em}
@@ -417,28 +417,28 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .rail-cover{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:8px}
 .rail-tags{position:absolute;top:12px;left:12px;right:12px;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
 .rail-tags .tag{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:8px;font-size:12px;font-weight:600;background:var(--soft);color:var(--muted)}
-.rail-tags .tag.live{background:var(--blue);color:#fff}
-.rail-tags .tag.cat{background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:14px}
+.rail-tags .tag.live{background:var(--blue);color:#fafafa}
+.rail-tags .tag.cat{background:var(--surface);border:1px solid var(--line);color:var(--text);font-size:16px}
 .rail-tags .tag.cat svg{width:16px;height:16px;flex:none}
 .rail-cat{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text)}
 .rail-cat svg{width:16px;height:16px;flex:none}
-.rail-badge{position:absolute;top:12px;right:12px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:8px;background:#4169E1;color:#fff}
+.rail-badge{position:absolute;top:12px;right:12px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:8px;background:#4169E1;color:#fafafa}
 .rail-badge.seen{background:var(--line);color:var(--muted)}
 .rail-card.seen{opacity:.55}
 .rail-card.mea{border-color:var(--blue)}
-.rail-card.live .ticket{background:#4169E1;color:#fff}
-.rail-card.soon .ticket{background:#171717;color:#fff}
+.rail-card.live .ticket{background:#4169E1;color:#fafafa}
+.rail-card.soon .ticket{background:#171717;color:#fafafa}
 .rail-card.seen .ticket{background:var(--line);color:var(--muted)}
 .rail-card .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
 .rail-card .seal{display:inline-flex}
 .rail-card .seal svg{width:16px;height:16px}
 .rail-card h4{font-size:24px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
-.rail-card .meta{font-size:14px;color:var(--text);display:flex;flex-direction:column;gap:4px}
+.rail-card .meta{font-size:16px;color:var(--text);display:flex;flex-direction:column;gap:4px}
 .rail-card .meta .line{display:flex;align-items:center;gap:8px}
 .rail-card .meta svg{width:14px;height:14px;flex:none;color:var(--text)}
-.rail-desc{position:relative;height:96px;overflow:hidden;margin:8px 0 12px;font-size:16px;color:#404040;line-height:1.45}
+.rail-desc{position:relative;height:96px;overflow:hidden;margin:8px 0 12px;font-size:16px;color:var(--muted);line-height:1.45}
 .rail-desc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(250,250,250,0),rgba(250,250,250,.95));pointer-events:none}
-.rail-card .ticket{margin-top:auto;display:block;padding:10px 18px;border-radius:16px;background:#4169E1;color:#fff;font-size:16px;font-weight:600;text-align:center}
+.rail-card .ticket{margin-top:auto;display:block;padding:8px 16px;border-radius:16px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:600;text-align:center}
 </style>
 </head>
 <body>
@@ -473,7 +473,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
       <div class="cursor" id="cursor">
-        <svg viewBox="0 0 24 24"><path d="M5.5 3.2L5.5 18.6L9.4 14.9L12 20.8L14.6 19.7L12.1 13.9L17.6 13.9Z" fill="#171717" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M5.5 3.2L5.5 18.6L9.4 14.9L12 20.8L14.6 19.7L12.1 13.9L17.6 13.9Z" fill="#171717" stroke="#fafafa" stroke-width="1.6" stroke-linejoin="round"/></svg>
       </div>
     </div>
   </div>
@@ -657,7 +657,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
   </div>
   <div class="rail" aria-hidden="true">
-    <div class="rail-track" id="rail-track"><div class="rail-card soon"><div class="rail-cover-box"><div class="rail-cover g-musique"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/> <circle cx="6" cy="18" r="3"/> <circle cx="18" cy="16" r="3"/></svg>Musique</span></div></div></div><div class="org"><span>Le Sucre</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Rave Against Fascism</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Vendredi 23 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Le Sucre, 50 quai Rambaud, Lyon 2e</span></div><div class="rail-desc"><div>Soirée contre le fascisme, avec une programmation pensée pour le rooftop.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card mea live"><div class="rail-cover-box"><div class="rail-cover g-culture"><div class="rail-tags"><span class="tag live">Mise en avant</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/> <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Culture</span></div></div></div><div class="org"><span>Galerie Nord Sud</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Expo photo en plein air</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Jusqu'au 31 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Place des Terreaux, Lyon 1er</span></div><div class="rail-desc"><div>Vingt tirages grand format exposés sous les arcades, en accès libre.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card live"><div class="rail-cover-box"><div class="rail-cover g-sport"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/> <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/> <path d="m21.5 21.5-1.4-1.4"/> <path d="M3.9 3.9 2.5 2.5"/> <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>Sport</span></div></div></div><div class="org"><span>Hugo Dubois</span></div><h4>Atelier street art</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Ce soir de 19h à 21h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Pentes de la Croix-Rousse, Lyon 1er</span></div><div class="rail-desc"><div>Initiation au pochoir, matériel fourni sur place.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card mea soon"><div class="rail-cover-box"><div class="rail-cover g-brocante"><div class="rail-tags"><span class="tag live">Mise en avant</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/> <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/> <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/> <path d="M2 7h20"/> <path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg>Brocante</span></div></div></div><div class="org"><span>Jazz à Ainay</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Concert jazz</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 21h à 23h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quartier Ainay, Lyon 2e</span></div><div class="rail-desc"><div>Trio jazz dans une cour pavée, deux sets dans la soirée.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card seen"><div class="rail-cover-box"><div class="rail-cover g-fete"><div class="rail-tags"><span class="tag">Déjà vu</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.8 11.3 2 22l10.7-3.79"/> <path d="M4 3h.01"/> <path d="M22 8h.01"/> <path d="M15 2h.01"/> <path d="M22 20h.01"/> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"/> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg>Fête</span></div></div></div><div class="org"><span>Ninkasi Cordeliers</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Brunch vinyles</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Dimanche 18 octobre de 11h à 15h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Cordeliers, Lyon 2e</span></div><div class="rail-desc"><div>Brunch et écoute de vinyles entre voisins.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card soon"><div class="rail-cover-box"><div class="rail-cover g-atelier"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/> <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg>Atelier</span></div></div></div><div class="org"><span>Club Le Rivage</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Set électro au Sucre</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 23h à 2h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quai Saint-Antoine, Lyon 2e</span></div><div class="rail-desc"><div>Une nuit de sets électro sur les quais, en plein air.</div></div><span class="ticket">Billetterie</span></div></div>
+    <div class="rail-track" id="rail-track"><div class="rail-card soon"><div class="rail-cover-box"><div class="rail-cover g-musique"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/> <circle cx="6" cy="18" r="3"/> <circle cx="18" cy="16" r="3"/></svg>Musique</span></div></div></div><div class="org"><span>Le Sucre</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Rave Against Fascism</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Vendredi 23 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Le Sucre, 50 quai Rambaud, Lyon 2e</span></div><div class="rail-desc"><div>Soirée contre le fascisme, avec une programmation pensée pour le rooftop.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card mea live"><div class="rail-cover-box"><div class="rail-cover g-culture"><div class="rail-tags"><span class="tag live">Mise en avant</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/> <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/> <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/> <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/> <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>Culture</span></div></div></div><div class="org"><span>Galerie Nord Sud</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Expo photo en plein air</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Jusqu'au 31 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Place des Terreaux, Lyon 1er</span></div><div class="rail-desc"><div>Vingt tirages grand format exposés sous les arcades, en accès libre.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card live"><div class="rail-cover-box"><div class="rail-cover g-sport"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6"/> <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z"/> <path d="m21.5 21.5-1.4-1.4"/> <path d="M3.9 3.9 2.5 2.5"/> <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z"/></svg>Sport</span></div></div></div><div class="org"><span>Hugo Dubois</span></div><h4>Atelier street art</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Ce soir de 19h à 21h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Pentes de la Croix-Rousse, Lyon 1er</span></div><div class="rail-desc"><div>Initiation au pochoir, matériel fourni sur place.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card mea soon"><div class="rail-cover-box"><div class="rail-cover g-brocante"><div class="rail-tags"><span class="tag live">Mise en avant</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/> <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/> <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/> <path d="M2 7h20"/> <path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/></svg>Brocante</span></div></div></div><div class="org"><span>Jazz à Ainay</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Concert jazz</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 21h à 23h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quartier Ainay, Lyon 2e</span></div><div class="rail-desc"><div>Trio jazz dans une cour pavée, deux sets dans la soirée.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card seen"><div class="rail-cover-box"><div class="rail-cover g-fete"><div class="rail-tags"><span class="tag">Déjà vu</span><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.8 11.3 2 22l10.7-3.79"/> <path d="M4 3h.01"/> <path d="M22 8h.01"/> <path d="M15 2h.01"/> <path d="M22 20h.01"/> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"/> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg>Fête</span></div></div></div><div class="org"><span>Ninkasi Cordeliers</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Brunch vinyles</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Dimanche 18 octobre de 11h à 15h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Cordeliers, Lyon 2e</span></div><div class="rail-desc"><div>Brunch et écoute de vinyles entre voisins.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card soon"><div class="rail-cover-box"><div class="rail-cover g-atelier"><div class="rail-tags"><span class="tag cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/> <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg>Atelier</span></div></div></div><div class="org"><span>Club Le Rivage</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Set électro au Sucre</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 23h à 2h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quai Saint-Antoine, Lyon 2e</span></div><div class="rail-desc"><div>Une nuit de sets électro sur les quais, en plein air.</div></div><span class="ticket">Billetterie</span></div></div>
   </div>
 </section>
 
@@ -1088,7 +1088,7 @@ const SEAL = `<svg viewBox="0 0 24 24" aria-hidden="true">
     const r = a * Math.PI / 180;
     return `<circle cx="${(12 + 8.2 * Math.cos(r)).toFixed(2)}" cy="${(12 + 8.2 * Math.sin(r)).toFixed(2)}" r="3" fill="#4169E1"/>`;
   }).join("")}
-  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fafafa" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
 // Icônes de la carte d'événement, en trait fin
