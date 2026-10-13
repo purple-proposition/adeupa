@@ -405,6 +405,15 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .micro{text-align:center;font-size:14px;color:var(--muted);margin:16px 0 0}
 .micro b{color:var(--text);font-weight:700}
 .sub-2{margin-top:8px}
+.price-card{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter);align-items:center;padding:var(--grid-gutter);border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.price{font-size:16px;margin:0}
+.price b{font-size:56px;line-height:1;letter-spacing:-.02em}
+.price span{color:var(--muted);font-size:16px}
+.price-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.price-list li{display:flex;gap:8px;align-items:center;font-size:16px}
+.price-list svg{width:16px;height:16px;flex:none}
+.price-card .btn{justify-self:start}
+@media (max-width:768px){.price-card{grid-template-columns:1fr}}
 .eyebrow{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 16px}
 </style>
 </head>
@@ -599,6 +608,29 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <h3>Une démonstration honnête</h3>
         <p>Les événements de la carte de démonstration sont des exemples, pas de vrais événements.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Un seul tarif, sans surprise.</h2>
+      <p class="lead">29 € par mois pour publier vos événements sur la carte de la métropole de Lyon.</p>
+    </div>
+    <div class="price-card" data-reveal>
+      <div>
+        <p class="eyebrow">Organisateur</p>
+        <p class="price"><b>29 €</b> <span>/ mois</span></p>
+        <p class="micro" style="text-align:left;margin:8px 0 0">1 mois offert, puis −50 % sur le trimestre suivant</p>
+      </div>
+      <ul class="price-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Présence sur la carte de la métropole</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Fiche complète pour chaque événement</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Statistiques de consultation par événement</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Badge « Entreprise vérifiée »</li>
+      </ul>
+      <a class="btn btn-dark" href="app.html">Créer mon compte maintenant</a>
     </div>
   </div>
 </section>
