@@ -362,7 +362,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .demo-card span{font-size:12px;color:var(--text)}
 .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter);align-items:stretch}
 .plan-card{display:flex;flex-direction:column;gap:16px;padding:var(--grid-gutter);border:1px solid var(--line);border-radius:16px;background:var(--surface)}
-.plan-card.featured{border:2px solid var(--text)}
+.plan-card.featured{border-color:transparent;background:var(--soft)}
 .plan-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .plan-head b{font-size:24px;font-weight:700}
 .plan-price{margin:0;font-size:16px}
@@ -375,6 +375,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .plan-btn{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease}
 .plan-btn:hover{border-color:var(--muted)}
 .plan-card.featured .plan-btn{background:var(--text);border-color:var(--text);color:#fff}
+.plan-card.featured .plan-list li{color:var(--muted)}
 .plan-card.featured .plan-btn:hover{background:#0a0a0a}
 @media (max-width:768px){.plans-grid{grid-template-columns:1fr}}
 .price-card{background:var(--surface);border-radius:16px;padding:32px;box-shadow:0 0 0 1px var(--line);flex:1}
@@ -637,7 +638,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <ul class="plan-list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>2 événements publiés par mois</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Présence sur la carte</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Statistiques basiques</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Commission de billetterie : 2,9 % + 0,49 €</li></ul>
         <a class="plan-btn" href="app.html">Créer mon compte</a>
       </div><div class="plan-card featured">
-        <div class="plan-head"><b>Pro</b><span class="tag live">Recommandé</span></div>
+        <div class="plan-head"><b>Pro</b></div>
         <p class="plan-price"><span>29 €</span> <small>par mois</small></p>
         <p class="plan-note">Pour les associations et les lieux qui publient régulièrement. 9 € le premier mois, puis 29 € par mois.</p>
         <ul class="plan-list"><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>5 événements publiés par mois</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Présence sur la carte</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Billetterie intégrée</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Statistiques avancées</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Codes promotionnels et listes d’attente</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Export des participants</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>2 mises en avant par mois</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Assistance prioritaire</li></ul>
