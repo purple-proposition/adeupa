@@ -95,7 +95,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 /* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
-.modal-box{background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:min(720px,calc(100vw - 2 * var(--grid-margin)));max-height:90vh;overflow:auto}
+.modal-box{position:relative;background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:min(720px,calc(100vw - 2 * var(--grid-margin)));max-height:90vh;overflow:auto}
 .lbl{display:flex;align-items:center;gap:8px}
 .ic{width:16px;height:16px;flex:none}
 .dropzone{position:relative;display:block;aspect-ratio:16/9;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
@@ -108,6 +108,9 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .dz-preview img{width:100%;height:100%;object-fit:cover;display:block}
 .dz-remove{position:absolute;top:8px;right:8px;width:32px;height:32px;border:0;border-radius:16px;background:var(--surface);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .dz-remove .ic{width:16px;height:16px}
+.modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:0;border-radius:16px;background:transparent;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.modal-x:hover{background:var(--soft)}
+.modal-x .ic{width:20px;height:20px}
 .modal-box h2{font-size:24px;margin:0 0 16px;letter-spacing:-.015em}
 .modal-box .row{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
 .modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;width:100%}
@@ -232,6 +235,9 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 <!-- Modale : ajouter un événement -->
 <div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
   <form class="modal-box" id="add-form">
+    <button type="button" class="modal-x" id="x-add" aria-label="Fermer">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
     <h2 id="add-title">Ajouter mon événement</h2>
 
     <div class="field">
@@ -509,7 +515,12 @@ function renderCatPicker() {
   $("f-cat").querySelectorAll(".pick").forEach(b => b.addEventListener("click", () => { chosenCat = b.dataset.c; renderCatPicker(); }));
 }
 $("open-add").addEventListener("click", () => { renderCatPicker(); $("add-modal").classList.add("open"); });
-$("close-add").addEventListener("click", () => $("add-modal").classList.remove("open"));
+function closeAdd() { $("add-modal").classList.remove("open"); }
+$("close-add").addEventListener("click", closeAdd);
+$("x-add").addEventListener("click", closeAdd);
+// Un clic en dehors de la fenêtre, ou la touche Échap, ferme aussi la modale
+$("add-modal").addEventListener("click", e => { if (e.target === $("add-modal")) closeAdd(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeAdd(); });
 $("add-form").addEventListener("submit", e => {
   e.preventDefault();
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
