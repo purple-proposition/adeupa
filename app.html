@@ -113,13 +113,13 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 /* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
-/* fenêtre = 6 colonnes de la grille (3 colonnes de marge de chaque côté), comme le reste de la page */
-.modal-box{position:relative;background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:calc(6 * var(--col) + 5 * var(--grid-gutter));max-width:calc(100vw - 2 * var(--grid-margin));max-height:90vh;overflow:auto}
+/* fenêtre = 4 colonnes de la grille, centrée dans l'écran */
+.modal-box{position:relative;background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:calc(4 * var(--col) + 3 * var(--grid-gutter));max-width:calc(100vw - 2 * var(--grid-margin));max-height:90vh;overflow:auto}
 @media (max-width:768px){.modal-box{width:calc(100vw - 2 * var(--grid-margin))}}
 .lbl{display:flex;align-items:center;gap:8px}
 .ic{width:16px;height:16px;flex:none}
-/* cadre image : 4 colonnes de large, ratio 16:9 */
-.dropzone{position:relative;display:block;width:calc(4 * var(--col) + 3 * var(--grid-gutter));max-width:100%;aspect-ratio:16/9;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
+/* cadre image : toute la largeur de la fenêtre, ratio 3:1 */
+.dropzone{position:relative;display:block;width:100%;aspect-ratio:3/1;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
 .dropzone:hover,.dropzone.over{border-color:var(--text);background:var(--surface)}
 .dz-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;color:var(--muted)}
 .dz-empty .ic{width:32px;height:32px;color:var(--text)}
@@ -279,7 +279,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
         <span class="dz-empty" id="dz-empty">
           <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5h6"/> <path d="M19 2v6"/> <path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/> <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/> <circle cx="9" cy="9" r="2"/></svg>
           <span class="dz-title">Ajouter une image</span>
-          <span class="dz-spec">Format 16:9 · 1600 × 900 px recommandé · 800 × 450 px minimum · JPG, PNG, WebP ou PDF · 10 Mo maximum</span>
+          <span class="dz-spec">Format 3:1 · 1500 × 500 px recommandé · 750 × 250 px minimum · JPG, PNG, WebP ou PDF · 10 Mo maximum</span>
         </span>
         <span class="dz-preview" id="dz-preview" hidden>
           <img id="dz-img" alt="">
