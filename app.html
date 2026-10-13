@@ -96,9 +96,16 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .time-in:focus{border-color:var(--blue)}
 .check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);margin:0 0 16px;cursor:pointer}
 .check input{width:16px;height:16px;accent-color:var(--dark)}
+#grid-overlay{position:fixed;inset:0;z-index:80;pointer-events:none;display:none}
+#grid-overlay.on{display:block}
+.go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
+.go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
+.go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:16px}
 </style>
 </head>
 <body>
+
+<div id="grid-overlay" aria-hidden="true"><div class="go-cols"></div><span class="go-tag"></span></div>
 
 <!-- Connexion (démo) -->
 <main id="login-view">
@@ -320,6 +327,27 @@ $("add-form").addEventListener("submit", e => {
   $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true;
   alert("Démonstration : votre événement n'est pas enregistré.");
 });
+
+// Touche G : affiche la grille de mise en page (mêmes valeurs que la landing)
+(() => {
+  const go = document.getElementById("grid-overlay");
+  function placeGrid() {
+    if (!go.classList.contains("on")) return;
+    const w = innerWidth;
+    const [n, gap, pad] = w <= 768 ? [4, 16, 16] : w <= 1024 ? [12, 16, 16] : [12, 24, 24];
+    go.style.setProperty("--go-n", n);
+    go.style.setProperty("--go-gap", gap + "px");
+    go.style.setProperty("--go-pad", pad + "px");
+    go.querySelector(".go-cols").innerHTML = "<i></i>".repeat(n);
+    go.querySelector(".go-tag").textContent = `${n} colonnes · gouttière ${gap} px · marge ${pad} px`;
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "g" && e.key !== "G") return;
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.("input, textarea, select, [contenteditable]")) return;
+    go.classList.toggle("on"); placeGrid();
+  });
+  window.addEventListener("resize", placeGrid);
+})();
 
 // Retour direct sur l'espace si la session de démonstration existe déjà
 try { if (sessionStorage.getItem("adeupa-demo") === "1") showApp(); } catch (_) {}
