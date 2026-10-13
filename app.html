@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
-:root{--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717;--dot:#171717;--live:#4169E1;--grid-gutter:24px;--grid-margin:24px}
+:root{--col:calc((100vw - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 12);--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717;--dot:#171717;--live:#4169E1;--grid-gutter:24px;--grid-margin:24px}
 @media (max-width:1024px){:root{--grid-gutter:16px;--grid-margin:16px}}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Manrope",ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -95,10 +95,13 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 /* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
-.modal-box{position:relative;background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:min(720px,calc(100vw - 2 * var(--grid-margin)));max-height:90vh;overflow:auto}
+/* fenêtre = 6 colonnes de la grille (3 colonnes de marge de chaque côté), comme le reste de la page */
+.modal-box{position:relative;background:var(--surface);border-radius:16px;padding:var(--grid-gutter);width:calc(6 * var(--col) + 5 * var(--grid-gutter));max-width:calc(100vw - 2 * var(--grid-margin));max-height:90vh;overflow:auto}
+@media (max-width:768px){.modal-box{width:calc(100vw - 2 * var(--grid-margin))}}
 .lbl{display:flex;align-items:center;gap:8px}
 .ic{width:16px;height:16px;flex:none}
-.dropzone{position:relative;display:block;aspect-ratio:16/9;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
+/* cadre image : 4 colonnes de large, ratio 16:9 */
+.dropzone{position:relative;display:block;width:calc(4 * var(--col) + 3 * var(--grid-gutter));max-width:100%;aspect-ratio:16/9;border:1px dashed var(--muted);border-radius:16px;background:var(--soft);cursor:pointer;overflow:hidden;transition:border-color .2s ease,background-color .2s ease}
 .dropzone:hover,.dropzone.over{border-color:var(--text);background:var(--surface)}
 .dz-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;color:var(--muted)}
 .dz-empty .ic{width:32px;height:32px;color:var(--text)}
