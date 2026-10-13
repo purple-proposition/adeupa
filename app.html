@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adeupa, espace organisateur</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Manrope",ui-sans-serif,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:24px;color:var(--blue);letter-spacing:-.02em;text-decoration:none}
+.brand svg{width:40px;height:40px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+.btn:hover{border-color:var(--muted)}
+.btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn-primary:hover{background:#3558CC;border-color:#3558CC}
+.btn-dark{background:var(--dark);border-color:var(--dark);color:#fff}
+.btn-dark:hover{background:#0a0a0a;border-color:#0a0a0a}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+@media (min-width:1025px){.wrap{padding:0 24px}}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+/* connexion */
+#login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.auth{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:32px}
+.auth h1{font-size:24px;line-height:1.2;margin:24px 0 8px;letter-spacing:-.015em}
+.auth p.lead{color:var(--muted);margin:0 0 24px;font-size:16px}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field input{padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none}
+.field input:focus{border-color:var(--blue)}
+.auth .btn{width:100%}
+.auth .err{color:#b42318;font-size:14px;min-height:20px;margin:0 0 8px}
+.auth .demo{margin-top:24px;padding:16px;border-radius:16px;background:var(--soft);font-size:14px;color:var(--muted)}
+.auth .demo b{color:var(--text)}
+/* espace connecté */
+#app-view{display:none}
+.map-box{position:relative;height:min(560px,62vh);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--soft)}
+#map{position:absolute;inset:0}
+.map-bar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:12px;pointer-events:none;z-index:2}
+.pill{pointer-events:auto;padding:12px 16px;border-radius:16px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);font-size:14px;color:var(--text)}
+.pill b{font-weight:700}
+.marker{width:14px;height:14px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 1px 4px rgba(10,10,10,.2);cursor:pointer}
+.marker.soon{background:var(--dark)}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:40px 0 16px;flex-wrap:wrap}
+.section-head h2{font-size:24px;line-height:1.2;margin:0;letter-spacing:-.015em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;padding-bottom:64px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.card .cover{width:100%;aspect-ratio:16/9;border-radius:16px;object-fit:cover;background:var(--soft);outline:1px solid var(--line)}
+.card .org{font-size:12px;font-weight:600;color:var(--muted)}
+.card h3{font-size:16px;margin:0;line-height:1.3}
+.card .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.card .stat{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:8px;padding-top:12px;border-top:1px solid var(--line)}
+.card .stat b{color:var(--text);font-weight:700}
+.tag{align-self:flex-start;font-size:12px;font-weight:600;padding:4px 8px;border-radius:16px;background:var(--soft);color:var(--muted)}
+.tag.live{background:var(--blue);color:#fff}
+/* modale d'ajout */
+.modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.modal-box{background:var(--surface);border-radius:16px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow:auto}
+.modal-box h2{font-size:24px;margin:0 0 16px;letter-spacing:-.015em}
+.modal-box .row{display:flex;gap:8px}
+.modal-box .row .field{flex:1}
+.modal-box textarea{padding:12px 16px;border:1px solid var(--line);border-radius:16px;font-size:16px;min-height:96px;resize:vertical;outline:none;font-family:inherit}
+.modal-box textarea:focus{border-color:var(--blue)}
+.modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.note{font-size:12px;color:var(--muted);margin:0 0 16px}
+</style>
+</head>
+<body>
+
+<!-- Connexion (démo) -->
+<main id="login-view">
+  <form class="auth" id="login-form" novalidate>
+    <a class="brand" href="index.html" aria-label="Adeupa, retour à l'accueil">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6"><circle cx="50" cy="20" r="11"/><circle cx="50" cy="80" r="11"/><circle cx="20" cy="35" r="11"/><circle cx="80" cy="65" r="11"/><circle cx="20" cy="65" r="11"/><circle cx="80" cy="35" r="11"/></g><circle cx="50" cy="50" r="18" fill="currentColor"/></svg>
+      Adeupa
+    </a>
+    <h1>Connexion</h1>
+    <p class="lead">Accédez à votre espace organisateur.</p>
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input id="email" type="email" autocomplete="username" required>
+    </div>
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+    </div>
+    <p class="err" id="login-err" role="alert"></p>
+    <button class="btn btn-dark" type="submit">Me connecter</button>
+    <div class="demo">
+      Compte de démonstration : <b>demo@adeupa.fr</b> · mot de passe <b>demo-adeupa</b>
+    </div>
+  </form>
+</main>
+
+<!-- Espace connecté -->
+<div id="app-view">
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="app.html">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="6"><circle cx="50" cy="20" r="11"/><circle cx="50" cy="80" r="11"/><circle cx="20" cy="35" r="11"/><circle cx="80" cy="65" r="11"/><circle cx="20" cy="65" r="11"/><circle cx="80" cy="35" r="11"/></g><circle cx="50" cy="50" r="18" fill="currentColor"/></svg>
+        Adeupa
+      </a>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-primary" id="open-add" type="button">Ajouter mon événement</button>
+        <button class="btn" id="logout" type="button">Déconnexion</button>
+      </div>
+    </header>
+
+    <section class="map-box" aria-label="Carte des événements">
+      <div id="map"></div>
+      <div class="map-bar">
+        <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
+      </div>
+    </section>
+
+    <div class="section-head">
+      <h2>Vos événements</h2>
+      <span class="note">Données de démonstration</span>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<!-- Modale : ajouter un événement -->
+<div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
+  <form class="modal-box" id="add-form">
+    <h2 id="add-title">Ajouter mon événement</h2>
+    <div class="field"><label for="f-title">Titre</label><input id="f-title" required></div>
+    <div class="row">
+      <div class="field"><label for="f-date">Date</label><input id="f-date" type="date" required></div>
+      <div class="field"><label for="f-hours">Horaires</label><input id="f-hours" placeholder="18h à 22h"></div>
+    </div>
+    <div class="field"><label for="f-address">Adresse</label><input id="f-address" required></div>
+    <div class="field"><label for="f-desc">Description</label><textarea id="f-desc"></textarea></div>
+    <div class="actions">
+      <button class="btn" type="button" id="close-add">Annuler</button>
+      <button class="btn btn-primary" type="submit">Publier</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<script>
+// Compte de démonstration : aucune donnée réelle, rien n'est envoyé à un serveur
+const DEMO_ACCOUNT = { email: "demo@adeupa.fr", password: "demo-adeupa" };
+
+// Événements de démonstration, sans ordre particulier (fictifs)
+const EVENTS = [
+  { title: "Apéro jazz au Rhône", org: "Quai Jazz Club", cat: "Musique", date: "Ce soir", hours: "18h à 22h", address: "1 quai Fulchiron, 69005 Lyon", lat: 45.75938, lng: 4.82748, status: "live", tickets: 14, interested: 52 },
+  { title: "Marché nocturne", org: "Galerie Nord Sud", cat: "Brocante", date: "Samedi 17 octobre", hours: "19h à 23h", address: "1 place Bellecour, 69002 Lyon", lat: 45.75889, lng: 4.83092, status: "soon", tickets: 0, interested: 88 },
+  { title: "Cours de yoga", org: "Le Sucre", cat: "Sport", date: "Dimanche 18 octobre", hours: "9h à 10h30", address: "2 quai Saint-Antoine, 69002 Lyon", lat: 45.76440, lng: 4.83205, status: "soon", tickets: 9, interested: 27 },
+  { title: "Expo photo en plein air", org: "Galerie Nord Sud", cat: "Culture", date: "Jusqu'au 31 octobre", hours: "", address: "1 place des Terreaux, 69001 Lyon", lat: 45.76784, lng: 4.83401, status: "live", tickets: 0, interested: 31 },
+  { title: "Atelier street art", org: "Hugo Dubois", cat: "Atelier", date: "Ce soir", hours: "19h à 21h", address: "9 montée de la Grande-Côte, 69001 Lyon", lat: 45.77271, lng: 4.83221, status: "live", tickets: 6, interested: 19 },
+  { title: "Brunch vinyles", org: "Ninkasi Cordeliers", cat: "Fête", date: "Dimanche 18 octobre", hours: "11h à 15h", address: "1 place des Cordeliers, 69002 Lyon", lat: 45.76368, lng: 4.83699, status: "soon", tickets: 22, interested: 64 },
+  { title: "Open mic", org: "Club Le Rivage", cat: "Musique", date: "Jeudi 22 octobre", hours: "20h à 23h", address: "1 place de la Croix-Rousse, 69004 Lyon", lat: 45.77479, lng: 4.83158, status: "soon", tickets: 4, interested: 12 },
+  { title: "Projection en plein air", org: "Cinéma Comoedia", cat: "Culture", date: "Ce soir", hours: "21h", address: "1 place des Célestins, 69002 Lyon", lat: 45.76010, lng: 4.83183, status: "live", tickets: 40, interested: 118 },
+];
+
+const $ = id => document.getElementById(id);
+
+// Connexion de démonstration : l'état est gardé pour l'onglet seulement
+function showApp() {
+  $("login-view").style.display = "none";
+  $("app-view").style.display = "block";
+  renderAll();
+  initMap();
+}
+function showLogin() {
+  $("app-view").style.display = "none";
+  $("login-view").style.display = "flex";
+}
+$("login-form").addEventListener("submit", e => {
+  e.preventDefault();
+  const ok = $("email").value.trim().toLowerCase() === DEMO_ACCOUNT.email && $("password").value === DEMO_ACCOUNT.password;
+  if (!ok) { $("login-err").textContent = "E-mail ou mot de passe incorrect."; return; }
+  $("login-err").textContent = "";
+  try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
+  showApp();
+});
+$("logout").addEventListener("click", () => {
+  try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {}
+  showLogin();
+});
+
+// Liste en vrac : ordre mélangé à chaque affichage
+function shuffled(list) {
+  return list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
+}
+function renderAll() {
+  $("n-total").textContent = EVENTS.length;
+  $("grid").innerHTML = shuffled(EVENTS).map(e => `
+    <article class="card">
+      <span class="tag${e.status === "live" ? " live" : ""}">${e.status === "live" ? "En cours" : "À venir"}</span>
+      <span class="org">${e.org}</span>
+      <h3>${e.title}</h3>
+      <div class="meta"><span>${e.date}${e.hours ? " · " + e.hours : ""}</span><span>${e.address}</span></div>
+      <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
+    </article>`).join("");
+}
+
+// Carte : même fond que la landing
+let mapReady = false;
+function initMap() {
+  if (mapReady || typeof maplibregl === "undefined") return;
+  mapReady = true;
+  const map = new maplibregl.Map({
+    container: "map",
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    center: [4.8318, 45.7575],
+    zoom: 13.2,
+    attributionControl: { compact: true },
+  });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+  EVENTS.forEach(e => {
+    const el = document.createElement("div");
+    el.className = "marker" + (e.status === "soon" ? " soon" : "");
+    el.title = e.title;
+    new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
+  });
+}
+
+// Ajout d'un événement : démonstration, rien n'est publié
+$("open-add").addEventListener("click", () => $("add-modal").classList.add("open"));
+$("close-add").addEventListener("click", () => $("add-modal").classList.remove("open"));
+$("add-form").addEventListener("submit", e => {
+  e.preventDefault();
+  $("add-modal").classList.remove("open");
+  $("add-form").reset();
+  alert("Démonstration : votre événement n'est pas enregistré.");
+});
+
+// Retour direct sur l'espace si la session de démonstration existe déjà
+try { if (sessionStorage.getItem("adeupa-demo") === "1") showApp(); } catch (_) {}
+</script>
+</body>
+</html>
