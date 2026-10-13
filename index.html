@@ -397,11 +397,7 @@ section{scroll-margin-top:128px}
 @media (prefers-reduced-motion:reduce){#intro svg{animation:none}}
 body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibility:hidden}
 /* FAQ : titre à gauche, questions à droite, chevrons */
-.faq-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);column-gap:24px;align-items:start}
-.faq-title{font-size:36px;line-height:1.1;letter-spacing:-.03em;margin:0;font-weight:800}
-.faq-layout .faq{max-width:none}
 .faq-q{font-size:24px;font-weight:600;padding:24px 0}
-@media (max-width:768px){.faq-layout{grid-template-columns:1fr;row-gap:32px}}
 @media (max-width:768px){.ecard{width:calc(100% - 32px);max-width:none}}
 .micro{text-align:center;font-size:16px;color:var(--muted);margin:16px 0 0}
 .micro b{color:var(--text);font-weight:700}
@@ -783,8 +779,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 </section>
 
 <section id="faq">
-  <div class="wrap faq-layout">
-    <h2 class="faq-title">Questions fréquentes</h2>
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Questions fréquentes</h2>
+    </div>
     <div class="faq">
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false"><span>Qui peut publier un événement ?</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
