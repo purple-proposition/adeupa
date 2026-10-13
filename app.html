@@ -29,7 +29,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .auth h1{font-size:24px;line-height:1.2;margin:24px 0 8px;letter-spacing:-.015em}
 .auth p.lead{color:var(--muted);margin:0 0 24px;font-size:16px}
 .field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.field label,.field .lbl{font-size:12px;font-weight:600;color:var(--muted)}
+.field[hidden]{display:none}
 .field input{padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none}
 .field input:focus{border-color:var(--blue)}
 .auth .btn{width:100%}
@@ -68,6 +69,33 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
 .modal-box textarea:focus{border-color:var(--blue)}
 .modal-box .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .note{font-size:12px;color:var(--muted);margin:0 0 16px}
+.dp{position:relative}
+.dp-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;text-align:left;cursor:pointer;transition:border-color .2s ease}
+.dp-trigger:hover,.dp-trigger[aria-expanded="true"]{border-color:var(--muted)}
+.dp-trigger .ph{color:#a3a3a3}
+.dp-trigger svg{width:16px;height:16px;flex:none;color:var(--muted)}
+.dp-pop{position:absolute;top:calc(100% + 8px);left:0;z-index:20;width:296px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 16px 40px rgba(10,10,10,.14);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .32s ease,transform .42s cubic-bezier(.22,1,.36,1)}
+.dp-pop.open{opacity:1;transform:none;pointer-events:auto}
+.dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.dp-head b{font-size:16px;font-weight:700;text-transform:capitalize}
+.dp-nav{width:32px;height:32px;border:0;border-radius:16px;background:transparent;color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.dp-nav:hover{background:var(--soft)}
+.dp-nav:disabled{color:#d4d4d4;cursor:default;background:transparent}
+.dp-week,.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.dp-week span{font-size:12px;color:var(--muted);padding:4px 0}
+.dp-day{height:36px;border:0;border-radius:16px;background:transparent;font-size:14px;color:var(--text);cursor:pointer}
+.dp-day:hover:not(:disabled){background:var(--soft)}
+.dp-day.today{box-shadow:inset 0 0 0 1px var(--muted)}
+.dp-day.sel{background:var(--dark);color:#fff}
+.dp-day:disabled{color:#d4d4d4;cursor:default}
+.dp-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.dp-foot button{border:0;background:transparent;font-size:14px;font-weight:600;color:var(--blue);cursor:pointer;padding:8px 12px;border-radius:16px}
+.dp-foot button:hover{background:var(--soft)}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.time-in{width:100%;padding:12px 16px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:var(--text);font-size:16px;outline:none;font-family:inherit}
+.time-in:focus{border-color:var(--blue)}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);margin:0 0 16px;cursor:pointer}
+.check input{width:16px;height:16px;accent-color:var(--dark)}
 </style>
 </head>
 <body>
@@ -131,10 +159,15 @@ header.top{display:flex;align-items:center;justify-content:space-between;padding
   <form class="modal-box" id="add-form">
     <h2 id="add-title">Ajouter mon événement</h2>
     <div class="field"><label for="f-title">Titre</label><input id="f-title" required></div>
-    <div class="row">
-      <div class="field"><label for="f-date">Date</label><input id="f-date" type="date" required></div>
-      <div class="field"><label for="f-hours">Horaires</label><input id="f-hours" placeholder="18h à 22h"></div>
+    <div class="field"><span class="lbl">Date de début</span><div class="dp" id="dp-start"></div></div>
+    <div class="field"><span class="lbl">Horaires</span>
+      <div class="times">
+        <input class="time-in" id="f-start-time" type="time" aria-label="Heure de début" required>
+        <input class="time-in" id="f-end-time" type="time" aria-label="Heure de fin" required>
+      </div>
     </div>
+    <label class="check"><input type="checkbox" id="f-multi"> L'événement se déroule sur plusieurs jours</label>
+    <div class="field" id="end-field" hidden><span class="lbl">Date de fin</span><div class="dp" id="dp-end"></div></div>
     <div class="field"><label for="f-address">Adresse</label><input id="f-address" required></div>
     <div class="field"><label for="f-desc">Description</label><textarea id="f-desc"></textarea></div>
     <div class="actions">
@@ -224,13 +257,67 @@ function initMap() {
   });
 }
 
+// Sélecteur de date : popover calendrier, dates passées désactivées, bouton « Aujourd'hui »
+const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const DAYS = ["lun.","mar.","mer.","jeu.","ven.","sam.","dim."];
+const ICON_CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>';
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+function DatePicker(host, { label, minDate = startOfDay(new Date()), showToday = true, onChange }) {
+  let value = null;
+  let view = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  host.innerHTML = `<button type="button" class="dp-trigger" aria-haspopup="dialog" aria-expanded="false">
+      <span class="val"><span class="ph">${label}</span></span>${ICON_CAL}</button>
+    <div class="dp-pop" role="dialog" aria-label="${label}"></div>`;
+  const trigger = host.querySelector(".dp-trigger"), pop = host.querySelector(".dp-pop");
+  const setOpen = o => { pop.classList.toggle("open", o); trigger.setAttribute("aria-expanded", String(o)); };
+  function render() {
+    const first = new Date(view.getFullYear(), view.getMonth(), 1);
+    const offset = (first.getDay() + 6) % 7;
+    const days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    const today = startOfDay(new Date());
+    const prevDisabled = new Date(view.getFullYear(), view.getMonth(), 0) < minDate;
+    let cells = "";
+    for (let i = 0; i < offset; i++) cells += "<span></span>";
+    for (let d = 1; d <= days; d++) {
+      const date = new Date(view.getFullYear(), view.getMonth(), d);
+      const dis = date < minDate;
+      const cls = ["dp-day", value && +date === +value ? "sel" : "", +date === +today ? "today" : ""].join(" ");
+      cells += `<button type="button" class="${cls}" data-d="${d}" ${dis ? "disabled" : ""}>${d}</button>`;
+    }
+    pop.innerHTML = `<div class="dp-head"><button type="button" class="dp-nav" data-nav="-1" ${prevDisabled ? "disabled" : ""} aria-label="Mois précédent">‹</button>
+        <b>${MONTHS[view.getMonth()]} ${view.getFullYear()}</b>
+        <button type="button" class="dp-nav" data-nav="1" aria-label="Mois suivant">›</button></div>
+      <div class="dp-week">${DAYS.map(x => `<span>${x}</span>`).join("")}</div>
+      <div class="dp-days">${cells}</div>
+      ${showToday ? `<div class="dp-foot"><button type="button" data-today>Aujourd'hui</button><span></span></div>` : ""}`;
+    pop.querySelectorAll("[data-nav]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); view = new Date(view.getFullYear(), view.getMonth() + +b.dataset.nav, 1); render(); }));
+    pop.querySelectorAll(".dp-day").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); choose(new Date(view.getFullYear(), view.getMonth(), +b.dataset.d)); }));
+    const t = pop.querySelector("[data-today]");
+    if (t) t.addEventListener("click", e => { e.stopPropagation(); view = new Date(today.getFullYear(), today.getMonth(), 1); choose(today); });
+  }
+  function choose(d) {
+    value = d;
+    trigger.querySelector(".val").innerHTML = `<span>${fmt(d)}</span>`;
+    setOpen(false);
+    onChange && onChange(d);
+  }
+  trigger.addEventListener("click", e => { e.stopPropagation(); const o = !pop.classList.contains("open"); if (o) { view = new Date((value || minDate).getFullYear(), (value || minDate).getMonth(), 1); render(); } setOpen(o); });
+  pop.addEventListener("click", e => e.stopPropagation());
+  document.addEventListener("click", () => setOpen(false));
+  return { get value() { return value; }, set minDate(d) { minDate = startOfDay(d); }, reset() { value = null; trigger.querySelector(".val").innerHTML = `<span class="ph">${label}</span>`; } };
+}
+const startPicker = DatePicker($("dp-start"), { label: "Choisir une date", onChange: d => { if (endPicker.value && endPicker.value < d) endPicker.reset(); endPicker.minDate = d; } });
+const endPicker = DatePicker($("dp-end"), { label: "Choisir une date", minDate: startOfDay(new Date()) });
+$("f-multi").addEventListener("change", e => { $("end-field").hidden = !e.target.checked; if (!e.target.checked) endPicker.reset(); });
+
 // Ajout d'un événement : démonstration, rien n'est publié
 $("open-add").addEventListener("click", () => $("add-modal").classList.add("open"));
 $("close-add").addEventListener("click", () => $("add-modal").classList.remove("open"));
 $("add-form").addEventListener("submit", e => {
   e.preventDefault();
   $("add-modal").classList.remove("open");
-  $("add-form").reset();
+  $("add-form").reset(); startPicker.reset(); endPicker.reset(); $("end-field").hidden = true;
   alert("Démonstration : votre événement n'est pas enregistré.");
 });
 
