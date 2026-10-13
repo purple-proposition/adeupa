@@ -374,7 +374,7 @@ section{scroll-margin-top:104px}
 .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter);align-items:stretch}
 .plan-card{display:flex;flex-direction:column;gap:16px;padding:var(--grid-gutter);border:1px solid var(--line);border-radius:24px;background:var(--surface)}
 .plan-card{border:1px solid var(--line)}
-.plan-card.featured{border:1px solid var(--blue);background:var(--surface)}
+.plan-card.plan-card.featured{border:1px solid var(--blue)!important;background:var(--surface)}
 .plan-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .plan-head b{font-size:24px;font-weight:700}
 .plan-price{margin:0;font-size:16px}
@@ -728,12 +728,15 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
   // Remplace un texte : sortie, puis entrée avec le nouveau texte
   const swapText = (el, text) => {
     if (!motion) { el.textContent = text; return; }
-    // Annule l'animation précédente : deux clics rapides ne se superposent pas
-    el.getAnimations().forEach(a => a.cancel());
+    // Une seule animation à la fois : un clic pendant la sortie met seulement à jour le texte cible
+    el.dataset.target = text;
+    if (el.dataset.busy === "1") return;
+    el.dataset.busy = "1";
     el.animate(fromTop, OUT).finished.then(() => {
-      el.textContent = text;
+      el.textContent = el.dataset.target;
+      el.dataset.busy = "0";
       el.animate(fromBottom, IN);
-    }).catch(() => {});
+    });
   };
   // Affiche ou masque une ligne en fondu, sans saut de mise en page après l'animation
   const toggleLine = (el, show, text) => {
