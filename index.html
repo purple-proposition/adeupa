@@ -362,7 +362,8 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .demo-card span{font-size:12px;color:var(--text)}
 .plans-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter);align-items:stretch}
 .plan-card{display:flex;flex-direction:column;gap:16px;padding:var(--grid-gutter);border:1px solid var(--line);border-radius:16px;background:var(--surface)}
-.plan-card.featured{border-color:transparent;background:var(--soft)}
+.plan-card{border:1px solid var(--line)}
+.plan-card.featured{border:1px solid var(--blue);background:var(--soft)}
 .plan-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .plan-head b{font-size:24px;font-weight:700}
 .plan-price{margin:0;font-size:16px}
@@ -381,13 +382,12 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 .plan-list li.off{opacity:.35}
 .plan-list li svg{width:16px;height:16px;flex:none}
 .plan-list .pv b{font-weight:700}
-.plan-head .tag{background:var(--text);color:#fff;border:0;padding:4px 12px}
 .tag-spacer{display:inline-block;height:24px}
 .plan-btn{display:flex;align-items:center;justify-content:center;width:100%;height:48px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background-color .2s ease,border-color .2s ease}
 .plan-btn:hover{border-color:var(--muted)}
-.plan-card.featured .plan-btn{background:var(--text);border-color:var(--text);color:#fff}
+.plan-card.featured .plan-btn{background:var(--blue);border-color:var(--blue);color:#fff}
 .plan-card.featured .plan-list li{color:var(--muted)}
-.plan-card.featured .plan-btn:hover{background:#0a0a0a}
+.plan-card.featured .plan-btn:hover{background:#3558CC;border-color:#3558CC}
 @media (max-width:768px){.plans-grid{grid-template-columns:1fr}}
 .price-card{background:var(--surface);border-radius:16px;padding:32px;box-shadow:0 0 0 1px var(--line);flex:1}
 .price-card .amount{font-size:36px;font-weight:800;letter-spacing:-.03em;margin:8px 0 16px}
@@ -678,7 +678,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <a class="plan-btn" href="app.html">Créer mon compte</a>
       </div>
       <div class="plan-card featured">
-        <div class="plan-head"><b>Pro</b><span class="tag">Recommandé</span></div>
+        <div class="plan-head"><b>Pro</b><span class="tag live">Recommandé</span></div>
         <p class="plan-price"><span data-m="29" data-y="290">29 €</span> <small data-unit>par mois</small></p>
         <p class="plan-save" data-save="58" hidden></p>
         <p class="plan-note">Pour les associations et les lieux qui publient souvent.</p>
