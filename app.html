@@ -175,6 +175,24 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .go-cols{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--go-n,12),1fr);column-gap:var(--go-gap,24px);padding:0 var(--go-pad,24px)}
 .go-cols i{background:rgba(65,105,225,.08);box-shadow:inset 1px 0 rgba(65,105,225,.32),inset -1px 0 rgba(65,105,225,.32)}
 .go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:16px}
+/* Tablette (769 à 1024 px) : contenu sur 10 colonnes, carte en pleine largeur, fenêtre sur 8 colonnes */
+@media (max-width:1024px) and (min-width:769px){
+  header.top,.section-title,.in-6{grid-column:2/span 10}
+  .map-box{grid-column:1/-1}
+  .panel{grid-column:1/-1!important}
+  .modal-box{width:calc(8 * var(--col) + 7 * var(--grid-gutter))}
+}
+/* Mobile (768 px et moins) : tout en pleine largeur, une carte par ligne */
+@media (max-width:768px){
+  header.top,.section-title,.map-box,.in-6,.in-8{grid-column:1/-1}
+  .card{grid-column:1/-1}
+  .panel{grid-column:1/-1!important}
+  .topnav{width:100%}
+  .topnav .btn{flex:1 1 auto;padding:10px 12px;font-size:14px}
+  .map-box{height:60vh}
+  .stats-grid{grid-template-columns:1fr}
+  .times,.modal-box .row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>

@@ -281,8 +281,7 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Contenu des sections : colonnes 3 à 10, deux colonnes libres de chaque côté */
 .wrap{padding-left:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));padding-right:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter))}
 .steps,.audiences,.feature{grid-template-columns:repeat(8,minmax(0,1fr))}
-.steps>*{grid-column:span 3}
-.steps>*:nth-child(3){grid-column:span 2}
+.steps>*{grid-column:span 4}
 .audiences>*,.feature>*{grid-column:span 4}
 @media (max-width:768px){
   .wrap{padding-left:var(--grid-margin);padding-right:var(--grid-margin)}
@@ -403,6 +402,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .faq-layout .faq{max-width:none}
 .faq-q{font-size:20px;font-weight:600;padding:24px 0}
 @media (max-width:768px){.faq-layout{grid-template-columns:1fr;row-gap:32px}}
+@media (max-width:768px){.ecard{width:calc(100% - 32px);max-width:none}}
 .micro{text-align:center;font-size:14px;color:var(--muted);margin:16px 0 0}
 .micro b{color:var(--text);font-weight:700}
 .sub-2{margin-top:8px}
