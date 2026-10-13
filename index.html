@@ -99,6 +99,14 @@ h1{font-size:56px;line-height:1.04;letter-spacing:-.035em;margin:0 auto 24px;max
 .data-chart .dc-label{font-size:14px;font-weight:600;fill:var(--text);font-family:inherit}
 .data-chart .dc-line{stroke:var(--text);stroke-width:3;stroke-linecap:round;fill:none;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 640ms cubic-bezier(0.22,1,0.36,1);transition-delay:calc(var(--i,0) * 160ms)}
 .data-chart.in .dc-line{stroke-dashoffset:0}
+.dc-cursor{opacity:0;transition:opacity 160ms ease-out}
+.dc-cursor.on{opacity:1}
+.dc-cursor{transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
+.dc-guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 4}
+.dc-marker{fill:var(--text);stroke:#fff;stroke-width:2}
+.dc-tip{position:absolute;left:0;top:0;pointer-events:none;display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:8px;background:var(--text);color:#fff;font-size:12px;line-height:1.4;white-space:nowrap;opacity:0;margin:-56px 0 0 12px;transition:opacity 160ms ease-out,transform 200ms cubic-bezier(0.22,1,0.36,1)}
+.dc-tip.on{opacity:1}
+.dc-tip b{font-weight:700}
 @media (prefers-reduced-motion:reduce){.data-chart .dc-line{transition:none;stroke-dashoffset:0}}
 .data-chart .dc-line.dc-hot{stroke:#4169E1}
 .data-chart .dc-today{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}
@@ -1400,7 +1408,36 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     ${segs}
     <text x="${todayX}" y="${Y0+52}" class="dc-label" text-anchor="middle">Aujourd’hui</text>
     <text x="${X1}" y="${Y0+52}" class="dc-label" text-anchor="end">Jour du mois</text>
-  </svg>`;
+    <g class="dc-cursor"><line x1="0" x2="0" y1="0" y2="0" class="dc-guide"/><circle r="6" cx="0" cy="0" class="dc-marker"/></g>
+  </svg>
+  <div class="dc-tip" aria-hidden="true"></div>`;
+  host.style.position = "relative";
+  const svg = host.querySelector("svg"), tip = host.querySelector(".dc-tip"), cursor = host.querySelector(".dc-cursor");
+  const valueAt = d => {
+    if (d <= pts[0][0]) return pts[0][1];
+    if (d >= pts[pts.length-1][0]) return pts[pts.length-1][1];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [d0, v0] = pts[i], [d1, v1] = pts[i+1];
+      if (d >= d0 && d <= d1) return v0 + (v1 - v0) * (d - d0) / (d1 - d0);
+    }
+    return 0;
+  };
+  const place = (e) => {
+    const r = svg.getBoundingClientRect();
+    const xv = (e.clientX - r.left) / r.width * 800;
+    const day = Math.min(today, Math.max(1, Math.round(dmin + (xv - X0) / (X1 - X0) * (dmax - dmin))));
+    const v = Math.round(valueAt(day));
+    const x = px(day), y = py(v);
+    cursor.style.transform = `translate(${x}px, ${y}px)`;
+    const guide = cursor.querySelector(".dc-guide");
+    guide.setAttribute("y1", Y1 - y); guide.setAttribute("y2", Y0 - y);
+    tip.innerHTML = `<b>Jour ${day}</b><span>${v} vues</span>`;
+    tip.style.transform = `translate(${x / 800 * r.width}px, ${y / 380 * r.height}px)`;
+    tip.classList.add("on");
+    cursor.classList.add("on");
+  };
+  svg.addEventListener("pointermove", place);
+  svg.addEventListener("pointerleave", () => { tip.classList.remove("on"); cursor.classList.remove("on"); });
 })();
 </script>
 </body>
