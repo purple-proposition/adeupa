@@ -377,6 +377,22 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .price span{color:var(--muted);font-size:16px}
 .price-card .btn{justify-self:start}
 @media (max-width:768px){.price-card{grid-template-columns:1fr}}
+.rail{overflow:hidden;padding:8px 0 32px;pointer-events:none;user-select:none;--fade-in:calc(var(--grid-margin) + (100% - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 6 + 2 * var(--grid-gutter));-webkit-mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)));mask-image:linear-gradient(to right,transparent var(--fade-in),#0a0a0a calc(var(--fade-in) + 96px),#0a0a0a calc(100% - var(--fade-in) - 96px),transparent calc(100% - var(--fade-in)))}
+.rail-track{display:flex;gap:16px;width:max-content;will-change:transform}
+.rail-card{flex:0 0 288px;height:480px;display:flex;flex-direction:column;background:rgba(255,255,255,.7);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid rgba(255,255,255,.6);border-radius:16px;box-shadow:0 14px 40px rgba(10,10,10,.12);padding:16px;overflow:hidden}
+.rail-cover-box{position:relative;margin:0 0 16px}
+.rail-cover{display:block;width:100%;aspect-ratio:16/9;border-radius:16px;background:var(--soft);outline:1px solid var(--line);outline-offset:0}
+.rail-badge{position:absolute;top:12px;right:12px;font-size:12px;font-weight:700;padding:4px 8px;border-radius:16px;background:#4169E1;color:#fff}
+.rail-card .org{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;flex-wrap:wrap}
+.rail-card .seal{display:inline-flex}
+.rail-card .seal svg{width:16px;height:16px}
+.rail-card h4{font-size:24px;line-height:1.2;margin:4px 0 8px;letter-spacing:-.015em}
+.rail-card .meta{font-size:14px;color:var(--text);display:flex;flex-direction:column;gap:4px}
+.rail-card .meta .line{display:flex;align-items:center;gap:8px}
+.rail-card .meta svg{width:14px;height:14px;flex:none;color:var(--text)}
+.rail-desc{position:relative;height:96px;overflow:hidden;margin:8px 0 12px;font-size:16px;color:#404040;line-height:1.45}
+.rail-desc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(250,250,250,0),rgba(250,250,250,.95));pointer-events:none}
+.rail-card .ticket{margin-top:auto;display:block;padding:10px 18px;border-radius:16px;background:#4169E1;color:#fff;font-size:16px;font-weight:600;text-align:center}
 </style>
 </head>
 <body>
@@ -595,6 +611,32 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           </svg>
       <figcaption>Chaque point est une journée : plus il est haut, plus l’événement a été vu ce jour-là ; plus il est à droite, plus la date est proche.</figcaption>
     </figure>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Votre événement a fière allure sur Adeupa.</h2>
+      <p class="lead">Chaque événement a sa fiche soignée, et les événements mis en avant défilent sous les yeux des visiteurs.</p>
+    </div>
+  </div>
+  <div class="rail" aria-hidden="true">
+    <div class="rail-track" id="rail-track"><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-1.jpg');background-size:cover;background-position:center"></div></div><div class="org"><span>Le Sucre</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Rave Against Fascism</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Vendredi 23 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Le Sucre, 50 quai Rambaud, Lyon 2e</span></div><div class="rail-desc"><div>Soirée contre le fascisme, avec une programmation pensée pour le rooftop.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-2.jpg');background-size:cover;background-position:center"></div><span class="rail-badge">Mise en avant</span></div><div class="org"><span>Galerie Nord Sud</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Expo photo en plein air</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Jusqu'au 31 octobre</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Place des Terreaux, Lyon 1er</span></div><div class="rail-desc"><div>Vingt tirages grand format exposés sous les arcades, en accès libre.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-5.jpg');background-size:cover;background-position:center"></div></div><div class="org"><span>Hugo Dubois</span></div><h4>Atelier street art</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Ce soir de 19h à 21h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Pentes de la Croix-Rousse, Lyon 1er</span></div><div class="rail-desc"><div>Initiation au pochoir, matériel fourni sur place.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-1.jpg');background-size:cover;background-position:center"></div><span class="rail-badge">Mise en avant</span></div><div class="org"><span>Jazz à Ainay</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Concert jazz</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 21h à 23h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quartier Ainay, Lyon 2e</span></div><div class="rail-desc"><div>Trio jazz dans une cour pavée, deux sets dans la soirée.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card seen"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-3.jpg');background-size:cover;background-position:center"></div><span class="rail-badge seen">Déjà vu</span></div><div class="org"><span>Ninkasi Cordeliers</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Brunch vinyles</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Dimanche 18 octobre de 11h à 15h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Cordeliers, Lyon 2e</span></div><div class="rail-desc"><div>Brunch et écoute de vinyles entre voisins.</div></div><span class="ticket">Billetterie</span></div><div class="rail-card"><div class="rail-cover-box"><div class="rail-cover" style="background-image:url('assets/illus-1.jpg');background-size:cover;background-position:center"></div></div><div class="org"><span>Club Le Rivage</span><span class="seal" aria-label="Entreprise vérifiée"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.6" fill="#4169E1"/><circle cx="20.20" cy="12.00" r="3" fill="#4169E1"/><circle cx="19.10" cy="16.10" r="3" fill="#4169E1"/><circle cx="16.10" cy="19.10" r="3" fill="#4169E1"/><circle cx="12.00" cy="20.20" r="3" fill="#4169E1"/><circle cx="7.90" cy="19.10" r="3" fill="#4169E1"/><circle cx="4.90" cy="16.10" r="3" fill="#4169E1"/><circle cx="3.80" cy="12.00" r="3" fill="#4169E1"/><circle cx="4.90" cy="7.90" r="3" fill="#4169E1"/><circle cx="7.90" cy="4.90" r="3" fill="#4169E1"/><circle cx="12.00" cy="3.80" r="3" fill="#4169E1"/><circle cx="16.10" cy="4.90" r="3" fill="#4169E1"/><circle cx="19.10" cy="7.90" r="3" fill="#4169E1"/><polyline points="8.2,12.3 10.9,15 15.8,9.6" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><h4>Set électro au Sucre</h4><div class="meta"><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>Samedi 17 octobre de 23h à 2h</span><span class="line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Quai Saint-Antoine, Lyon 2e</span></div><div class="rail-desc"><div>Une nuit de sets électro sur les quais, en plein air.</div></div><span class="ticket">Billetterie</span></div></div>
+  </div>
+</section>
+
+<section id="billetterie">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Vendez vos billets directement sur Adeupa.</h2>
+      <p class="lead">Une billetterie intégrée à votre fiche : vos visiteurs achètent sans quitter la page, et vous ne payez qu'une commission sur les billets vendus.</p>
+    </div>
+    <div class="steps" data-reveal>
+      <div class="step"><div class="n">%</div><h3>Commission à partir de 0,9 %</h3><p>Plus votre formule est large, plus la commission baisse. Gratuit : 2,9 % + 0,49 € par billet. Pro : 1,2 % + 0,20 € par billet. Business : 0,9 % + 0,15 € par billet.</p></div>
+      <div class="step"><div class="n">€</div><h3>Aucun frais caché</h3><p>Le montant affiché est celui que vos visiteurs paient, commission comprise. Vos ventes arrivent sur votre compte selon les délais de versement indiqués dans vos conditions.</p></div>
+      <div class="step"><div class="n">✓</div><h3>Une fiche, un billet</h3><p>Le bouton Billetterie est sur la fiche de votre événement, à côté de l'adresse et des horaires. Vous suivez vos ventes depuis votre espace.</p></div>
+    </div>
   </div>
 </section>
 
@@ -1286,6 +1328,26 @@ document.querySelectorAll(".faq-q").forEach(btn => {
       fade.finished.then(() => intro.remove());
     });
   });
+})();
+</script>
+<script>
+// Carrousel infini : la carte qui sort à gauche est replacée à droite
+(() => {
+  const track = document.getElementById("rail-track");
+  if (!track) return;
+  let x = 0, last = performance.now();
+  const speed = 40; // pixels par seconde
+  const step = () => {
+    const now = performance.now();
+    const dt = (now - last) / 1000; last = now;
+    x -= speed * dt;
+    const first = track.firstElementChild;
+    const w = first.offsetWidth + parseFloat(getComputedStyle(track).columnGap || 16);
+    if (-x >= w) { track.appendChild(first); x += w; }
+    track.style.transform = `translate3d(${x}px,0,0)`;
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 })();
 </script>
 </body>
