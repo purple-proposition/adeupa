@@ -660,6 +660,19 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       el.animate(fromBottom, IN);
     });
   };
+  // Décompte : le prix défile de l'ancienne à la nouvelle valeur, en ease-out de 320 ms (timing Clover)
+  const countTo = (el, from, to) => {
+    if (!motion || from === to) { el.textContent = to + " €"; return; }
+    const t0 = performance.now(), dur = 320;
+    if (el._raf) cancelAnimationFrame(el._raf);
+    const step = now => {
+      const k = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = Math.round(from + (to - from) * e) + " €";
+      if (k < 1) el._raf = requestAnimationFrame(step);
+    };
+    el._raf = requestAnimationFrame(step);
+  };
   // Affiche ou masque une ligne en fondu, sans saut de mise en page après l'animation
   const toggleLine = (el, show, text) => {
     if (show) {
@@ -682,7 +695,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       const save = card.querySelector(".plan-save");
       const value = (mode === "y" ? price.dataset.y : price.dataset.m) + " €";
       const unitText = mode === "y" ? "par an" : "par mois";
-      swapText(price, value);
+      const to = +(mode === "y" ? price.dataset.y : price.dataset.m);
+      const from = price.dataset.cur !== undefined ? +price.dataset.cur : parseFloat(price.textContent) || 0;
+      countTo(price, from, to);
+      price.dataset.cur = to;
       swapText(unit, unitText);
       const saving = mode === "y" && +save.dataset.save > 0;
       toggleLine(save, saving, saving ? "Économisez " + save.dataset.save + " € par an" : "");
