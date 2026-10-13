@@ -416,7 +416,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .reach-card{display:flex;flex-direction:column;gap:16px;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
 .reach-icon{width:48px;height:48px;border:1px solid var(--line);border-radius:24px;display:grid;place-items:center;color:var(--text);background:var(--accent);flex:none}
 .reach-icon svg{width:24px;height:24px}
-.reach-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
+.reach-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800;color:var(--blue)}
 .reach-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
 .rail-card{flex:0 0 288px;height:480px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:16px;overflow:hidden}
 .rail-cover-box{position:relative;margin:0 0 16px}
@@ -453,11 +453,21 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-credit{margin:24px 0 0;font-size:12px;color:var(--muted);text-align:right}
 .pb-credit a{color:var(--muted)}
 .pb-slide{position:relative;overflow:hidden;isolation:isolate;flex:0 0 100%;min-width:0;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--grid-gutter);align-items:center;padding:48px;background:var(--surface);border:1px solid var(--line);border-radius:32px;box-sizing:border-box;min-height:480px}
-.pb-text h3{margin:0 0 16px;font-size:36px;line-height:1.1;font-weight:800}
+.pb-text h3{margin:0 0 16px;font-size:36px;line-height:1.1;font-weight:800;color:var(--blue)}
 .pb-q{font-size:24px;color:var(--text);margin:0 0 16px;line-height:1.3}
 .pb-text p:last-child{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
 .pb-device{display:flex;justify-content:center;perspective:1200px}
-.pb-device{display:flex;justify-content:center;perspective:1600px}
+.pb-device{display:flex;justify-content:center;perspective:1600px;position:relative}
+.pb-device{position:relative}
+.pb-float{position:absolute;z-index:2;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--text);animation:pbFloat 4.8s ease-in-out infinite}
+.pb-float svg{width:24px;height:24px}
+.pb-float.pf1{top:8%;left:4%}
+.pb-float.pf2{top:18%;right:2%;animation-delay:-1.2s}
+.pb-float.pf3{bottom:14%;left:8%;animation-delay:-2.4s}
+.pb-float.pf4{bottom:6%;right:10%;animation-delay:-3.6s}
+@keyframes pbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@media (prefers-reduced-motion:reduce){.pb-float{animation:none}}
+
 .ph-tilt{position:relative;width:257px;height:521px;transform-style:preserve-3d;transform:rotateX(14deg) rotateY(-28deg) rotateZ(12deg)}
 .ph-tilt::before,.ph-tilt::after{content:"";position:absolute;inset:0;border-radius:41px}
 .ph-tilt::before{background:linear-gradient(135deg,#d4d4d4 0%,#737373 60%,#525252 100%);transform:translateZ(-7px)}
@@ -726,7 +736,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           <h3>Votre événement ne s’arrête pas à vos abonnés.</h3>
           <p>Et si vos futurs participants ne vous suivaient pas encore ? Ne parlez pas seulement à ceux qui vous suivent. Donnez envie à ceux qui ne vous connaissent pas encore.</p>
         </div>
-        <div class="pb-device">
+        <div class="pb-device"><span class="pb-float pf1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
             <div class="ph-top"><span class="ph-logo">Adeupa</span><span class="ph-av"></span></div>
             <div class="ph-search">Sortir près de moi</div>
@@ -740,7 +750,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           <h3>Votre événement ne s’arrête pas à votre newsletter.</h3>
           <p>Et si vos futurs participants n’étaient pas abonnés ? Faites découvrir votre événement au moment où votre public cherche quoi faire.</p>
         </div>
-        <div class="pb-device">
+        <div class="pb-device"><span class="pb-float pf1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
             <div class="ph-top"><span class="ph-logo">Adeupa</span><span class="ph-av"></span></div>
             <div class="ph-search">Sortir près de moi</div>
@@ -754,7 +764,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           <h3>Votre événement ne s’arrête pas à votre budget pub.</h3>
           <p>Et si votre visibilité durait plus longtemps que votre campagne ? Donnez à votre événement une visibilité qui dure, sans dépendre d’un budget publicitaire.</p>
         </div>
-        <div class="pb-device">
+        <div class="pb-device"><span class="pb-float pf1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
             <div class="ph-top"><span class="ph-logo">Adeupa</span><span class="ph-av"></span></div>
             <div class="ph-search">Sortir près de moi</div>
@@ -768,7 +778,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           <h3>Votre événement ne s’arrête pas au coin de la rue.</h3>
           <p>Et si vous visiez plus loin que votre quartier ? Votre événement mérite d’être vu, et pas seulement par ceux qui passent devant. Donnez-lui la chance d’être découvert par tous.</p>
         </div>
-        <div class="pb-device">
+        <div class="pb-device"><span class="pb-float pf1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
           <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
             <div class="ph-top"><span class="ph-logo">Adeupa</span><span class="ph-av"></span></div>
             <div class="ph-search">Sortir près de moi</div>
