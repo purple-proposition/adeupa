@@ -367,7 +367,6 @@ section{scroll-margin-top:128px}
 .billing[data-mode="y"] .billing-thumb{transform:translateX(100%)}
 .billing-btn{position:relative;z-index:1;flex:1 1 0;border:0;border-radius:24px;padding:8px 16px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;transition:background-color 240ms cubic-bezier(0.22,1,0.36,1),color 160ms ease-out}
 .billing-btn.on{color:var(--text)}
-.plan-save{margin:4px 0 0;font-size:16px;color:var(--muted)}
 .plan-list li{min-height:24px;align-items:flex-start}
 .plan-list li{color:var(--text)}
 .plan-list li.off{color:var(--muted)}
@@ -768,7 +767,6 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     document.querySelectorAll(".plan-card").forEach(card => {
       const price = card.querySelector(".plan-price span");
       const unit = card.querySelector("[data-unit]");
-      const save = card.querySelector(".plan-save");
       const value = (mode === "y" ? price.dataset.y : price.dataset.m) + " €";
       const unitText = mode === "y" ? "par an" : "par mois";
       const to = +(mode === "y" ? price.dataset.y : price.dataset.m);
@@ -776,8 +774,6 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       countTo(price, from, to);
       price.dataset.cur = to;
       swapText(unit, unitText);
-      const saving = mode === "y" && +save.dataset.save > 0;
-      toggleLine(save, saving, saving ? "Économisez " + save.dataset.save + " € par an" : "");
     });
   };
   btns.forEach(b => b.addEventListener("click", () => { b.closest(".billing").dataset.mode = b.dataset.b; set(b.dataset.b); }));
