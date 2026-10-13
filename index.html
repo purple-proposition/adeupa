@@ -730,6 +730,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     if (!motion) { el.textContent = text; return; }
     // Une seule animation à la fois : un clic pendant la sortie met seulement à jour le texte cible
     el.dataset.target = text;
+    if (el.dataset.busy !== "1" && el.textContent === text) return;
     if (el.dataset.busy === "1") return;
     el.dataset.busy = "1";
     el.animate(fromTop, OUT).finished.then(() => {
@@ -760,8 +761,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       const save = card.querySelector(".plan-save");
       const value = (mode === "y" ? price.dataset.y : price.dataset.m) + " €";
       const unitText = mode === "y" ? "par an" : "par mois";
-      if (price.textContent !== value) swapText(price, value);
-      if (unit.textContent !== unitText) swapText(unit, unitText);
+      swapText(price, value);
+      swapText(unit, unitText);
       const saving = mode === "y" && +save.dataset.save > 0;
       toggleLine(save, saving, saving ? "Économisez " + save.dataset.save + " € par an" : "");
     });
