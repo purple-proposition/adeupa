@@ -1363,23 +1363,38 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 })();
 </script>
 <script>
-// Carrousel infini : la carte qui sort à gauche est replacée à droite
+// Carrousel infini : la carte qui sort à gauche est replacée à droite.
+// Ne lit jamais la mise en page pendant l'animation (largeur mesurée au redimensionnement),
+// borne le delta de temps (pas de saut après un onglet masqué) et s'arrête hors écran.
 (() => {
+  const rail = document.querySelector(".rail");
   const track = document.getElementById("rail-track");
-  if (!track) return;
-  let x = 0, last = performance.now();
-  const speed = 40; // pixels par seconde
-  const step = () => {
-    const now = performance.now();
-    const dt = (now - last) / 1000; last = now;
-    x -= speed * dt;
+  if (!rail || !track) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const SPEED = 40; // pixels par seconde
+  let x = 0, step = 0, last = 0, inView = false, running = false;
+  const measure = () => {
     const first = track.firstElementChild;
-    const w = first.offsetWidth + parseFloat(getComputedStyle(track).columnGap || 16);
-    if (-x >= w) { track.appendChild(first); x += w; }
-    track.style.transform = `translate3d(${x}px,0,0)`;
-    requestAnimationFrame(step);
+    if (first) step = first.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0);
   };
-  requestAnimationFrame(step);
+  const frame = (now) => {
+    if (!running) return;
+    const dt = Math.min((now - last) / 1000, 0.05); last = now;
+    x -= SPEED * dt;
+    while (step > 0 && -x >= step) { track.appendChild(track.firstElementChild); x += step; }
+    track.style.transform = `translate3d(${x}px,0,0)`;
+    requestAnimationFrame(frame);
+  };
+  const sync = () => {
+    const should = inView && !document.hidden && !reduce;
+    if (should === running) return;
+    running = should;
+    if (running) { last = performance.now(); requestAnimationFrame(frame); }
+  };
+  measure();
+  window.addEventListener("resize", measure);
+  document.addEventListener("visibilitychange", sync);
+  new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }).observe(rail);
 })();
 </script>
 <script>
