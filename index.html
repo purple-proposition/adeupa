@@ -283,11 +283,11 @@ footer .foot{display:flex;justify-content:space-between;align-items:center;gap:1
 /* Menu fixe : liens au centre, qui font défiler la page jusqu'à la section */
 .menu{position:fixed;top:0;left:0;right:0;z-index:35;height:88px;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .menu i{position:absolute;left:0;right:0;top:0;display:block;pointer-events:none}
-.menu i:nth-child(1){height:24px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);background:rgba(250,250,250,.3)}
-.menu i:nth-child(2){height:40px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(250,250,250,.2)}
-.menu i:nth-child(3){height:56px;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);background:rgba(250,250,250,.12)}
-.menu i:nth-child(4){height:72px;backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);background:rgba(250,250,250,.06)}
-.menu i:nth-child(5){height:88px;backdrop-filter:blur(.5px);-webkit-backdrop-filter:blur(.5px)}
+.menu i:nth-child(1){height:32px;backdrop-filter:blur(16px) saturate(110%);-webkit-backdrop-filter:blur(16px) saturate(110%);background:rgba(250,250,250,.4)}
+.menu i:nth-child(2){height:48px;backdrop-filter:blur(12px) saturate(110%);-webkit-backdrop-filter:blur(12px) saturate(110%);background:rgba(250,250,250,.25)}
+.menu i:nth-child(3){height:64px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);background:rgba(250,250,250,.15)}
+.menu i:nth-child(4){height:80px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);background:rgba(250,250,250,.07)}
+.menu i:nth-child(5){height:88px;backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px)}
 @keyframes menuIn{from{opacity:0}to{opacity:1}}
 .menu-links{position:relative;z-index:1;pointer-events:auto;display:flex;gap:32px;list-style:none;margin:0;padding:0}
 .menu-links a{font-size:16px;font-weight:500;color:var(--muted);text-decoration:none;transition:color 160ms ease-out}
