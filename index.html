@@ -459,6 +459,17 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-device{display:flex;justify-content:center;perspective:1200px}
 .pb-device{display:flex;justify-content:center;perspective:1600px;position:relative}
 .pb-device{position:relative}
+.env{position:relative;width:360px;height:260px;margin:0 auto}
+.env-back{position:absolute;inset:0;border-radius:24px;background:#f5f5f5;border:1px solid var(--line)}
+.env-letter{position:absolute;left:32px;right:32px;top:24px;height:220px;padding:16px;border-radius:16px;background:#fafafa;border:1px solid var(--line);display:flex;flex-direction:column;gap:8px;overflow:hidden;transform:rotate(-3deg)}
+.env-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.env-head b{font-size:16px;font-weight:800;color:var(--blue)}
+.env-head span{font-size:12px;color:var(--muted)}
+.env-letter h4{margin:0;font-size:16px;font-weight:700;color:var(--text)}
+.env-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.env-imgs span{height:72px;border-radius:8px}
+.env-letter p{margin:0;font-size:12px;color:var(--muted)}
+.env-front{position:absolute;left:0;right:0;bottom:0;height:150px;border-radius:0 0 24px 24px;background:#fafafa;border-top:1px solid var(--line);clip-path:polygon(0 0,50% 40%,100% 0,100% 100%,0 100%)}
 .pb-float{position:absolute;z-index:2;border-radius:50%;background:var(--blue);color:#fafafa;display:grid;place-items:center;animation:pbFloat 4.8s ease-in-out infinite}
 .pb-float svg{width:50%;height:50%}
 .pb-float.pf1{width:56px;height:56px;top:8%;left:4%}
@@ -751,12 +762,16 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
           <p>Et si vos futurs participants n’étaient pas abonnés ? Faites découvrir votre événement au moment où votre public cherche quoi faire.</p>
         </div>
         <div class="pb-device"><span class="pb-float pf1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="pb-float pf4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-          <div class="ph-tilt"><div class="device device-iphone-14-pro device-silver"><div class="device-frame"><div class="device-screen ph-screen">
-            <div class="ph-top"><span class="ph-logo">Adeupa</span><span class="ph-av"></span></div>
-            <div class="ph-search">Sortir près de moi</div>
-            <div class="ph-map"><i style="left:22%;top:28%"></i><i style="left:58%;top:20%"></i><i style="left:36%;top:60%"></i><i class="hot" style="left:64%;top:44%"></i></div>
-            <div class="ph-card"><div class="ph-cover g-musique"></div><b>Concert jazz</b><span class="ph-meta">Samedi 17 octobre de 21h à 23h</span><span class="ph-btn">Billetterie</span></div>
-          </div></div><div class="device-stripe"></div><div class="device-header"></div><div class="device-sensors"></div><div class="device-btns"></div><div class="device-power"></div></div></div>
+          <div class="env" role="img" aria-label="Enveloppe contenant une newsletter Altora">
+            <div class="env-back"></div>
+            <div class="env-letter">
+              <div class="env-head"><b>Altora</b><span>Newsletter · octobre</span></div>
+              <h4>Concerts et soirées à Lyon</h4>
+              <div class="env-imgs"><span class="g-musique"></span><span class="g-fete"></span></div>
+              <p>Les événements de la semaine, près de chez vous.</p>
+            </div>
+            <div class="env-front"></div>
+          </div>
         </div>
       </div>
       <div class="pb-slide">
