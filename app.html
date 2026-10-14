@@ -808,7 +808,8 @@ async function publishEvent() {
   const body = {
     title: $("f-title").value.trim(), desc: $("f-desc").value.trim(), cat: chosenCat, date, org: profile.name, image,
     hours: `${hm($("f-start-time").value)} à ${hm($("f-end-time").value)}`, address: addrPick.label,
-    lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon"
+    lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon",
+    start: `${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, "0")}-${String(start.getDate()).padStart(2, "0")}`
   };
   // Envoi en formulaire : l'image part en fichier binaire, sans données encodées dans le corps
   const dataUrlToBlob = u => fetch(u).then(r => r.blob());

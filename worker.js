@@ -56,7 +56,7 @@ async function createEvent(req, env) {
   if (ids.length >= MAX_EVENTS) return json({ error: "Limite atteinte" }, 409);
   const id = crypto.randomUUID().slice(0, 8);
   const ev = {
-    id, title, desc: clean(b.desc).slice(0, 1000), cat, status, lat, lng, owner: user.id,
+    id, title, desc: clean(b.desc).slice(0, 1000), cat, status, lat, lng, owner: user.id, start: clean(b.start).slice(0, 10),
     org: user.name, date: clean(b.date).slice(0, 60), hours: clean(b.hours).slice(0, 40),
     address: clean(b.address).slice(0, 200), tickets: 0, interested: 0, user: true, hasImage: !!image,
   };
