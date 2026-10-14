@@ -610,9 +610,10 @@ addrInput.addEventListener("input", () => {
   if (q.length < 3) { closeAddr(); return; }
   addrTimer = setTimeout(async () => {
     try {
-      const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=5&q=" + encodeURIComponent(q));
+      // Résultats limités au Rhône (69), département de la métropole lyonnaise, classés autour de Lyon
+      const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=10&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
       const data = await r.json();
-      const items = (data.features || []).map(f => ({ label: f.properties.label, city: f.properties.city, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
+      const items = (data.features || []).filter(f => (f.properties.context || "").startsWith("69,")).slice(0, 5).map(f => ({ label: f.properties.label, city: f.properties.city, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
       if (!items.length) { closeAddr(); return; }
       addrList.innerHTML = items.map((it, i) => `<li role="option" data-i="${i}" aria-selected="false">${it.label}<small>${it.city || ""}</small></li>`).join("");
       addrList.hidden = false; addrInput.setAttribute("aria-expanded", "true");
