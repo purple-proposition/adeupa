@@ -453,6 +453,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .av-card{display:flex;flex-direction:column;gap:16px;padding:24px;border:1px solid var(--line);border-radius:32px;background:var(--surface)}
 .av-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
 .av-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
+.av-card.blue{background:var(--blue);border-color:var(--blue)}
+.av-card.blue h3,.av-card.blue p{color:#fafafa}
 @media (max-width:1024px){.av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:768px){.fr-grid,.av-grid{grid-template-columns:1fr}}
 .visuels-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter)}
@@ -578,7 +580,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Un seul outil pour consulter, gérer et publier vos événements</h2>
     </div>
     <div class="av-grid" data-reveal>
-      <article class="av-card">
+      <article class="av-card blue">
         <h3>1. Vos événements sur une carte interactive</h3>
         <p class="clamp">Publiez vos événements en cours et à venir sur notre carte, avec un classement par catégorie pour faciliter leur exploration. Un halo coloré distingue les événements en cours des événements à venir, représentés en gris. Grâce aux filtres par statut et par catégorie, le public peut affiner l’affichage et découvrir les événements référencés dans la zone couverte.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
@@ -593,7 +595,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
         <p class="clamp">Consultez le nombre de vues de vos fiches et les clics vers la billetterie pour suivre les interactions avec vos événements. Retrouvez ces données dans un tableau de bord centralisé pour visualiser les résultats de chaque événement. Identifiez ainsi ceux qui suscitent le plus d’intérêt et obtenez des repères pour ajuster votre communication.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
-      <article class="av-card">
+      <article class="av-card blue">
         <h3>4. Gestion optimisée de votre profil</h3>
         <p class="clamp">Gérez votre profil et vos événements depuis un espace dédié : créez vos fiches, modifiez-les et préparez vos publications en brouillon avant de les mettre en ligne. Réutilisez les informations de vos précédentes éditions pour gagner du temps et partagez facilement les liens de vos événements. Des badges permettent également d’identifier les entreprises vérifiées et les événements sponsorisés.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
@@ -612,15 +614,15 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
     <div class="steps">
       <div class="step" data-reveal style="--i:0">
-        <h4>1 Créez votre compte</h4>
+        <h4>1. Inscrivez-vous</h4>
         <p>Renseignez votre e-mail, le nom de votre structure et son type (association ou organisateur professionnel). Une empreinte bancaire de 0 € est demandée, sans aucun prélèvement.</p>
       </div>
       <div class="step" data-reveal style="--i:1">
-        <h4>2 Créez votre fiche événement</h4>
+        <h4>2. Créez votre fiche événement</h4>
         <p>Renseignez le titre, les dates, la catégorie, l’adresse et l’image de votre événement. Prévisualisez votre fiche et son emplacement sur la carte avant sa publication, puis configurez votre billetterie.</p>
       </div>
       <div class="step" data-reveal style="--i:2">
-        <h4>3 Cliquez sur Publier</h4>
+        <h4>3. Cliquez sur Publier</h4>
         <p>Votre événement apparaît alors sur la carte publique et reste accessible jusqu’à sa date de fin. Les visiteurs peuvent consulter sa fiche et accéder à la billetterie intégrée pour réserver leurs billets.</p>
       </div>
     </div>
