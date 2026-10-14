@@ -44,7 +44,7 @@ header.top .btn-primary:hover{background:#3558CC}
 .btn-dark:hover{background:#0a0a0a}
 .btn-ghost{background:transparent}
 .tab-on{background:var(--text)!important;border-color:var(--text)!important;color:#fff!important}
-header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;grid-column:3/span 8;flex-wrap:wrap}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px;grid-column:1/-1;flex-wrap:wrap}
 .topnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 /* connexion */
 #login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -189,7 +189,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .go-tag{position:absolute;right:8px;bottom:8px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#4169E1;background:#fff;padding:4px 8px;border-radius:8px}
 /* Tablette (769 à 1024 px) : contenu sur 10 colonnes, carte en pleine largeur, fenêtre sur 8 colonnes */
 @media (max-width:1024px) and (min-width:769px){
-  header.top,.section-title,.in-6{grid-column:2/span 10}
+  header.top,.section-title,.in-6{grid-column:1/-1}
   .map-box{grid-column:1/-1}
   .panel{grid-column:1/-1!important}
   .modal-box{width:calc(8 * var(--col) + 7 * var(--grid-gutter))}
