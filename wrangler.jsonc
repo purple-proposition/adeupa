@@ -1,7 +1,7 @@
 {
   "name": "adeupa",
   "main": "worker.js",
-  "vars": { "SENDER_EMAIL": "adeupa@gmail.com" },
+  "vars": { "SENDER_EMAIL": "adeupa.app@gmail.com" },
   "compatibility_date": "2026-10-01",
   "assets": { "directory": ".", "binding": "ASSETS", "run_worker_first": ["/api/*", "/evenements*"] },
   "kv_namespaces": [{ "binding": "ADEUPA_EVENTS", "id": "e30f0c88c1f640e2bc65fb9ad9dd3b11" }],
