@@ -46,3 +46,8 @@
 
 .g-club{background:linear-gradient(135deg,#171717 0%,#4169E1 100%)}
 .g-food{background:linear-gradient(135deg,#e5e5e5 0%,#737373 100%)}
+
+/* Épingles cliquables : curseur en main sur toute l'épingle */
+.event,.event *{cursor:pointer}
+.event{pointer-events:auto}
+.event .pin-svg{pointer-events:auto}
