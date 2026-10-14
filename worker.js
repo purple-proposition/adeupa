@@ -15,7 +15,7 @@ async function listIds(env) {
 
 function publicEvent(ev, hasImage) {
   const { image, ...rest } = ev;
-  return { ...rest, image: hasImage ? `/api/events/${ev.id}/image` : null };
+  return { ...rest, image: hasImage ? `/evenements/${ev.id}/image` : null };
 }
 
 async function getEvents(env) {
@@ -79,9 +79,9 @@ export default {
       if (req.method === "POST") return createEvent(req, env);
       return json({ error: "Méthode non autorisée" }, 405);
     }
-    const img = url.pathname.match(/^\/api\/events\/([a-z0-9-]+)\/image$/);
+    const img = url.pathname.match(/^\/(?:api\/events|evenements)\/([a-z0-9-]+)\/image$/);
     if (img && req.method === "GET") return getImage(img[1], env);
-    if (url.pathname.startsWith("/api/")) return json({ error: "Introuvable" }, 404);
+    if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/evenements")) return json({ error: "Introuvable" }, 404);
     return env.ASSETS.fetch(req);
   },
 };

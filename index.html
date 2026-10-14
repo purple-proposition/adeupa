@@ -1276,7 +1276,7 @@ const places = [];    // un point par lieu
 })();
 
 // Événements publiés depuis l'espace organisateur : un point sur la carte, pour tous les visiteurs
-fetch("/api/events").then(r => (r.ok ? r.json() : [])).then(list => {
+fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
   list.forEach(e => {
     const el = document.createElement("div");
     el.className = `event ${e.status === "live" ? "live" : ""}`;

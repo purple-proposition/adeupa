@@ -362,7 +362,7 @@ const EVENTS = [
   { title: "Projection en plein air", org: "Cinéma Comoedia", cat: "Culture", date: "Ce soir", hours: "21h", address: "1 place des Célestins, 69002 Lyon", lat: 45.76010, lng: 4.83183, status: "live", tickets: 40, interested: 118 },
 ];
 // Événements publiés par les organisateurs, partagés via l'API du site
-const remoteEvents = fetch("/api/events").then(r => (r.ok ? r.json() : [])).then(list => {
+const remoteEvents = fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
   EVENTS.push(...list.map(e => ({ ...e, user: true })));
 }).catch(() => {});
 const PLANS = [
