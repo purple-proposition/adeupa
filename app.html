@@ -761,7 +761,7 @@ async function publishEvent() {
     const fd = new FormData();
     Object.entries(b).forEach(([k, v]) => { if (k !== "image" && v != null) fd.append(k, String(v)); });
     if (b.image) fd.append("image", await dataUrlToBlob(b.image), "image.jpg");
-    return fetch("/api/events", { method: "POST", body: fd });
+    return fetch("/evenements", { method: "POST", body: fd });
   };
   let res;
   try { res = await send(body); }

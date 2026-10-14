@@ -74,7 +74,7 @@ async function getImage(id, env) {
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
-    if (url.pathname === "/api/events") {
+    if (url.pathname === "/api/events" || url.pathname === "/evenements") {
       if (req.method === "GET") return json(await getEvents(env));
       if (req.method === "POST") return createEvent(req, env);
       return json({ error: "Méthode non autorisée" }, 405);
