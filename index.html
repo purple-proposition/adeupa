@@ -457,9 +457,11 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .clamp.open{display:block;overflow:visible}
 .voir-plus{align-self:flex-start;padding:8px 16px;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
 .cta-row{display:flex;justify-content:center;margin-top:48px}
-.apercu{cursor:zoom-out;position:fixed;left:50%;top:50%;z-index:90;width:min(90vw,1200px);transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
-.apercu.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
-.apercu img{display:block;width:100%;height:auto;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface)}
+.apercu{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:24px;background:rgba(23,23,23,.6);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1)}
+.apercu.on{opacity:1;pointer-events:auto}
+.apercu-close{position:absolute;top:24px;right:24px;width:40px;height:40px;display:grid;place-items:center;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);cursor:pointer}
+.apercu-close svg{width:16px;height:16px}
+.apercu img{display:block;max-width:min(90vw,1200px);max-height:86vh;width:auto;height:auto;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface)}
 .visuel,.fr-card{position:relative}
 .zoom{position:absolute;top:16px;right:16px;z-index:2;width:40px;height:40px;display:grid;place-items:center;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);cursor:pointer}
 .zoom svg{width:16px;height:16px}
@@ -542,10 +544,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Attirer des participants à vos événements ne devrait pas dépendre…</h2>
     </div>
     <div class="fr-grid" data-reveal>
-      <article class="fr-card"><img src="assets/frictions/friction-1.webp" alt="… d’une affiche ignorée par des passants pressés" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></article>
-      <article class="fr-card"><img src="assets/frictions/friction-2.webp" alt="… d’une communauté déjà acquise sur les réseaux sociaux" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></article>
-      <article class="fr-card"><img src="assets/frictions/friction-3.webp" alt="… d’un budget publicitaire que vous n’avez pas" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></article>
-      <article class="fr-card"><img src="assets/frictions/friction-4.webp" alt="… d’une newsletter survolée en quelques secondes" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></article>
+      <article class="fr-card"><img src="assets/frictions/friction-1.webp" alt="… d’une affiche ignorée par des passants pressés" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></article>
+      <article class="fr-card"><img src="assets/frictions/friction-2.webp" alt="… d’une communauté déjà acquise sur les réseaux sociaux" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></article>
+      <article class="fr-card"><img src="assets/frictions/friction-3.webp" alt="… d’un budget publicitaire que vous n’avez pas" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></article>
+      <article class="fr-card"><img src="assets/frictions/friction-4.webp" alt="… d’une newsletter survolée en quelques secondes" width="1536" height="1024" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></article>
     </div>
   </div>
 <div class="wrap"><div class="cta-row"><a class="btn btn-dark" href="app.html">Publier mon événement</a></div></div>
@@ -557,9 +559,9 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Des événements plus visibles, mieux suivis, plus réservés</h2>
     </div>
     <div class="visuels-row" data-reveal>
-      <div class="visuel"><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
-      <div class="visuel"><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
-      <div class="visuel"><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
+      <div class="visuel"><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></div>
+      <div class="visuel"><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></div>
+      <div class="visuel"><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7"/><path d="M16 16l5 5"/></svg></button></div>
     </div>
   </div>
 <div class="wrap"><div class="cta-row"><a class="btn btn-dark" href="app.html">Publier mon événement</a></div></div>
@@ -1581,18 +1583,19 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
   b.setAttribute("aria-expanded", String(open));
 }));
 </script>
-<div class="apercu" id="apercu" aria-hidden="true"><img alt=""></div>
+<div class="apercu" id="apercu" role="dialog" aria-modal="true" aria-hidden="true"><button class="apercu-close" type="button" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img alt="" style="cursor:zoom-out"></div>
 <script>
-// Aperçu en grand : ouvert par la loupe, fermé par un clic ou la touche Échap
+// Aperçu en grand : ouvert par la loupe ; fermé par le bouton ×, un clic sur l'image ou la touche Échap
 (() => {
-  const box = document.getElementById("apercu"), big = box.querySelector("img");
+  const box = document.getElementById("apercu"), big = box.querySelector("img"), x = box.querySelector(".apercu-close");
   const close = () => box.classList.remove("on");
   document.querySelectorAll(".visuel .zoom, .fr-card .zoom").forEach(z => z.addEventListener("click", () => {
     const img = z.parentElement.querySelector("img");
     big.src = img.src; big.alt = img.alt;
     box.classList.add("on");
   }));
-  box.addEventListener("click", close);
+  big.addEventListener("click", close);
+  x.addEventListener("click", close);
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 })();
 </script>
