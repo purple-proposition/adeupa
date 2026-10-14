@@ -610,6 +610,14 @@ const dates = DatePickerRange($("dp-range"));
 
 // Aide à l'adresse : suggestions de la Base Adresse Nationale (data.gouv.fr), sans clé
 let addrPick = null, addrTimer = null;
+// Première adresse du Rhône correspondant à la saisie (utilisée si l'utilisateur n'a rien choisi dans la liste)
+async function findLyonAddress(q) {
+  try {
+    const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=50&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
+    const f = ((await r.json()).features || []).find(f => (f.properties.context || "").startsWith("69,"));
+    return f ? { label: f.properties.label, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] } : null;
+  } catch (_) { return null; }
+}
 const addrInput = $("f-address"), addrList = $("addr-list");
 function closeAddr() { addrList.hidden = true; addrInput.setAttribute("aria-expanded", "false"); }
 addrInput.addEventListener("input", () => {
@@ -620,7 +628,7 @@ addrInput.addEventListener("input", () => {
   addrTimer = setTimeout(async () => {
     try {
       // Résultats limités au Rhône (69), département de la métropole lyonnaise, classés autour de Lyon
-      const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=10&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
+      const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=50&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
       const data = await r.json();
       const items = (data.features || []).filter(f => (f.properties.context || "").startsWith("69,")).slice(0, 5).map(f => ({ label: f.properties.label, city: f.properties.city, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
       if (!items.length) { closeAddr(); return; }
@@ -708,7 +716,8 @@ $("add-form").addEventListener("submit", async e => {
   if (!$("f-start-time").value || !$("f-end-time").value) { alert("Les horaires de début et de fin sont obligatoires."); return; }
   if (!imgFile) { $("img-err").textContent = "L'image est obligatoire."; $("drop").scrollIntoView({ block: "center" }); return; }
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
-  if (!addrPick) { alert("Choisissez une adresse dans la liste pour placer l'événement sur la carte."); return; }
+  if (!addrPick && addrInput.value.trim()) addrPick = await findLyonAddress(addrInput.value.trim());
+  if (!addrPick) { addrInput.focus(); alert("Adresse introuvable dans le Rhône. Vérifiez-la ou choisissez une proposition dans la liste."); return; }
   if (!dates.start) { alert("Choisissez une date."); return; }
   const day = d => { const t = d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); return t.charAt(0).toUpperCase() + t.slice(1); };
   const hm = v => v.replace(/^(\d{2}):00$/, (_, h) => h.replace(/^0/, "") + "h").replace(/^(\d{1,2}):(\d{2})$/, (_, h, m) => (+h) + "h" + (m === "00" ? "" : m));
