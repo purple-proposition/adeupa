@@ -755,18 +755,13 @@ async function publishEvent() {
     hours: `${hm($("f-start-time").value)} à ${hm($("f-end-time").value)}`, address: addrPick.label,
     lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon"
   };
-  // Envoi par fetch, avec repli sur XMLHttpRequest si le navigateur refuse fetch
-  const xhrPost = b => new Promise((resolve, reject) => {
-    const x = new XMLHttpRequest();
-    x.open("POST", "/api/events");
-    x.setRequestHeader("content-type", "application/json");
-    x.onload = () => resolve({ ok: x.status >= 200 && x.status < 300, status: x.status, json: async () => JSON.parse(x.responseText) });
-    x.onerror = () => reject(new Error("Load failed"));
-    x.send(JSON.stringify(b));
-  });
+  // Envoi en formulaire : l'image part en fichier binaire, sans données encodées dans le corps
+  const dataUrlToBlob = u => fetch(u).then(r => r.blob());
   const send = async b => {
-    try { return await fetch("/api/events", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b) }); }
-    catch (_) { return xhrPost(b); }
+    const fd = new FormData();
+    Object.entries(b).forEach(([k, v]) => { if (k !== "image" && v != null) fd.append(k, String(v)); });
+    if (b.image) fd.append("image", await dataUrlToBlob(b.image), "image.jpg");
+    return fetch("/api/events", { method: "POST", body: fd });
   };
   let res;
   try { res = await send(body); }

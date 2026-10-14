@@ -2,6 +2,7 @@
 const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier"];
 const MAX_EVENTS = 200;
 const MAX_IMAGE = 900_000; // caractères de la data URL JPEG
+const MAX_IMAGE_BYTES = 700_000;
 
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -28,8 +29,18 @@ async function getEvents(env) {
 }
 
 async function createEvent(req, env) {
-  let b;
-  try { b = await req.json(); } catch (_) { return json({ error: "JSON invalide" }, 400); }
+  let b, file = null;
+  try {
+    const form = await req.formData();
+    b = Object.fromEntries([...form.entries()].filter(([, v]) => typeof v === "string"));
+    file = form.get("image");
+  } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  if (file && typeof file !== "string" && file.size > 0) {
+    if (file.size > MAX_IMAGE_BYTES) return json({ error: "Image trop lourde" }, 413);
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    let bin = ""; for (let i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode(...bytes.subarray(i, i + 8192));
+    b.image = "data:image/jpeg;base64," + btoa(bin);
+  }
   const title = clean(b.title).slice(0, 120);
   const cat = CATS.includes(b.cat) ? b.cat : null;
   const lat = Number(b.lat), lng = Number(b.lng);
