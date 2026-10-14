@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="assets/shared.css">
+<script src="assets/events.js"></script>
 <style>
 :root{--col:calc((100vw - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 12);--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717;--dot:#171717;--live:#4169E1;--grid-gutter:24px;--grid-margin:24px}
 @media (max-width:1024px){:root{--grid-gutter:16px;--grid-margin:16px}}
@@ -359,16 +360,7 @@ const CAT_ICON = {
 };
 const CAT_CLASS = { "Musique": "musique", "Culture": "culture", "Sport": "sport", "Brocante": "brocante", "Fête": "fete", "Atelier": "atelier" };
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
-const EVENTS = [
-  { title: "Apéro jazz au Rhône", org: "Quai Jazz Club", cat: "Musique", date: "Ce soir", hours: "18h à 22h", address: "1 quai Fulchiron, 69005 Lyon", lat: 45.75938, lng: 4.82748, status: "live", tickets: 14, interested: 52 },
-  { title: "Marché nocturne", org: "Galerie Nord Sud", cat: "Brocante", date: "Samedi 17 octobre", hours: "19h à 23h", address: "1 place Bellecour, 69002 Lyon", lat: 45.75889, lng: 4.83092, status: "soon", tickets: 0, interested: 88 },
-  { title: "Cours de yoga", org: "Le Sucre", cat: "Sport", date: "Dimanche 18 octobre", hours: "9h à 10h30", address: "2 quai Saint-Antoine, 69002 Lyon", lat: 45.76440, lng: 4.83205, status: "soon", tickets: 9, interested: 27 },
-  { title: "Expo photo en plein air", org: "Galerie Nord Sud", cat: "Culture", date: "Jusqu'au 31 octobre", hours: "", address: "1 place des Terreaux, 69001 Lyon", lat: 45.76784, lng: 4.83401, status: "live", tickets: 0, interested: 31 },
-  { title: "Atelier street art", org: "Hugo Dubois", cat: "Atelier", date: "Ce soir", hours: "19h à 21h", address: "9 montée de la Grande-Côte, 69001 Lyon", lat: 45.77271, lng: 4.83221, status: "live", tickets: 6, interested: 19 },
-  { title: "Brunch vinyles", org: "Ninkasi Cordeliers", cat: "Fête", date: "Dimanche 18 octobre", hours: "11h à 15h", address: "1 place des Cordeliers, 69002 Lyon", lat: 45.76368, lng: 4.83699, status: "soon", tickets: 22, interested: 64 },
-  { title: "Open mic", org: "Club Le Rivage", cat: "Musique", date: "Jeudi 22 octobre", hours: "20h à 23h", address: "1 place de la Croix-Rousse, 69004 Lyon", lat: 45.77479, lng: 4.83158, status: "soon", tickets: 4, interested: 12 },
-  { title: "Projection en plein air", org: "Cinéma Comoedia", cat: "Culture", date: "Ce soir", hours: "21h", address: "1 place des Célestins, 69002 Lyon", lat: 45.76010, lng: 4.83183, status: "live", tickets: 40, interested: 118 },
-];
+const EVENTS = (window.DEMO_EVENTS || []).map(e => ({ ...e, org: typeof e.org === "string" ? e.org : e.org.name }));
 // Événements publiés par les organisateurs, partagés via l'API du site
 const remoteEvents = fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
   EVENTS.push(...list.map(e => ({ ...e, user: true })));
