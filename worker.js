@@ -155,16 +155,18 @@ async function deleteAccount(req, env) {
 const CODE_TTL = 600, CODE_COOLDOWN = 60, CODE_MAX_TRIES = 5;
 
 async function sendCode(email, code, name, env) {
-  const r = await fetch("https://api.resend.com/emails", {
+  // Envoi via Brevo, depuis l'adresse expéditrice vérifiée chez Brevo
+  const r = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+    headers: { "api-key": env.BREVO_API_KEY, "content-type": "application/json", accept: "application/json" },
     body: JSON.stringify({
-      from: "Adeupa <onboarding@resend.dev>",
-      to: [email],
+      sender: { name: "Adeupa", email: env.SENDER_EMAIL },
+      to: [{ email, name }],
       subject: `${code} : votre code de connexion Adeupa`,
-      html: `<p>Bonjour ${name},</p><p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+      htmlContent: `<p>Bonjour ${name},</p><p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
     }),
   });
+  if (!r.ok) console.log("brevo", r.status, await r.text());
   return r.ok;
 }
 
