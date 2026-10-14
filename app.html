@@ -686,14 +686,15 @@ $("add-form").addEventListener("submit", e => {
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
   if (!addrPick) { alert("Choisissez une adresse dans la liste pour placer l'événement sur la carte."); return; }
   if (!dates.start) { alert("Choisissez une date."); return; }
-  const day = d => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const day = d => { const t = d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const hm = v => v.replace(/^(\d{2}):00$/, (_, h) => h.replace(/^0/, "") + "h").replace(/^(\d{1,2}):(\d{2})$/, (_, h, m) => (+h) + "h" + (m === "00" ? "" : m));
   const today = startOfDay(new Date());
   const start = dates.start, end = dates.end;
   const isToday = +start === +today;
   const date = isToday ? "Ce soir" : (end && +end !== +start ? `Du ${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} au ${fmt(end)}` : day(start));
   const ev = {
     user: true, title: $("f-title").value.trim(), org: profile.name, cat: chosenCat, date,
-    hours: `${$("f-start-time").value} à ${$("f-end-time").value}`, address: addrPick.label,
+    hours: `${hm($("f-start-time").value)} à ${hm($("f-end-time").value)}`, address: addrPick.label,
     lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon", tickets: 0, interested: 0
   };
   EVENTS.push(ev); saveUserEvents();
