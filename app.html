@@ -691,13 +691,13 @@ $("add-form").addEventListener("submit", e => {
   const start = dates.start, end = dates.end;
   const isToday = +start === +today;
   const date = isToday ? "Ce soir" : (end && +end !== +start ? `Du ${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} au ${fmt(end)}` : day(start));
-  const e = {
+  const ev = {
     user: true, title: $("f-title").value.trim(), org: profile.name, cat: chosenCat, date,
     hours: `${$("f-start-time").value} à ${$("f-end-time").value}`, address: addrPick.label,
     lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon", tickets: 0, interested: 0
   };
-  EVENTS.push(e); saveUserEvents();
-  if (mapRef) addPin(e);
+  EVENTS.push(ev); saveUserEvents();
+  if (mapRef) addPin(ev);
   renderGrid();
   $("add-modal").classList.remove("open");
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage(); addrPick = null;
