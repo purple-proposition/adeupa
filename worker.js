@@ -163,7 +163,7 @@ async function sendCode(email, code, name, env) {
       sender: { name: "Adeupa", email: env.SENDER_EMAIL },
       to: [{ email, name }],
       subject: `${code} : votre code de connexion Adeupa`,
-      htmlContent: `<p>Bonjour ${name},</p><p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+      htmlContent: `<div style="font-family:Arial,sans-serif;color:#171717"><div style="display:flex;align-items:center;gap:12px;margin:0 0 24px"><img src="https://adeupa.lyon-map-demo.workers.dev/assets/logo-email.png" width="40" height="40" alt="" style="display:block"><span style="font-size:24px;font-weight:800;color:#4169E1">Adeupa</span></div><p>Bonjour ${name},</p><p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p></div>`,
     }),
   });
   if (!r.ok) console.log("brevo", r.status, await r.text());
