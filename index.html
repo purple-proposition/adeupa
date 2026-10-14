@@ -1589,11 +1589,13 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
 (() => {
   const box = document.getElementById("apercu"), big = box.querySelector("img"), x = box.querySelector(".apercu-close");
   const close = () => box.classList.remove("on");
-  document.querySelectorAll(".visuel .zoom, .fr-card .zoom").forEach(z => z.addEventListener("click", () => {
-    const img = z.parentElement.querySelector("img");
-    big.src = img.src; big.alt = img.alt;
-    box.classList.add("on");
-  }));
+  // Un clic sur l'image (ou sur la loupe) ouvre l'aperçu
+  const ouvrir = img => { big.src = img.src; big.alt = img.alt; box.classList.add("on"); };
+  document.querySelectorAll(".visuel img, .fr-card img").forEach(img => {
+    img.style.cursor = "zoom-in";
+    img.addEventListener("click", () => ouvrir(img));
+  });
+  document.querySelectorAll(".visuel .zoom, .fr-card .zoom").forEach(z => z.addEventListener("click", () => ouvrir(z.parentElement.querySelector("img"))));
   big.addEventListener("click", close);
   box.addEventListener("click", e => { if (e.target === box) close(); });
   x.addEventListener("click", close);
