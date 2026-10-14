@@ -508,6 +508,21 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-frame{margin-top:0}
 @media (max-width:1100px){.pb-slide{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:left}}
 @media (max-width:768px){.pb-slide{padding:24px}}
+/* Témoignages (exemples de maquette) */
+.tm-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter)}
+@media (max-width:768px){.tm-grid{grid-template-columns:1fr}}
+.tm-card{margin:0;display:flex;flex-direction:column;gap:16px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:32px}
+.tm-photo{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:24px}
+.tm-example{align-self:flex-start;padding:4px 12px;border:1px dashed var(--line);border-radius:12px;background:var(--bg);font-size:12px;font-weight:600;color:var(--muted)}
+.tm-quote{margin:0;display:flex;flex-direction:column;gap:12px;flex:1}
+.tm-quote p{margin:0;font-size:16px;line-height:1.45;color:var(--text)}
+.tm-quote strong{font-weight:700;color:var(--blue)}
+.tm-who{display:flex;flex-direction:column;gap:2px}
+.tm-who b{font-size:18px;font-weight:800}
+.tm-role{font-size:16px;font-weight:600;color:var(--blue)}
+.tm-org{font-size:14px;color:var(--muted)}
+.tm-tags{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.tm-tags li{padding:4px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:12px;font-weight:600;color:var(--text)}
 </style>
 </head>
 <body>
@@ -917,6 +932,79 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
   btns.forEach(b => b.addEventListener("click", () => { b.closest(".billing").dataset.mode = b.dataset.b; set(b.dataset.b); }));
 })();
 </script>
+</section>
+
+<section id="temoignages">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Ce que vous pouvez en attendre</h2>
+      <p class="lead">Exemples de témoignages (maquette), à remplacer par de vrais retours d’organisateurs après le lancement.</p>
+    </div>
+    <div class="tm-grid">
+      <figure class="tm-card" data-reveal style="--i:0">
+        <img class="tm-photo" src="assets/temoignages/julien.webp" alt="Portrait illustratif de Julien M." width="536" height="411" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Depuis que nous publions nos événements sur Adeupa, nous touchons <strong>un public plus diversifié</strong> que sur nos canaux habituels.</p>
+          <p>L’interface est intuitive, la mise en ligne est simple et l’équipe est réactive. C’est <strong>un vrai soutien</strong> pour faire vivre nos événements !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Julien M.</b><span class="tm-role">Organisateur d’événements</span><span class="tm-org">Festival indépendant · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Festivals</li><li>Musique</li><li>Événements locaux</li></ul>
+      </figure>
+      <figure class="tm-card" data-reveal style="--i:1">
+        <img class="tm-photo" src="assets/temoignages/manon.webp" alt="Portrait illustratif de Manon R." width="544" height="416" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Nous avons publié notre atelier poterie sur Adeupa et nous avons eu <strong>beaucoup plus d’inscriptions</strong> que d’habitude.</p>
+          <p>La plateforme est <strong>super simple</strong> à utiliser, et notre événement a été <strong>très visible</strong> sur la carte.</p>
+          <p>C’est un vrai plus pour notre café, ça nous permet de toucher un nouveau public local et curieux !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Manon R.</b><span class="tm-role">Gérante de café culturel</span><span class="tm-org">Café associatif · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Ateliers</li><li>Vie locale</li><li>Culture</li></ul>
+      </figure>
+      <figure class="tm-card" data-reveal style="--i:0">
+        <img class="tm-photo" src="assets/temoignages/lea.webp" alt="Portrait illustratif de Léa V." width="540" height="429" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Grâce à Adeupa, notre association touche <strong>un public que nous n’atteignions pas auparavant.</strong></p>
+          <p>La plateforme est très simple à utiliser, nous pouvons publier nos événements en quelques clics et la visibilité sur la carte est <strong>un vrai plus.</strong></p>
+          <p>Depuis que nous sommes sur Adeupa, nous avons constaté une meilleure fréquentation de nos événements !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Léa V.</b><span class="tm-role">Organisatrice d’événements</span><span class="tm-org">Association culturelle · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Expositions</li><li>Ateliers</li><li>Événements associatifs</li></ul>
+      </figure>
+      <figure class="tm-card" data-reveal style="--i:1">
+        <img class="tm-photo" src="assets/temoignages/thomas.webp" alt="Portrait illustratif de Thomas L." width="547" height="416" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Adeupa nous permet de toucher <strong>un nouveau public</strong> qu’on n’atteignait pas avant.</p>
+          <p>La publication de nos événements est très simple, l’interface est claire et notre <strong>visibilité a vraiment augmenté</strong>. C’est devenu un outil indispensable pour notre lieu !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Thomas L.</b><span class="tm-role">Organisateur d’événements</span><span class="tm-org">Lieu culturel indépendant · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Concerts</li><li>Spectacles</li><li>Événements locaux</li></ul>
+      </figure>
+      <figure class="tm-card" data-reveal style="--i:0">
+        <img class="tm-photo" src="assets/temoignages/lucas.webp" alt="Portrait illustratif de Lucas P." width="541" height="416" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Adeupa nous aide à faire connaître tous nos événements sportifs auprès d’un <strong>public plus large</strong>.</p>
+          <p>La publication est simple, la carte est directement mise à jour et nous recevons <strong>plus de participants</strong> que via nos réseaux habituels. C’est un vrai coup de pouce pour notre collectif !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Lucas P.</b><span class="tm-role">Organisateur d’événements</span><span class="tm-org">Collectif sportif · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Événements sportifs</li><li>Tournois</li><li>Run &amp; outdoor</li></ul>
+      </figure>
+      <figure class="tm-card" data-reveal style="--i:1">
+        <img class="tm-photo" src="assets/temoignages/camille.webp" alt="Portrait illustratif de Camille D." width="540" height="407" loading="lazy">
+        <span class="tm-example">Exemple de témoignage</span>
+        <blockquote class="tm-quote">
+          <p>Grâce à Adeupa, nos événements gagnent <strong>une vraie visibilité</strong> auprès d’un public plus large.</p>
+          <p>La publication est simple et rapide, et nous recevons clairement <strong>plus de participants</strong> depuis que nous sommes sur la plateforme. C’est un super outil pour notre association !</p>
+        </blockquote>
+        <figcaption class="tm-who"><b>Camille D.</b><span class="tm-role">Organisatrice d’événements</span><span class="tm-org">Association culturelle · Lyon</span></figcaption>
+        <ul class="tm-tags"><li>Culture</li><li>Festivals</li><li>Vie locale</li></ul>
+      </figure>
+    </div>
+  </div>
 </section>
 
 <section id="faq">
