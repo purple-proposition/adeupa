@@ -37,7 +37,8 @@ header.top .btn:hover{background:#fafafa}
 header.top .btn-primary{background:var(--blue);border-color:var(--blue);color:#fafafa}
 header.top .btn-primary:hover{background:#3558CC}
 .empty{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface);margin-bottom:24px}
-.empty[hidden]{display:none}
+.empty[hidden],.mine-empty[hidden]{display:none}
+.mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
@@ -263,7 +264,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
       <div id="grid-live" class="g6 in-6"></div></div>
       <div id="soon-block" hidden><div class="section-title"><h2>Mes événements à venir</h2></div>
       <div id="grid-soon" class="g6 in-6"></div></div>
-      <div id="mine-empty" class="empty" style="grid-column:1/-1" hidden><p>Vous n’avez pas encore publié d’événement.</p><button class="btn btn-primary" id="empty-add" type="button">Publier mon premier événement</button></div>
+      <div id="mine-empty" class="mine-empty" hidden><button class="btn btn-primary" id="empty-add" type="button">Publier mon premier événement</button></div>
     </div>
 
     <!-- Vue profil -->
