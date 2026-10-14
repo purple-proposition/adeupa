@@ -432,11 +432,8 @@ function showTab(t) {
   $("tab-profile").classList.toggle("tab-on", t === "profile");
   $("tab-profile").textContent = t === "profile" ? "Mes événements" : "Mon profil";
   $("tab-profile").dataset.go = t === "profile" ? "events" : "profile";
-  document.querySelector("header.top .brand").setAttribute("href", "app.html");
   if (t === "events" && mapRef) mapRef.resize();
 }
-// Le logo ramène à la liste des événements
-document.querySelector("header.top .brand").addEventListener("click", e => { e.preventDefault(); showTab("events"); });
 $("tab-profile").addEventListener("click", () => showTab($("tab-profile").dataset.go || "profile"));
 
 // Cartes d'événements, dans un ordre mélangé à chaque affichage
