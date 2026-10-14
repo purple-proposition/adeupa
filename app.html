@@ -529,7 +529,8 @@ function initMap() {
   window.addEventListener("resize", () => { map.resize(); map.fitBounds(VIEW_BOUNDS, { padding: 24, animate: false }); });
   // Un point par lieu ; halo bleu pour les points en cours, noir pour les points à venir
   const byPlace = new Map();
-  EVENTS.forEach(e => { const k = e.lat + "," + e.lng; if (!byPlace.has(k)) byPlace.set(k, []); byPlace.get(k).push(e); });
+  // La carte du back-office n'affiche que les événements du compte
+  EVENTS.filter(e => e.user).forEach(e => { const k = e.lat + "," + e.lng; if (!byPlace.has(k)) byPlace.set(k, []); byPlace.get(k).push(e); });
   byPlace.forEach(list => {
     const hasLive = list.some(e => e.status === "live");
     const el = document.createElement("div");
