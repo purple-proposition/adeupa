@@ -1,5 +1,6 @@
 /* Marqueurs et badges partagés entre la landing et le back-office (source unique) */
-.event{position:absolute;top:0;left:0;width:12px;height:12px;transition:opacity .32s}
+.event{position:absolute;top:0;left:0;width:32px;height:40px;transition:opacity .32s}
+.pin-svg{position:absolute;inset:0;width:32px;height:40px;display:block;filter:drop-shadow(0 1px 1px rgba(23,23,23,.25))}
 .pin{position:absolute;inset:0;border-radius:50%;background:var(--dot);border:0;box-shadow:none}
 .event.live .pin{background:var(--live)}
 .halo{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:radial-gradient(circle,rgba(65,105,225,.5) 0%,rgba(65,105,225,0) 70%);animation:haloBreathe 3.2s cubic-bezier(.45,0,.55,1) infinite;pointer-events:none}
@@ -40,3 +41,6 @@
 .ticket:hover{background:var(--blue-hover)}
 @keyframes ecardItemIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
 .ecard.show>*{animation:ecardItemIn .4s cubic-bezier(.4,0,.2,1) both;animation-delay:calc(var(--i,0) * 32ms + 60ms)}
+
+.g-bar{background:linear-gradient(135deg,#171717 0%,#a3a3a3 100%)}
+.g-humour{background:linear-gradient(135deg,#4169E1 0%,#e5e5e5 100%)}

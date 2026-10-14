@@ -1084,17 +1084,14 @@ function buildPlaces() {
   byPlace.forEach(list => {
     const leader = list.find(e => e.status === "live") || list[0];
     const hasLive = list.some(e => e.status === "live");
-    const size = 12 + 4 * Math.min(list.length - 1, 5);
     const el = document.createElement("div");
     el.className = `event ${hasLive ? "live" : ""}`;
-    el.style.width = size + "px";
-    el.style.height = size + "px";
-    el.innerHTML = `${hasLive ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+    el.innerHTML = `${hasLive ? '<div class="halo"></div>' : ""}${window.Adeupa.pinSVG(leader)}`;
     el.addEventListener("click", (ev) => {
       ev.stopPropagation();
       if (openTitle === leader.title) closeCard(); else openCard(leader.title);
     });
-    const marker = new maplibregl.Marker({ element: el }).setLngLat([leader.lng, leader.lat]).addTo(map);
+    const marker = new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([leader.lng, leader.lat]).addTo(map);
     places.push({ list, el, marker });
     list.forEach(e => markers.push({ e, el, marker }));
   });
