@@ -259,13 +259,11 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
         <div id="map"></div>
         <div class="ecard" id="app-ecard" aria-live="polite"></div>
       </section>
-      <div class="section-title"><h2>Événements en cours</h2></div>
-      <div id="grid-live" class="g6 in-6"></div>
-      <div class="section-title"><h2>Événements à venir</h2></div>
-      <div id="grid-soon" class="g6 in-6"></div>
-      <div class="section-title"><h2>Mes événements publiés</h2><span id="mine-count" class="count">0 événement</span></div>
+      <div id="live-block" hidden><div class="section-title"><h2>Mes événements en cours</h2></div>
+      <div id="grid-live" class="g6 in-6"></div></div>
+      <div id="soon-block" hidden><div class="section-title"><h2>Mes événements à venir</h2></div>
+      <div id="grid-soon" class="g6 in-6"></div></div>
       <div id="mine-empty" class="empty" style="grid-column:1/-1" hidden><p>Vous n’avez pas encore publié d’événement.</p><button class="btn btn-primary" id="empty-add" type="button">Publier mon premier événement</button></div>
-      <div id="grid-mine" class="g6 in-6"></div>
     </div>
 
     <!-- Vue profil -->
@@ -485,23 +483,16 @@ function renderGrid() {
     </article>`;
   // Trois événements par section ; le reste est accessible depuis la liste complète
   // Les événements publiés par l'utilisateur sont toujours affichés, en tête de leur section
-  const pick = status => {
-    const mine = EVENTS.filter(e => e.status === status && e.user);
-    const others = shuffled(EVENTS.filter(e => e.status === status && !e.user));
-    return [...mine, ...others].slice(0, Math.max(3, mine.length));
-  };
-  const live = pick("live");
-  const soon = pick("soon");
   const mine = EVENTS.filter(e => e.user);
-  $("grid-mine").innerHTML = mine.map(card).join("");
-  $("mine-count").textContent = `${mine.length} événement${mine.length > 1 ? "s" : ""}`;
-  $("mine-empty").hidden = mine.length > 0;
+  const live = mine.filter(e => e.status === "live");
+  const soon = mine.filter(e => e.status === "soon");
   $("grid-live").innerHTML = live.map(card).join("");
-  // Fondu de description seulement quand le texte dépasse la hauteur de la carte
-  document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
-  // Fondu de description seulement quand le texte dépasse la hauteur de la carte
-  document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
   $("grid-soon").innerHTML = soon.map(card).join("");
+  $("live-block").hidden = live.length === 0;
+  $("soon-block").hidden = soon.length === 0;
+  $("mine-empty").hidden = mine.length > 0;
+  // Fondu de description seulement quand le texte dépasse la hauteur de la carte
+  document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
   document.querySelectorAll("[data-stats]").forEach(b => b.addEventListener("click", () => openStats(EVENTS[+b.dataset.stats])));
 }
 
