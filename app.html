@@ -363,7 +363,15 @@ const EVENTS = [
 // Événements publiés par l'utilisateur : sauvegardés dans ce navigateur
 const USER_EVENTS_KEY = "adeupa-user-events";
 try { EVENTS.push(...JSON.parse(localStorage.getItem(USER_EVENTS_KEY) || "[]")); } catch (_) {}
-const saveUserEvents = () => { try { localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(EVENTS.filter(e => e.user))); } catch (_) {} };
+const saveUserEvents = () => {
+  const mine = EVENTS.filter(e => e.user);
+  try { localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(mine)); return true; }
+  catch (_) {
+    // Stockage plein : on garde les événements sans leurs images
+    try { localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(mine.map(e => ({ ...e, image: null })))); } catch (_) {}
+    return false;
+  }
+};
 const PLANS = [
   { key: "lancement", name: "Lancement", desc: "1 mois offert, puis 50 % de réduction sur le trimestre suivant (43,50 € au lieu de 87 €)" },
   { key: "standard", name: "Standard", desc: "29 € par mois, sans engagement" },
@@ -444,7 +452,7 @@ function renderGrid() {
   $("n-total").textContent = EVENTS.length;
   const card = e => `
     <article class="card">
-      <div class="cover g-${CAT_CLASS[e.cat]}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
+      <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
@@ -639,6 +647,23 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") closeAddr();
 // Image de l'événement : obligatoire, 10 Mo maximum, images ou PDF
 const MAX_IMG = 10 * 1024 * 1024;
 let imgUrl = null, imgFile = null;
+// Image réduite (1200 px, JPEG) pour tenir dans le stockage du navigateur ; null pour un PDF
+function compressImage(file) {
+  return new Promise(resolve => {
+    if (!file || !/^image\//.test(file.type)) return resolve(null);
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 1200 / img.naturalWidth);
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
+  });
+}
 function setImage(file) {
   $("img-err").textContent = "";
   if (!file) return;
@@ -685,7 +710,7 @@ $("x-add").addEventListener("click", closeAdd);
 // Un clic en dehors de la fenêtre, ou la touche Échap, ferme aussi la modale
 $("add-modal").addEventListener("click", e => { if (e.target === $("add-modal")) closeAdd(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAdd(); closeStats(); } });
-$("add-form").addEventListener("submit", e => {
+$("add-form").addEventListener("submit", async e => {
   e.preventDefault();
   if (!$("f-start-time").value || !$("f-end-time").value) { alert("Les horaires de début et de fin sont obligatoires."); return; }
   if (!imgFile) { $("img-err").textContent = "L'image est obligatoire."; $("drop").scrollIntoView({ block: "center" }); return; }
@@ -698,18 +723,20 @@ $("add-form").addEventListener("submit", e => {
   const start = dates.start, end = dates.end;
   const isToday = +start === +today;
   const date = isToday ? "Ce soir" : (end && +end !== +start ? `Du ${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} au ${fmt(end)}` : day(start));
+  const image = await compressImage(imgFile);
   const ev = {
-    user: true, title: $("f-title").value.trim(), org: profile.name, cat: chosenCat, date,
+    user: true, image, title: $("f-title").value.trim(), org: profile.name, cat: chosenCat, date,
     hours: `${hm($("f-start-time").value)} à ${hm($("f-end-time").value)}`, address: addrPick.label,
     lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon", tickets: 0, interested: 0
   };
-  EVENTS.push(ev); saveUserEvents();
+  EVENTS.push(ev);
+  const saved = saveUserEvents();
   if (mapRef) addPin(ev);
   renderGrid();
   $("add-modal").classList.remove("open");
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage(); addrPick = null;
   showTab("events");
-  showToast(`« ${ev.title} » a été ajouté à vos événements ${ev.status === "live" ? "en cours" : "à venir"}.`);
+  showToast(`« ${ev.title} » a été ajouté à vos événements ${ev.status === "live" ? "en cours" : "à venir"}.` + (saved ? "" : " L’image est trop lourde pour être sauvegardée."));
 });
 
 // Message de confirmation discret, en bas de l'écran
