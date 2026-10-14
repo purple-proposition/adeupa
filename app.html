@@ -41,6 +41,8 @@ header.top .btn-primary:hover{background:#3558CC}
 .mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
+.btn-danger{background:#DC2626;border-color:#DC2626;color:#fafafa}
+.btn-danger:hover{background:#B91C1C;border-color:#B91C1C}
 .profil-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter);align-items:start}
 .profil-col{display:flex;flex-direction:column;gap:var(--grid-gutter);min-width:0}
 @media (max-width:768px){.profil-cols{grid-template-columns:1fr}}
@@ -126,7 +128,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .status .d{width:8px;height:8px;border-radius:50%;background:currentColor}
 .plans{display:flex;flex-direction:column;gap:8px}
 .plan{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px}
-.plan.on{border-color:var(--text)}
+.plan.on{border-color:var(--blue)}
 .plan b{display:block;font-size:16px}
 .plan span{font-size:14px;color:var(--muted)}
 .note{font-size:12px;color:var(--muted);margin:16px 0 0}
@@ -293,14 +295,13 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <h3>Statut du compte</h3>
           <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
             <span class="status" id="p-status"><span class="d"></span><span></span></span>
-            <button class="btn" id="p-confirm" type="button">Simuler la confirmation</button>
           </div>
           <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés.</p>
           <h3 style="margin-top:32px">Abonnement</h3>
           <div class="plans" id="plans"></div>
           <p class="note">1 mois offert, puis 50 % de réduction sur le trimestre suivant.</p>
       </div>
-        <div class="panel danger-zone"><h3>Supprimer mon compte</h3><p>Votre compte et tous les événements que vous avez publiés seront supprimés définitivement.</p><button class="btn" id="delete-account" type="button">Supprimer mon compte</button></div>
+        <div class="panel danger-zone"><h3>Supprimer mon compte</h3><p>Votre compte et tous les événements que vous avez publiés seront supprimés définitivement.</p><button class="btn btn-danger" id="delete-account" type="button">Supprimer mon compte</button></div>
         </div>
       </div>
     </div>
@@ -561,7 +562,6 @@ function renderProfile() {
   const st = $("p-status");
   st.classList.toggle("ok", profile.confirmed);
   st.querySelector("span:last-child").textContent = profile.confirmed ? "Compte confirmé" : "Compte non confirmé";
-  $("p-confirm").textContent = profile.confirmed ? "Annuler la confirmation" : "Simuler la confirmation";
   $("plans").innerHTML = PLANS.map(p => `<div class="plan${profile.plan === p.key ? " on" : ""}"><div><b>${p.name}</b><span>${p.desc}</span></div>${profile.plan === p.key ? '<span class="tag live">Actuel</span>' : `<button class="btn" type="button" data-plan="${p.key}">Choisir</button>`}</div>`).join("");
   $("plans").querySelectorAll("[data-plan]").forEach(b => b.addEventListener("click", () => { profile.plan = b.dataset.plan; saveProfile(profile); renderProfile(); }));
 }
@@ -573,7 +573,6 @@ $("profile-form").addEventListener("submit", e => {
   $("p-saved").textContent = "Profil enregistré.";
   renderProfile();
 });
-$("p-confirm").addEventListener("click", () => { profile.confirmed = !profile.confirmed; saveProfile(profile); renderProfile(); });
 
 // Ajout d'un événement : catégorie, dates, horaires, plusieurs jours
 const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
