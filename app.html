@@ -38,6 +38,8 @@ header.top .btn-primary{background:var(--blue);border-color:var(--blue);color:#f
 header.top .btn-primary:hover{background:#3558CC}
 .empty{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface);margin-bottom:24px}
 .empty[hidden],.mine-empty[hidden]{display:none}
+#live-block,#soon-block{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter);row-gap:var(--grid-gutter)}
+#live-block[hidden],#soon-block[hidden]{display:none}
 .mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
