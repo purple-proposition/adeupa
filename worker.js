@@ -175,9 +175,8 @@ async function requestCode(req, env) {
   const now = Math.floor(Date.now() / 1000);
   const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
   if (!existing) {
-    // Inscription : code d'invitation et nom de la structure obligatoires
-    if (!b.invite || b.invite !== env.INVITE_CODE) return json({ error: "Code d'invitation incorrect." }, 403);
-    if (clean(b.name).length < 2) return json({ error: "Indiquez le nom de votre structure." }, 400);
+    // Inscription : prénom et nom obligatoires
+    if (clean(b.name).length < 2) return json({ error: "Indiquez votre prénom et votre nom." }, 400);
   }
   const prev = await env.DB.prepare("SELECT sent_at FROM login_codes WHERE email = ?").bind(email).first();
   if (prev && now - prev.sent_at < CODE_COOLDOWN) return json({ error: "Patientez une minute avant de demander un nouveau code." }, 429);

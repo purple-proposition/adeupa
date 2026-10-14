@@ -231,8 +231,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <div class="field" id="code-field" hidden><label for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
     <div class="field" id="password-field" hidden><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password"></div>
     <p class="err" id="login-err" role="alert"></p>
-    <div class="field" id="signup-fields" hidden><label for="s-name">Nom de la structure</label><input id="s-name"></div>
-    <div class="field" id="signup-invite" hidden><label for="s-invite">Code d’invitation</label><input id="s-invite" autocomplete="off"></div>
+    <div class="field" id="signup-fields" hidden><label for="s-name">Prénom et nom</label><input id="s-name"></div>
     <div class="field" id="signup-type" hidden><label for="s-type">Type de structure</label><select id="s-type"><option>Une association</option><option>Un lieu</option><option>Un organisateur professionnel</option></select></div>
     <button class="btn btn-dark" type="submit" id="login-submit">Me connecter</button>
     <p class="switch" id="switch-text">Vous n'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button></p>
@@ -426,7 +425,7 @@ $("login-form").addEventListener("submit", async e => {
       $("password-field").hidden = false; $("password").focus(); return;
     }
     if (!codeStep) {
-      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "", invite: signupMode ? $("s-invite").value.trim() : "" });
+      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "", });
       if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Envoi impossible pour le moment.");
       codeStep = true;
       $("code-field").hidden = false; $("code").focus();
@@ -454,8 +453,7 @@ function setSignup(on) {
   codeStep = false; $("code-field").hidden = true; $("code").value = "";
   $("login-submit").textContent = on ? "Recevoir mon code" : "Recevoir mon code";
   $("signup-fields").hidden = !on;
-  $("signup-type").hidden = !on;
-  $("signup-invite").hidden = !on;
+  $("signup-type").hidden = true;
   $("switch-text").innerHTML = on
     ? 'Vous avez déjà un compte ? <button type="button" class="link" id="go-login">Connectez-vous</button>'
     : 'Vous n\'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button>';
