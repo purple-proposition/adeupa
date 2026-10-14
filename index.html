@@ -1245,7 +1245,7 @@ map.on("click", () => closeCard());
 // Les filtres ne font qu'afficher ou masquer les points.
 const markers = [];   // un élément par événement (pour les recherches par titre)
 const places = [];    // un point par lieu
-(() => {
+function buildPlaces() {
   const byPlace = new Map();
   events.forEach(e => {
     const k = e.lat + "," + e.lng;
@@ -1269,18 +1269,18 @@ const places = [];    // un point par lieu
     places.push({ list, el, marker });
     list.forEach(e => markers.push({ e, el, marker }));
   });
-})();
+}
 
-// Événements publiés depuis l'espace organisateur : un point sur la carte, pour tous les visiteurs
-fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
-  list.forEach(e => {
-    const el = document.createElement("div");
-    el.className = `event ${e.status === "live" ? "live" : ""}`;
-    el.innerHTML = `${e.status === "live" ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
-    el.title = e.title;
-    new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
-  });
-}).catch(() => {});
+// Événements publiés depuis l'espace organisateur : ajoutés au même jeu que les événements de la landing
+const toLanding = e => ({
+  title: e.title, cat: e.cat, tickets: e.tickets ?? 0, interested: e.interested ?? 0, image: e.image || null,
+  lat: e.lat, lng: e.lng, status: e.status, start: null,
+  org: { name: e.org, type: "ind", verified: false }, ticket: false,
+  date: e.date, hours: e.hours, address: e.address, desc: "", user: true
+});
+const remoteReady = fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
+  list.forEach(e => events.push(toLanding(e)));
+}).catch(() => {}).then(() => buildPlaces());
 
 const $ = id => document.getElementById(id);
 const product = $("product");
