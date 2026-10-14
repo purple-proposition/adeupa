@@ -63,7 +63,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .section-title{grid-column:4/span 6;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:32px 0 0;flex-wrap:wrap}
 .section-title h2{font-size:24px;line-height:1.2;margin:0;letter-spacing:-.015em}
 .meta{display:flex;flex-direction:column;gap:4px}
-.meta .line{display:flex;align-items:center;gap:8px}
+.meta .line{display:flex;align-items:flex-start;gap:8px}
+.meta .line svg{width:12px;height:12px;flex:none;margin-top:3px}
 .app-ecard{position:absolute;z-index:6;left:16px;top:16px;width:320px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:auto;background:var(--surface);border:1px solid #a3a3a3;border-radius:32px;padding:16px;display:flex;flex-direction:column;gap:12px;opacity:0;transform:translateX(-16px);pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
 .app-ecard.show{opacity:1;transform:none;pointer-events:auto}
 .app-ecard .ae-cover{height:160px;border-radius:24px;background-size:cover!important;background-position:center}
