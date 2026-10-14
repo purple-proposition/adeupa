@@ -36,6 +36,10 @@ header.top .btn{height:40px;padding:8px 16px;border-radius:24px;font-size:16px;l
 header.top .btn:hover{background:#fafafa}
 header.top .btn-primary{background:var(--blue);border-color:var(--blue);color:#fafafa}
 header.top .btn-primary:hover{background:#3558CC}
+.empty{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface);margin-bottom:24px}
+.empty[hidden]{display:none}
+.empty p{margin:0;font-size:16px;color:var(--muted)}
+.count{font-size:16px;color:var(--muted)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .btn:hover{background:var(--soft)}
 .btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}
@@ -227,6 +231,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
     <p class="err" id="login-err" role="alert"></p>
     <div class="field" id="signup-fields" hidden><label for="s-name">Nom de la structure</label><input id="s-name"></div>
+    <div class="field" id="signup-invite" hidden><label for="s-invite">Code d’invitation</label><input id="s-invite" autocomplete="off"></div>
     <div class="field" id="signup-type" hidden><label for="s-type">Type de structure</label><select id="s-type"><option>Une association</option><option>Un lieu</option><option>Un organisateur professionnel</option></select></div>
     <button class="btn btn-dark" type="submit" id="login-submit">Me connecter</button>
     <p class="switch" id="switch-text">Vous n'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button></p>
@@ -259,6 +264,9 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
       <div id="grid-live" class="g6 in-6"></div>
       <div class="section-title"><h2>Vos événements à venir</h2></div>
       <div id="grid-soon" class="g6 in-6"></div>
+      <div class="section-title"><h2>Mes événements publiés</h2><span id="mine-count" class="count">0 événement</span></div>
+      <div id="mine-empty" class="empty" hidden><p>Vous n’avez pas encore publié d’événement.</p><button class="btn btn-primary" id="empty-add" type="button">Publier mon premier événement</button></div>
+      <div id="grid-mine" class="g6 in-6"></div>
     </div>
 
     <!-- Vue profil -->
@@ -364,9 +372,14 @@ const CAT_CLASS = { "Musique": "musique", "Culture": "culture", "Sport": "sport"
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
 const EVENTS = (window.DEMO_EVENTS || []).map(e => ({ ...e, org: typeof e.org === "string" ? e.org : e.org.name, verified: !!(e.org && e.org.verified), desc: e.desc || "" }));
 // Événements publiés par les organisateurs, partagés via l'API du site
-const remoteEvents = fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
-  EVENTS.push(...list.map(e => ({ ...e, user: true })));
-}).catch(() => {});
+// Événements publiés par le compte connecté (les événements de démonstration restent affichés)
+function loadMine() {
+  return fetch("/api/mine").then(r => (r.ok ? r.json() : [])).then(list => {
+    for (let i = EVENTS.length - 1; i >= 0; i--) if (EVENTS[i].user) EVENTS.splice(i, 1);
+    EVENTS.push(...list.map(e => ({ ...e, user: true })));
+  }).catch(() => {});
+}
+let remoteEvents = loadMine();
 const PLANS = [
   { key: "lancement", name: "Lancement", desc: "1 mois offert, puis 50 % de réduction sur le trimestre suivant (43,50 € au lieu de 87 €)" },
   { key: "standard", name: "Standard", desc: "29 € par mois, sans engagement" },
@@ -386,29 +399,50 @@ function showApp() {
   $("login-view").style.display = "none";
   $("app-view").classList.add("show");
   renderProfile(); showTab("events");
+  remoteEvents = loadMine();
   remoteEvents.then(() => { renderGrid(); initMap(); });
 }
 function showLogin() {
   $("app-view").classList.remove("show");
   $("login-view").style.display = "flex";
 }
-$("login-form").addEventListener("submit", e => {
+$("login-form").addEventListener("submit", async e => {
   e.preventDefault();
-  if (signupMode) {
-    // Démonstration : le compte est créé dans cette session seulement, rien n'est envoyé
-    profile = { ...profile, name: $("s-name").value.trim() || profile.name, type: $("s-type").value || profile.type, email: $("email").value.trim() };
+  const email = $("email").value.trim().toLowerCase(), password = $("password").value;
+  const btn = $("login-submit"), label = btn.textContent;
+  btn.disabled = true; btn.textContent = "Un instant…";
+  try {
+    if (signupMode) {
+      const r = await fetch("/api/signup", { method: "POST", headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email, password, name: $("s-name").value.trim(), invite: $("s-invite").value.trim() }) });
+      if (!r.ok) { $("login-err").textContent = (await r.json().catch(() => ({}))).error || "Inscription impossible."; return; }
+      const u = await r.json();
+      profile = { ...profile, name: u.name, email: u.email };
+      saveProfile(profile);
+      $("login-err").textContent = "";
+      showApp();
+      return;
+    }
+    if (email === DEMO.email && password === DEMO.password) {
+      try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
+      $("login-err").textContent = "";
+      showApp();
+      return;
+    }
+    const r = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) });
+    if (!r.ok) { $("login-err").textContent = (await r.json().catch(() => ({}))).error || "E-mail ou mot de passe incorrect."; return; }
+    const u = await r.json();
+    profile = { ...profile, name: u.name, email: u.email };
     saveProfile(profile);
-    try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
-    setSignup(false);
+    $("login-err").textContent = "";
     showApp();
-    return;
+  } catch (_) {
+    $("login-err").textContent = "Connexion impossible pour le moment. Réessayez dans quelques instants.";
+  } finally {
+    btn.disabled = false; btn.textContent = label;
   }
-  const ok = $("email").value.trim().toLowerCase() === DEMO.email && $("password").value === DEMO.password;
-  if (!ok) { $("login-err").textContent = "E-mail ou mot de passe incorrect."; return; }
-  $("login-err").textContent = "";
-  try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
-  showApp();
 });
+document.getElementById("empty-add")?.addEventListener("click", () => $("open-add").click());
 let signupMode = false;
 function setSignup(on) {
   signupMode = on;
@@ -417,6 +451,7 @@ function setSignup(on) {
   $("login-submit").textContent = on ? "Créer mon compte" : "Me connecter";
   $("signup-fields").hidden = !on;
   $("signup-type").hidden = !on;
+  $("signup-invite").hidden = !on;
   $("switch-text").innerHTML = on
     ? 'Vous avez déjà un compte ? <button type="button" class="link" id="go-login">Connectez-vous</button>'
     : 'Vous n\'avez pas de compte ? <button type="button" class="link" id="go-signup">Créez-le maintenant</button>';
@@ -428,7 +463,7 @@ function bindSwitch() {
   b.addEventListener("click", () => setSignup(!signupMode));
 }
 bindSwitch();
-$("logout").addEventListener("click", () => { try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {} showLogin(); });
+$("logout").addEventListener("click", async () => { try { sessionStorage.removeItem("adeupa-demo"); await fetch("/api/logout", { method: "POST" }); } catch (_) {} showLogin(); });
 
 // Onglets
 function showTab(t) {
@@ -464,6 +499,10 @@ function renderGrid() {
   };
   const live = pick("live");
   const soon = pick("soon");
+  const mine = EVENTS.filter(e => e.user);
+  $("grid-mine").innerHTML = mine.map(card).join("");
+  $("mine-count").textContent = `${mine.length} événement${mine.length > 1 ? "s" : ""}`;
+  $("mine-empty").hidden = mine.length > 0;
   $("grid-live").innerHTML = live.map(card).join("");
   // Fondu de description seulement quand le texte dépasse la hauteur de la carte
   document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
@@ -867,7 +906,13 @@ function addPin(e) {
   window.addEventListener("resize", placeGrid);
 })();
 
-try { if (sessionStorage.getItem("adeupa-demo") === "1") showApp(); } catch (_) {}
+(async () => {
+  try {
+    const r = await fetch("/api/me");
+    if (r.ok) { const u = await r.json(); profile = { ...profile, name: u.name, email: u.email }; saveProfile(profile); showApp(); return; }
+    if (sessionStorage.getItem("adeupa-demo") === "1") showApp();
+  } catch (_) {}
+})();
 </script>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
