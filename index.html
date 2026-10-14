@@ -451,6 +451,9 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 @media (max-width:768px){.fr-grid,.av-grid{grid-template-columns:1fr}}
 .visuel{margin:0 0 24px;border:1px solid #e5e5e5;border-radius:32px;overflow:hidden;background:var(--surface)}
 .visuel img{display:block;width:100%;height:auto}
+.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.clamp.open{display:block;overflow:visible}
+.voir-plus{align-self:flex-start;padding:8px 16px;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
 .pb-float{position:absolute;z-index:2;border-radius:50%;background:var(--blue);color:#fafafa;display:grid;place-items:center;animation:pbFloat 4.8s ease-in-out infinite}
 .pb-float svg{width:50%;height:50%}
 .pb-float.pf1{width:56px;height:56px;top:8%;left:4%}
@@ -571,6 +574,36 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <article class="av-card">
         <h3>Voyez ce qui attire l’attention</h3>
         <p>Combien de personnes ont consulté votre événement ? Combien ont cliqué vers la billetterie ? Remplacez les impressions à l’aveugle par des premiers indicateurs concrets.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="gestion">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Gérez vos événements au même endroit avec Adeupa</h2>
+    </div>
+    <div class="av-grid" data-reveal>
+      <article class="av-card">
+        <h3>1. Vos événements sur une carte interactive</h3>
+        <p class="clamp">Publiez vos événements en cours et à venir sur notre carte, avec un classement par catégorie pour faciliter leur exploration. Un halo coloré distingue les événements en cours des événements à venir, représentés en gris. Grâce aux filtres par statut et par catégorie, le public peut affiner l’affichage et découvrir les événements référencés dans la zone couverte.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
+      </article>
+      <article class="av-card">
+        <h3>2. Une fiche personnalisée pour chacun de vos événements</h3>
+        <p class="clamp">Présentez les informations essentielles de vos événements et rassemblez la programmation de votre lieu sur une fiche dédiée. Ajoutez un titre, une catégorie, une date, une adresse, une description et une image pour donner aux visiteurs toutes les informations utiles. Intégrez un lien vers votre billetterie pour leur permettre d’accéder directement à la réservation.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
+      </article>
+      <article class="av-card">
+        <h3>3. Des statistiques claires et accessibles dans un tableau de bord unique</h3>
+        <p class="clamp">Consultez le nombre de vues de vos fiches et les clics vers la billetterie pour suivre les interactions avec vos événements. Retrouvez ces données dans un tableau de bord centralisé pour visualiser les résultats de chaque événement. Identifiez ainsi ceux qui suscitent le plus d’intérêt et obtenez des repères pour ajuster votre communication.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
+      </article>
+      <article class="av-card">
+        <h3>4. Gestion optimisée de votre profil</h3>
+        <p class="clamp">Gérez votre profil et vos événements depuis un espace dédié : créez vos fiches, modifiez-les et préparez vos publications en brouillon avant de les mettre en ligne. Réutilisez les informations de vos précédentes éditions pour gagner du temps et partagez facilement les liens de vos événements. Des badges permettent également d’identifier les entreprises vérifiées et les événements sponsorisés.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
     </div>
   </div>
@@ -1513,6 +1546,15 @@ document.querySelectorAll(".faq-q").forEach(btn => {
     track.scrollBy({ left: Number(b.dataset.dir) * track.clientWidth, behavior: "smooth" });
   }));
 })();
+</script>
+<script>
+// « Voir plus » : affiche la description complète de la carte
+document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener("click", () => {
+  const p = b.previousElementSibling;
+  const open = p.classList.toggle("open");
+  b.textContent = open ? "Voir moins" : "Voir plus";
+  b.setAttribute("aria-expanded", String(open));
+}));
 </script>
 </body>
 </html>
