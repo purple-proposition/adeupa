@@ -28,8 +28,9 @@ const ecardHTML = e => `
       <span class="line">${ICON_PIN}${fmtAddress(e.address)}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
+    <div class="ecard-stats"><div class="ecard-stat"><b>${e.tickets ?? "–"}</b> confirmé${e.tickets === 1 ? "" : "s"}</div><span class="ecard-stat-sep" aria-hidden="true"></span><div class="ecard-stat"><b>${e.interested ?? "–"}</b> intéressé${e.interested === 1 ? "" : "s"}</div></div></div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
-    <div class="ecard-stats"><div class="ecard-stat"><b>${e.tickets ?? "–"}</b> confirmé${e.tickets === 1 ? "" : "s"}</div><span class="ecard-stat-sep" aria-hidden="true"></span><div class="ecard-stat"><b>${e.interested ?? "–"}</b> intéressé${e.interested === 1 ? "" : "s"}</div></div>`;
+    `;
 
 // Affiche la fiche dans `el`, ajustée à la hauteur de `container`, avec son bouton de fermeture
 function mountEcard(el, e, { container, onClose }) {

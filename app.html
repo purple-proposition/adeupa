@@ -84,6 +84,9 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .card .org{font-size:16px;font-weight:700;color:var(--text)}
 .card h3{font-size:24px;margin:4px 0 8px;line-height:1.2;font-weight:800}
 .card .meta{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.card .desc-wrap{position:relative;max-height:96px;overflow:hidden;margin-top:8px;font-size:16px;color:var(--muted);line-height:1.45}
+.card .desc-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;background:linear-gradient(to bottom,rgba(250,250,250,0),rgba(250,250,250,.95));opacity:0;pointer-events:none}
+.card .desc-wrap.fade::after{opacity:1}
 .card .stat{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:auto;padding-top:12px;border-top:1px solid var(--line)}
 .card-stats{margin-top:8px;width:100%;padding:8px 16px;font-size:16px;font-weight:600;border-radius:24px}
 .card-stats .ic{width:16px;height:16px}
@@ -352,7 +355,7 @@ const CAT_ICON = {
 };
 const CAT_CLASS = { "Musique": "musique", "Culture": "culture", "Sport": "sport", "Brocante": "brocante", "Fête": "fete", "Atelier": "atelier" };
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
-const EVENTS = (window.DEMO_EVENTS || []).map(e => ({ ...e, org: typeof e.org === "string" ? e.org : e.org.name }));
+const EVENTS = (window.DEMO_EVENTS || []).map(e => ({ ...e, org: typeof e.org === "string" ? e.org : e.org.name, verified: !!(e.org && e.org.verified), desc: e.desc || "" }));
 // Événements publiés par les organisateurs, partagés via l'API du site
 const remoteEvents = fetch("/evenements").then(r => (r.ok ? r.json() : [])).then(list => {
   EVENTS.push(...list.map(e => ({ ...e, user: true })));
@@ -438,11 +441,12 @@ function renderGrid() {
   const card = e => `
     <article class="card">
       <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
-      <span class="org">${profile.name}</span>
+      <span class="org"><span>${e.org}</span>${e.verified ? `<span class="seal" aria-label="Entreprise vérifiée">${window.Adeupa.SEAL}</span>` : ""}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span class="line">${ICON_CAL}${e.date}${e.hours ? " de " + e.hours : ""}</span><span class="line">${ICON_PIN}${window.Adeupa.fmtAddress(e.address)}</span></div>
+      <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
-      <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>
+      ${e.user ? `<button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>` : ""}
     </article>`;
   // Trois événements par section ; le reste est accessible depuis la liste complète
   // Les événements publiés par l'utilisateur sont toujours affichés, en tête de leur section
@@ -454,6 +458,10 @@ function renderGrid() {
   const live = pick("live");
   const soon = pick("soon");
   $("grid-live").innerHTML = live.map(card).join("");
+  // Fondu de description seulement quand le texte dépasse la hauteur de la carte
+  document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
+  // Fondu de description seulement quand le texte dépasse la hauteur de la carte
+  document.querySelectorAll(".card .desc-wrap").forEach(w => { const d = w.firstElementChild; w.classList.toggle("fade", d.scrollHeight > w.clientHeight + 2); });
   $("grid-soon").innerHTML = soon.map(card).join("");
   document.querySelectorAll("[data-stats]").forEach(b => b.addEventListener("click", () => openStats(EVENTS[+b.dataset.stats])));
 }
@@ -722,12 +730,13 @@ function clearErr(el) {
   if (p) p.textContent = "";
   el.removeAttribute("aria-invalid");
 }
-["f-title", "f-start-time", "f-end-time", "f-address"].forEach(id => $(id).addEventListener("input", () => clearErr($(id))));
+["f-title", "f-desc", "f-start-time", "f-end-time", "f-address"].forEach(id => $(id).addEventListener("input", () => clearErr($(id))));
 $("f-cat").addEventListener("click", () => clearErr($("f-cat")));
 
 async function publishEvent() {
   const missing = [];
   if (!$("f-title").value.trim()) missing.push(setErr($("f-title"), "Ajoutez un titre à votre événement."));
+  if (!$("f-desc").value.trim()) missing.push(setErr($("f-desc"), "Ajoutez une description à votre événement."));
   if (!dates.start) missing.push(setErr($("dp-range"), "Choisissez une date ou une période."));
   if (!$("f-start-time").value) missing.push(setErr($("f-start-time"), "Indiquez l’horaire de début."));
   if (!$("f-end-time").value) missing.push(setErr($("f-end-time"), "Indiquez l’horaire de fin."));
@@ -746,7 +755,7 @@ async function publishEvent() {
   const date = isToday ? "Ce soir" : (end && +end !== +start ? `Du ${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} au ${fmt(end)}` : day(start));
   const image = await compressImage(imgFile);
   const body = {
-    title: $("f-title").value.trim(), cat: chosenCat, date, org: profile.name, image,
+    title: $("f-title").value.trim(), desc: $("f-desc").value.trim(), cat: chosenCat, date, org: profile.name, image,
     hours: `${hm($("f-start-time").value)} à ${hm($("f-end-time").value)}`, address: addrPick.label,
     lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon"
   };
