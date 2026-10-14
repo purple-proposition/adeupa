@@ -194,6 +194,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
   .stats-grid{grid-template-columns:1fr}
   .times,.modal-box .row{grid-template-columns:1fr}
 }
+.toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,8px);max-width:calc(100% - 32px);padding:16px;border-radius:24px;background:var(--surface);border:1px solid #a3a3a3;font-size:16px;color:var(--text);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
@@ -450,8 +452,14 @@ function renderGrid() {
       <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>
     </article>`;
   // Trois événements par section ; le reste est accessible depuis la liste complète
-  const live = shuffled(EVENTS.filter(e => e.status === "live")).slice(0, 3);
-  const soon = shuffled(EVENTS.filter(e => e.status === "soon")).slice(0, 3);
+  // Les événements publiés par l'utilisateur sont toujours affichés, en tête de leur section
+  const pick = status => {
+    const mine = EVENTS.filter(e => e.status === status && e.user);
+    const others = shuffled(EVENTS.filter(e => e.status === status && !e.user));
+    return [...mine, ...others].slice(0, Math.max(3, mine.length));
+  };
+  const live = pick("live");
+  const soon = pick("soon");
   $("grid-live").innerHTML = live.map(card).join("");
   $("grid-soon").innerHTML = soon.map(card).join("");
   document.querySelectorAll("[data-stats]").forEach(b => b.addEventListener("click", () => openStats(EVENTS[+b.dataset.stats])));
@@ -700,7 +708,19 @@ $("add-form").addEventListener("submit", e => {
   renderGrid();
   $("add-modal").classList.remove("open");
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage(); addrPick = null;
+  showTab("events");
+  showToast(`« ${ev.title} » a été ajouté à vos événements ${ev.status === "live" ? "en cours" : "à venir"}.`);
 });
+
+// Message de confirmation discret, en bas de l'écran
+let toastTimer = null;
+function showToast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 4000);
+}
 
 // Un point sur la carte pour un événement publié
 function addPin(e) {
@@ -732,5 +752,6 @@ function addPin(e) {
 
 try { if (sessionStorage.getItem("adeupa-demo") === "1") showApp(); } catch (_) {}
 </script>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
