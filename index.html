@@ -1585,7 +1585,7 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
 </script>
 <div class="apercu" id="apercu" role="dialog" aria-modal="true" aria-hidden="true"><button class="apercu-close" type="button" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img alt="" style="cursor:zoom-out"></div>
 <script>
-// Aperçu en grand : ouvert par la loupe ; fermé par le bouton ×, un clic sur l'image ou la touche Échap
+// Aperçu en grand : ouvert par la loupe ; fermé par le bouton ×, un clic à côté de l'image, sur l'image ou par la touche Échap
 (() => {
   const box = document.getElementById("apercu"), big = box.querySelector("img"), x = box.querySelector(".apercu-close");
   const close = () => box.classList.remove("on");
@@ -1595,6 +1595,7 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
     box.classList.add("on");
   }));
   big.addEventListener("click", close);
+  box.addEventListener("click", e => { if (e.target === box) close(); });
   x.addEventListener("click", close);
   document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 })();
