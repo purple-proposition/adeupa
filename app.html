@@ -804,8 +804,18 @@ function showToast(msg) {
 // Fiche de l'événement à gauche de la carte, comme sur la landing page
 const aeCard = $("app-ecard");
 // Fiche partagée avec la landing : même gabarit, même style, même comportement
+const ICON_STATS = svgIcon('<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>');
 function openCard(e) {
   Adeupa.mountEcard(aeCard, { ...e, org: { name: typeof e.org === "string" ? e.org : e.org.name, type: "ind" }, desc: e.desc || "", ticket: false }, { container: aeCard.parentElement, onClose: closeCard });
+  // Statistiques : uniquement pour les événements publiés au nom de l'organisateur connecté
+  if ((typeof e.org === "string" ? e.org : e.org.name) === profile.name) {
+    const btn = document.createElement("button");
+    btn.className = "btn card-stats";
+    btn.type = "button";
+    btn.innerHTML = `${ICON_STATS}Statistiques`;
+    btn.addEventListener("click", ev => { ev.stopPropagation(); openStats(e); });
+    aeCard.appendChild(btn);
+  }
   aeOpen = e;
 }
 let aeOpen = null;
