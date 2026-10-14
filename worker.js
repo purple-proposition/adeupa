@@ -1,5 +1,5 @@
 // Adeupa : API des événements publiés (partagés entre tous les visiteurs) + fichiers statiques
-const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier", "Bar", "Humour"];
+const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier", "Bar", "Humour", "Club", "Food"];
 const MAX_EVENTS = 200;
 const MAX_IMAGE = 900_000; // caractères de la data URL JPEG
 const MAX_IMAGE_BYTES = 700_000;
