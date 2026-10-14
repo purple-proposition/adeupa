@@ -15,6 +15,9 @@ const ICON_CLOCK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
 
 
+// Adresse au format « numéro rue, code postal ville »
+const fmtAddress = a => (a || "").replace(/^(.*?[^,\s])\s+(\d{5})\s+/, "$1, $2 ");
+
 // Gabarit de la fiche d'un événement (landing et back-office)
 const ecardHTML = e => `
     <div class="ecard-cover-box"><div class="ecard-cover${e.image ? "" : " g-" + (CAT_CLASS[e.cat] || "culture")}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><span class="cat-tag">${CAT_ICON[e.cat] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[e.cat].replace(/`/g, "")}</svg>` : ""}${e.cat || ""}</span></div></div>
@@ -22,7 +25,7 @@ const ecardHTML = e => `
     <h4>${e.title}</h4>
     <div class="meta">
       <span class="line">${ICON_CLOCK}${e.hours ? `${e.date} ${e.hours}` : e.date}</span>
-      <span class="line">${ICON_PIN}${e.address}</span>
+      <span class="line">${ICON_PIN}${fmtAddress(e.address)}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
@@ -52,5 +55,5 @@ function mountEcard(el, e, { container, onClose }) {
   el.classList.add("show");
 }
 
-window.Adeupa = { CAT_CLASS, CAT_ICON, SEAL, ICON_CLOCK, ICON_PIN, ecardHTML, mountEcard };
+window.Adeupa = { CAT_CLASS, CAT_ICON, SEAL, ICON_CLOCK, ICON_PIN, ecardHTML, mountEcard, fmtAddress };
 })();

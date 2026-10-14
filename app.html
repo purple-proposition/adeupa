@@ -440,7 +440,7 @@ function renderGrid() {
       <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
-      <div class="meta"><span class="line">${ICON_CAL}${e.date}${e.hours ? " de " + e.hours : ""}</span><span class="line">${ICON_PIN}${e.address}</span></div>
+      <div class="meta"><span class="line">${ICON_CAL}${e.date}${e.hours ? " de " + e.hours : ""}</span><span class="line">${ICON_PIN}${window.Adeupa.fmtAddress(e.address)}</span></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
       <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>
     </article>`;
@@ -611,7 +611,7 @@ async function findLyonAddress(q) {
   try {
     const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=50&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
     const f = ((await r.json()).features || []).find(f => (f.properties.context || "").startsWith("69,"));
-    return f ? { label: f.properties.label, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] } : null;
+    return f ? { label: `${f.properties.name}, ${f.properties.postcode} ${f.properties.city}`, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] } : null;
   } catch (_) { return null; }
 }
 const addrInput = $("f-address"), addrList = $("addr-list");
@@ -626,7 +626,7 @@ addrInput.addEventListener("input", () => {
       // Résultats limités au Rhône (69), département de la métropole lyonnaise, classés autour de Lyon
       const r = await fetch("https://api-adresse.data.gouv.fr/search/?limit=50&lat=45.7640&lon=4.8357&q=" + encodeURIComponent(q));
       const data = await r.json();
-      const items = (data.features || []).filter(f => (f.properties.context || "").startsWith("69,")).slice(0, 5).map(f => ({ label: f.properties.label, city: f.properties.city, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
+      const items = (data.features || []).filter(f => (f.properties.context || "").startsWith("69,")).slice(0, 5).map(f => ({ label: `${f.properties.name}, ${f.properties.postcode} ${f.properties.city}`, city: f.properties.city, lng: f.geometry.coordinates[0], lat: f.geometry.coordinates[1] }));
       if (!items.length) { closeAddr(); return; }
       addrList.innerHTML = items.map((it, i) => `<li role="option" data-i="${i}" aria-selected="false">${it.label}<small>${it.city || ""}</small></li>`).join("");
       addrList.hidden = false; addrInput.setAttribute("aria-expanded", "true");
