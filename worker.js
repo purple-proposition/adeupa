@@ -4,8 +4,8 @@ const MAX_EVENTS = 200;
 const MAX_IMAGE = 900_000; // caractères de la data URL JPEG
 const MAX_IMAGE_BYTES = 700_000;
 
-const json = (data, status = 200) =>
-  new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+const json = (data, status = 200, extra = {}) =>
+  new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...extra } });
 
 const clean = s => String(s ?? "").replace(/[\u0000-\u001f]/g, " ").trim();
 
@@ -14,7 +14,7 @@ async function listIds(env) {
 }
 
 function publicEvent(ev, hasImage) {
-  const { image, ...rest } = ev;
+  const { image, owner, ...rest } = ev;
   return { ...rest, image: hasImage ? `/evenements/${ev.id}/image` : null };
 }
 
@@ -29,6 +29,8 @@ async function getEvents(env) {
 }
 
 async function createEvent(req, env) {
+  const user = await currentUser(req, env);
+  if (!user) return json({ error: "Connectez-vous pour publier un événement." }, 401);
   let b, file = null;
   try {
     const form = await req.formData();
@@ -54,8 +56,8 @@ async function createEvent(req, env) {
   if (ids.length >= MAX_EVENTS) return json({ error: "Limite atteinte" }, 409);
   const id = crypto.randomUUID().slice(0, 8);
   const ev = {
-    id, title, desc: clean(b.desc).slice(0, 1000), cat, status, lat, lng,
-    org: clean(b.org).slice(0, 80), date: clean(b.date).slice(0, 60), hours: clean(b.hours).slice(0, 40),
+    id, title, desc: clean(b.desc).slice(0, 1000), cat, status, lat, lng, owner: user.id,
+    org: user.name, date: clean(b.date).slice(0, 60), hours: clean(b.hours).slice(0, 40),
     address: clean(b.address).slice(0, 200), tickets: 0, interested: 0, user: true, hasImage: !!image,
   };
   await env.ADEUPA_EVENTS.put(`event:${id}`, JSON.stringify(ev));
@@ -71,9 +73,87 @@ async function getImage(id, env) {
   return new Response(bytes, { headers: { "content-type": "image/jpeg", "cache-control": "public, max-age=3600" } });
 }
 
+
+// ---------- Comptes : inscription par code d'invitation, connexion, session signée ----------
+const enc = new TextEncoder();
+const b64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+const fromB64 = str => Uint8Array.from(atob(str), c => c.charCodeAt(0));
+const PBKDF2_ITER = 100000;
+
+async function hashPassword(password, saltB64) {
+  const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: fromB64(saltB64), iterations: PBKDF2_ITER }, key, 256);
+  return b64(bits);
+}
+
+async function sign(text, secret) {
+  const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return b64(await crypto.subtle.sign("HMAC", key, enc.encode(text))).replace(/[+/=]/g, c => ({ "+": "-", "/": "_", "=": "" }[c]));
+}
+
+const WEEK = 7 * 24 * 3600;
+async function sessionCookie(userId, env) {
+  const exp = Math.floor(Date.now() / 1000) + WEEK;
+  const body = `${userId}.${exp}`;
+  return `adeupa_session=${body}.${await sign(body, env.SESSION_SECRET)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${WEEK}`;
+}
+
+async function currentUser(req, env) {
+  const m = (req.headers.get("cookie") || "").match(/(?:^|;\s*)adeupa_session=([^;]+)/);
+  if (!m) return null;
+  const parts = m[1].split(".");
+  if (parts.length !== 3) return null;
+  const [id, exp, sig] = parts;
+  if (await sign(`${id}.${exp}`, env.SESSION_SECRET) !== sig || Number(exp) < Date.now() / 1000) return null;
+  return await env.DB.prepare("SELECT id, email, name FROM users WHERE id = ?").bind(id).first();
+}
+
+const publicUser = u => ({ id: u.id, email: u.email, name: u.name });
+
+async function signup(req, env) {
+  let b; try { b = await req.json(); } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  if (!b.invite || b.invite !== env.INVITE_CODE) return json({ error: "Code d'invitation incorrect." }, 403);
+  const email = clean(b.email).toLowerCase(), name = clean(b.name).slice(0, 80), password = String(b.password || "");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "Adresse e-mail invalide." }, 400);
+  if (name.length < 2) return json({ error: "Indiquez le nom de votre structure." }, 400);
+  if (password.length < 8) return json({ error: "Le mot de passe doit faire au moins 8 caractères." }, 400);
+  if (await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first()) return json({ error: "Un compte existe déjà avec cette adresse." }, 409);
+  const salt = b64(crypto.getRandomValues(new Uint8Array(16)));
+  const id = crypto.randomUUID().slice(0, 12);
+  const hash = await hashPassword(password, salt);
+  await env.DB.prepare("INSERT INTO users (id, email, name, password_hash, salt) VALUES (?, ?, ?, ?, ?)").bind(id, email, name, hash, salt).run();
+  return json(publicUser({ id, email, name }), 201, { "set-cookie": await sessionCookie(id, env) });
+}
+
+async function login(req, env) {
+  let b; try { b = await req.json(); } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  const u = await env.DB.prepare("SELECT id, email, name, password_hash, salt FROM users WHERE email = ?").bind(clean(b.email).toLowerCase()).first();
+  if (!u || (await hashPassword(String(b.password || ""), u.salt)) !== u.password_hash) return json({ error: "E-mail ou mot de passe incorrect." }, 401);
+  return json(publicUser(u), 200, { "set-cookie": await sessionCookie(u.id, env) });
+}
+
+const logout = () => json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
+    if (url.pathname === "/api/signup" && req.method === "POST") return signup(req, env);
+    if (url.pathname === "/api/login" && req.method === "POST") return login(req, env);
+    if (url.pathname === "/api/logout" && req.method === "POST") return logout();
+    if (url.pathname === "/api/me" && req.method === "GET") {
+      const u = await currentUser(req, env);
+      return u ? json(publicUser(u)) : json({ error: "Non connecté" }, 401);
+    }
+    if (url.pathname === "/api/mine" && req.method === "GET") {
+      const u = await currentUser(req, env);
+      if (!u) return json({ error: "Non connecté" }, 401);
+      const mine = [];
+      for (const id of await listIds(env)) {
+        const ev = await env.ADEUPA_EVENTS.get(`event:${id}`, "json");
+        if (ev && ev.owner === u.id) mine.push(publicEvent(ev, ev.hasImage));
+      }
+      return json(mine);
+    }
     if (url.pathname === "/api/events" || url.pathname === "/evenements") {
       if (req.method === "GET") return json(await getEvents(env));
       if (req.method === "POST") return createEvent(req, env);
