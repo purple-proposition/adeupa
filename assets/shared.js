@@ -17,7 +17,7 @@ const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 
 // Gabarit de la fiche d'un événement (landing et back-office)
 const ecardHTML = e => `
-    <div class="ecard-cover-box"><div class="ecard-cover g-${CAT_CLASS[e.cat] || "culture"}" aria-hidden="true"><span class="cat-tag">${CAT_ICON[e.cat] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[e.cat].replace(/`/g, "")}</svg>` : ""}${e.cat || ""}</span></div></div>
+    <div class="ecard-cover-box"><div class="ecard-cover${e.image ? "" : " g-" + (CAT_CLASS[e.cat] || "culture")}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><span class="cat-tag">${CAT_ICON[e.cat] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[e.cat].replace(/`/g, "")}</svg>` : ""}${e.cat || ""}</span></div></div>
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
