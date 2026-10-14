@@ -41,6 +41,9 @@ header.top .btn-primary:hover{background:#3558CC}
 .mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
+.profil-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter);align-items:start}
+.profil-col{display:flex;flex-direction:column;gap:var(--grid-gutter);min-width:0}
+@media (max-width:768px){.profil-cols{grid-template-columns:1fr}}
 .type-select{width:100%;height:48px;padding:0 16px;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);font:inherit;font-size:16px;color:var(--text)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .btn:hover{background:var(--soft)}
@@ -271,30 +274,34 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <!-- Vue profil -->
     <div id="view-profile" class="g12 app-section" style="grid-column:1/-1" hidden>
       <div class="section-title" style="margin-top:0"><h2>Mon profil</h2></div>
-      <div class="g6 in-6" style="row-gap:var(--grid-gutter)">
-      <div class="panel danger-zone"><h3>Supprimer mon compte</h3><p>Votre compte et tous les événements que vous avez publiés seront supprimés définitivement.</p><button class="btn" id="delete-account" type="button">Supprimer mon compte</button></div>
-      <form class="panel" id="profile-form">
-        <h3>Informations</h3>
-        <div class="field"><label for="p-name">Nom de la structure</label><input id="p-name" required></div>
-        <div class="field"><span class="lbl">Type de structure</span>
-          <select id="p-type" class="type-select"></select>
+      <div class="profil-cols">
+        <div class="profil-col">
+        <form class="panel" id="profile-form">
+          <h3>Informations</h3>
+          <div class="field"><label for="p-name">Nom de la structure</label><input id="p-name" required></div>
+          <div class="field"><span class="lbl">Type de structure</span>
+            <select id="p-type" class="type-select"></select>
+          </div>
+          <div class="field"><label for="p-email">E-mail</label><input id="p-email" type="email" readonly></div>
+          <div class="field"><label for="p-phone">Téléphone</label><input id="p-phone" type="tel" placeholder="06 00 00 00 00"></div>
+          <button class="btn btn-dark" type="submit">Enregistrer</button>
+          <p class="note" id="p-saved" role="status"></p>
+        </form>
         </div>
-        <div class="field"><label for="p-email">E-mail</label><input id="p-email" type="email" readonly></div>
-        <div class="field"><label for="p-phone">Téléphone</label><input id="p-phone" type="tel" placeholder="06 00 00 00 00"></div>
-        <button class="btn btn-dark" type="submit">Enregistrer</button>
-        <p class="note" id="p-saved" role="status"></p>
-      </form>
-      <div class="panel" style="grid-column:span 3">
-        <h3>Statut du compte</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
-          <span class="status" id="p-status"><span class="d"></span><span></span></span>
-          <button class="btn" id="p-confirm" type="button">Simuler la confirmation</button>
-        </div>
-        <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés.</p>
-        <h3 style="margin-top:32px">Abonnement</h3>
-        <div class="plans" id="plans"></div>
-        <p class="note">Formules proposées.</p>
+        <div class="profil-col">
+        <div class="panel">
+          <h3>Statut du compte</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+            <span class="status" id="p-status"><span class="d"></span><span></span></span>
+            <button class="btn" id="p-confirm" type="button">Simuler la confirmation</button>
+          </div>
+          <p class="note">Un compte est confirmé quand l'e-mail et la structure sont vérifiés.</p>
+          <h3 style="margin-top:32px">Abonnement</h3>
+          <div class="plans" id="plans"></div>
+          <p class="note">1 mois offert, puis 50 % de réduction sur le trimestre suivant.</p>
       </div>
+        <div class="panel danger-zone"><h3>Supprimer mon compte</h3><p>Votre compte et tous les événements que vous avez publiés seront supprimés définitivement.</p><button class="btn" id="delete-account" type="button">Supprimer mon compte</button></div>
+        </div>
       </div>
     </div>
   </div>
@@ -381,15 +388,15 @@ function loadMine() {
 }
 let remoteEvents = loadMine();
 const PLANS = [
-  { key: "lancement", name: "Lancement", desc: "1 mois offert, puis 50 % de réduction sur le trimestre suivant (43,50 € au lieu de 87 €)" },
-  { key: "standard", name: "Standard", desc: "29 € par mois, sans engagement" },
-  { key: "mise-en-avant", name: "Mise en avant", desc: "Option sur un abonnement : à définir" },
+  { key: "gratuit", name: "Gratuit", desc: "Pour les événements ponctuels, organisés de temps en temps." },
+  { key: "pro", name: "Pro", desc: "29 € par mois, ou 290 € par an. Idéal pour publier chaque mois et remplir vos soirées." },
+  { key: "business", name: "Business", desc: "99 € par mois, ou 990 € par an. Pensé pour un rythme quotidien, sans rien laisser passer." },
 ];
 const TYPES = ["Un particulier", "Une association", "Un club", "Un bar", "Un lieu", "Une salle de spectacle", "Une galerie", "Un organisateur professionnel", "Une collectivité"];
 
 const $ = id => document.getElementById(id);
 const DEMO = { email: "demo@adeupa.fr", password: "demo-adeupa" };
-const DEFAULT_PROFILE = { name: "Club Le Rivage", type: TYPES[1], email: DEMO.email, phone: "", confirmed: false, plan: "lancement" };
+const DEFAULT_PROFILE = { name: "Club Le Rivage", type: TYPES[1], email: DEMO.email, phone: "", confirmed: false, plan: "gratuit" };
 const loadProfile = () => { try { return { ...DEFAULT_PROFILE, ...JSON.parse(sessionStorage.getItem("adeupa-profile") || "{}") }; } catch (_) { return { ...DEFAULT_PROFILE }; } };
 const saveProfile = p => { try { sessionStorage.setItem("adeupa-profile", JSON.stringify(p)); } catch (_) {} };
 let profile = loadProfile();
