@@ -454,6 +454,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .av-card h3{margin:0;font-size:24px;line-height:1.2;font-weight:800}
 .av-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
 .av-card.blue{background:var(--blue);border-color:var(--blue)}
+#gestion .av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:768px){#gestion .av-grid{grid-template-columns:1fr}}
 .av-card.blue h3,.av-card.blue p{color:#fafafa}
 @media (max-width:1024px){.av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:768px){.fr-grid,.av-grid{grid-template-columns:1fr}}
