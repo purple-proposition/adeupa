@@ -1275,6 +1275,17 @@ const places = [];    // un point par lieu
   });
 })();
 
+// Événements publiés depuis l'espace organisateur : un point sur la carte, pour tous les visiteurs
+fetch("/api/events").then(r => (r.ok ? r.json() : [])).then(list => {
+  list.forEach(e => {
+    const el = document.createElement("div");
+    el.className = `event ${e.status === "live" ? "live" : ""}`;
+    el.innerHTML = `${e.status === "live" ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+    el.title = e.title;
+    new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(map);
+  });
+}).catch(() => {});
+
 const $ = id => document.getElementById(id);
 const product = $("product");
 const cursor = $("cursor");
