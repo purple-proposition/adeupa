@@ -425,7 +425,8 @@ $("login-form").addEventListener("submit", async e => {
       $("password-field").hidden = false; $("password").focus(); return;
     }
     if (!codeStep) {
-      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "", });
+      if (signupMode && $("s-name").value.trim().length < 2) return fail("Indiquez votre prénom et votre nom.");
+      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "" });
       if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Envoi impossible pour le moment.");
       codeStep = true;
       $("code-field").hidden = false; $("code").focus();

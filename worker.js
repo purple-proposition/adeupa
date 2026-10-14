@@ -154,7 +154,7 @@ async function deleteAccount(req, env) {
 // ---------- Connexion par code e-mail (code à 6 chiffres, valable 10 minutes) ----------
 const CODE_TTL = 600, CODE_COOLDOWN = 60, CODE_MAX_TRIES = 5;
 
-async function sendCode(email, code, env) {
+async function sendCode(email, code, name, env) {
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
@@ -162,7 +162,7 @@ async function sendCode(email, code, env) {
       from: "Adeupa <onboarding@resend.dev>",
       to: [email],
       subject: `${code} : votre code de connexion Adeupa`,
-      html: `<p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+      html: `<p>Bonjour ${name},</p><p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
     }),
   });
   return r.ok;
@@ -173,7 +173,8 @@ async function requestCode(req, env) {
   const email = clean(b.email).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "Adresse e-mail invalide." }, 400);
   const now = Math.floor(Date.now() / 1000);
-  const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
+  const existing = await env.DB.prepare("SELECT id, name FROM users WHERE email = ?").bind(email).first();
+  const displayName = existing ? existing.name : clean(b.name).slice(0, 80);
   if (!existing) {
     // Inscription : prénom et nom obligatoires
     if (clean(b.name).length < 2) return json({ error: "Indiquez votre prénom et votre nom." }, 400);
@@ -184,7 +185,7 @@ async function requestCode(req, env) {
   const hash = await sign(`${email}:${code}`, env.SESSION_SECRET);
   await env.DB.prepare("INSERT OR REPLACE INTO login_codes (email, code_hash, name, expires_at, attempts, sent_at) VALUES (?, ?, ?, ?, 0, ?)")
     .bind(email, hash, clean(b.name).slice(0, 80) || null, now + CODE_TTL, now).run();
-  if (!(await sendCode(email, code, env))) return json({ error: "Envoi du code impossible pour le moment." }, 502);
+  if (!(await sendCode(email, code, displayName, env))) return json({ error: "Envoi du code impossible pour le moment." }, 502);
   return json({ ok: true });
 }
 
