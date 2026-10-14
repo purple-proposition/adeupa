@@ -194,6 +194,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
   .stats-grid{grid-template-columns:1fr}
   .times,.modal-box .row{grid-template-columns:1fr}
 }
+.err{margin:8px 0 0;font-size:12px;line-height:1.4;color:var(--text);font-weight:600}
 .toast{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,8px);max-width:calc(100% - 32px);padding:16px;border-radius:24px;background:var(--surface);border:1px solid #a3a3a3;font-size:16px;color:var(--text);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -294,7 +295,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 
 <!-- Modale : ajouter un événement -->
 <div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
-  <form class="modal-box" id="add-form">
+  <form class="modal-box" id="add-form" novalidate>
     <button type="button" class="modal-x" id="x-add" aria-label="Fermer">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
     </button>
@@ -711,14 +712,38 @@ $("x-add").addEventListener("click", closeAdd);
 // Un clic en dehors de la fenêtre, ou la touche Échap, ferme aussi la modale
 $("add-modal").addEventListener("click", e => { if (e.target === $("add-modal")) closeAdd(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAdd(); closeStats(); } });
+// Erreur affichée sous le champ concerné, retirée dès que le champ est modifié
+function setErr(el, msg) {
+  const box = el.closest(".field") || el.parentElement;
+  let p = box.querySelector(".err");
+  if (!p) { p = document.createElement("p"); p.className = "err"; p.setAttribute("role", "alert"); box.appendChild(p); }
+  p.textContent = msg;
+  el.setAttribute("aria-invalid", "true");
+  return el;
+}
+function clearErr(el) {
+  const box = el.closest(".field") || el.parentElement;
+  const p = box.querySelector(".err");
+  if (p) p.textContent = "";
+  el.removeAttribute("aria-invalid");
+}
+["f-title", "f-start-time", "f-end-time", "f-address"].forEach(id => $(id).addEventListener("input", () => clearErr($(id))));
+$("f-cat").addEventListener("click", () => clearErr($("f-cat")));
+
 $("add-form").addEventListener("submit", async e => {
   e.preventDefault();
-  if (!$("f-start-time").value || !$("f-end-time").value) { alert("Les horaires de début et de fin sont obligatoires."); return; }
-  if (!imgFile) { $("img-err").textContent = "L'image est obligatoire."; $("drop").scrollIntoView({ block: "center" }); return; }
-  if (!chosenCat) { alert("Choisissez une catégorie."); return; }
-  if (!addrPick && addrInput.value.trim()) addrPick = await findLyonAddress(addrInput.value.trim());
-  if (!addrPick) { addrInput.focus(); alert("Adresse introuvable dans le Rhône. Vérifiez-la ou choisissez une proposition dans la liste."); return; }
-  if (!dates.start) { alert("Choisissez une date."); return; }
+  const missing = [];
+  if (!$("f-title").value.trim()) missing.push(setErr($("f-title"), "Ajoutez un titre à votre événement."));
+  if (!dates.start) missing.push(setErr($("dp-range"), "Choisissez une date ou une période."));
+  if (!$("f-start-time").value) missing.push(setErr($("f-start-time"), "Indiquez l’horaire de début."));
+  if (!$("f-end-time").value) missing.push(setErr($("f-end-time"), "Indiquez l’horaire de fin."));
+  if (!chosenCat) missing.push(setErr($("f-cat"), "Choisissez une catégorie."));
+  if (!imgFile) { $("img-err").textContent = "Ajoutez une image pour votre événement."; missing.push($("drop")); }
+  if (!addrPick) {
+    if (!addrInput.value.trim()) missing.push(setErr(addrInput, "Indiquez l’adresse de l’événement."));
+    else if (!(addrPick = await findLyonAddress(addrInput.value.trim()))) missing.push(setErr(addrInput, "Adresse introuvable dans le Rhône. Choisissez une proposition dans la liste."));
+  }
+  if (missing.length) { missing[0].scrollIntoView({ block: "center", behavior: "smooth" }); return; }
   const day = d => { const t = d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); return t.charAt(0).toUpperCase() + t.slice(1); };
   const hm = v => v.replace(/^(\d{2}):00$/, (_, h) => h.replace(/^0/, "") + "h").replace(/^(\d{1,2}):(\d{2})$/, (_, h, m) => (+h) + "h" + (m === "00" ? "" : m));
   const today = startOfDay(new Date());
