@@ -358,6 +358,10 @@ const EVENTS = [
   { title: "Open mic", org: "Club Le Rivage", cat: "Musique", date: "Jeudi 22 octobre", hours: "20h à 23h", address: "1 place de la Croix-Rousse, 69004 Lyon", lat: 45.77479, lng: 4.83158, status: "soon", tickets: 4, interested: 12 },
   { title: "Projection en plein air", org: "Cinéma Comoedia", cat: "Culture", date: "Ce soir", hours: "21h", address: "1 place des Célestins, 69002 Lyon", lat: 45.76010, lng: 4.83183, status: "live", tickets: 40, interested: 118 },
 ];
+// Événements publiés par l'utilisateur : sauvegardés dans ce navigateur
+const USER_EVENTS_KEY = "adeupa-user-events";
+try { EVENTS.push(...JSON.parse(localStorage.getItem(USER_EVENTS_KEY) || "[]")); } catch (_) {}
+const saveUserEvents = () => { try { localStorage.setItem(USER_EVENTS_KEY, JSON.stringify(EVENTS.filter(e => e.user))); } catch (_) {} };
 const PLANS = [
   { key: "lancement", name: "Lancement", desc: "1 mois offert, puis 50 % de réduction sur le trimestre suivant (43,50 € au lieu de 87 €)" },
   { key: "standard", name: "Standard", desc: "29 € par mois, sans engagement" },
@@ -680,10 +684,33 @@ $("add-form").addEventListener("submit", e => {
   if (!$("f-start-time").value || !$("f-end-time").value) { alert("Les horaires de début et de fin sont obligatoires."); return; }
   if (!imgFile) { $("img-err").textContent = "L'image est obligatoire."; $("drop").scrollIntoView({ block: "center" }); return; }
   if (!chosenCat) { alert("Choisissez une catégorie."); return; }
+  if (!addrPick) { alert("Choisissez une adresse dans la liste pour placer l'événement sur la carte."); return; }
+  if (!dates.start) { alert("Choisissez une date."); return; }
+  const day = d => d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+  const today = startOfDay(new Date());
+  const start = dates.start, end = dates.end;
+  const isToday = +start === +today;
+  const date = isToday ? "Ce soir" : (end && +end !== +start ? `Du ${start.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })} au ${fmt(end)}` : day(start));
+  const e = {
+    user: true, title: $("f-title").value.trim(), org: profile.name, cat: chosenCat, date,
+    hours: `${$("f-start-time").value} à ${$("f-end-time").value}`, address: addrPick.label,
+    lat: addrPick.lat, lng: addrPick.lng, status: isToday ? "live" : "soon", tickets: 0, interested: 0
+  };
+  EVENTS.push(e); saveUserEvents();
+  if (mapRef) addPin(e);
+  renderGrid();
   $("add-modal").classList.remove("open");
-  $("add-form").reset(); dates.reset(); chosenCat = null; clearImage();
-  alert("Publication indisponible pour le moment.");
+  $("add-form").reset(); dates.reset(); chosenCat = null; clearImage(); addrPick = null;
 });
+
+// Un point sur la carte pour un événement publié
+function addPin(e) {
+  const el = document.createElement("div");
+  el.className = "event" + (e.status === "live" ? " live" : "");
+  el.innerHTML = `${e.status === "live" ? '<div class="halo"></div>' : ""}<div class="pin"></div>`;
+  el.title = e.title;
+  new maplibregl.Marker({ element: el }).setLngLat([e.lng, e.lat]).addTo(mapRef);
+}
 
 // Touche G : grille de mise en page (mêmes valeurs que la landing)
 (() => {
