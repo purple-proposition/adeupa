@@ -240,13 +240,14 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     </a>
     <h1 id="login-title">Connexion</h1>
     <p class="lead">Saisissez votre e-mail, nous vous envoyons un code de connexion.</p>
-    <div class="field" id="signup-fields"><label for="s-name">Prénom et nom</label><input id="s-name" autocomplete="name" placeholder="Prénom et nom" required></div>
+    <div class="field" id="signup-fields" hidden><label for="s-name">Prénom et nom</label><input id="s-name" autocomplete="name" placeholder="Prénom et nom"></div>
     <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="vous@exemple.fr" autocomplete="username" required></div>
     <div class="field" id="code-field" hidden><label for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
     <div class="field" id="password-field" hidden><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password"></div>
     <p class="err" id="login-err" role="alert"></p>
     <div class="field" id="signup-type" hidden><label for="s-type">Type de structure</label><select id="s-type"><option>Une association</option><option>Un lieu</option><option>Un organisateur professionnel</option></select></div>
-    <button class="btn btn-primary" type="submit" id="login-submit">Me connecter</button>
+    <button class="btn btn-primary" type="submit" id="login-submit">Recevoir mon code</button>
+    <p class="switch" id="switch-text">Vous n’avez pas de compte ? <button type="button" class="link" id="go-signup">Inscrivez-vous ici</button></p>
   </form>
 </main>
 
@@ -426,6 +427,22 @@ function showLogin() {
   $("login-view").style.display = "flex";
 }
 let codeStep = false;
+let signupMode = false;
+function setSignup(on) {
+  signupMode = on;
+  $("signup-fields").hidden = !on;
+  $("login-title").textContent = on ? "Créer mon compte" : "Connexion";
+  $("switch-text").innerHTML = on
+    ? 'Vous avez déjà un compte ? <button type="button" class="link" id="go-login">Connectez-vous</button>'
+    : 'Vous n’avez pas de compte ? <button type="button" class="link" id="go-signup">Inscrivez-vous ici</button>';
+  $("login-err").textContent = "";
+  bindSwitch();
+}
+function bindSwitch() {
+  const b = document.getElementById(signupMode ? "go-login" : "go-signup");
+  b.addEventListener("click", () => setSignup(!signupMode));
+}
+bindSwitch();
 $("login-form").addEventListener("submit", async e => {
   e.preventDefault();
   const email = $("email").value.trim().toLowerCase();
@@ -444,10 +461,15 @@ $("login-form").addEventListener("submit", async e => {
       $("password-field").hidden = false; $("password").focus(); return;
     }
     if (!codeStep) {
-      if ($("s-name").value.trim().length < 2) return fail("Indiquez votre prénom et votre nom.");
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail("Indiquez votre adresse e-mail.");
-      const r = await post("/api/code", { email, name: $("s-name").value.trim() });
-      if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Envoi impossible pour le moment.");
+      if (signupMode && $("s-name").value.trim().length < 2) return fail("Indiquez votre prénom et votre nom.");
+      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "" });
+      if (!r.ok) {
+        const err = (await r.json().catch(() => ({}))).error || "Envoi impossible pour le moment.";
+        // Adresse inconnue en connexion : on propose l'inscription
+        if (!signupMode && r.status === 400) { setSignup(true); return fail("Aucun compte avec cette adresse : indiquez votre prénom et votre nom pour vous inscrire."); }
+        return fail(err);
+      }
       codeStep = true;
       $("code-field").hidden = false; $("code").focus();
       $("login-submit").textContent = "Valider le code";
