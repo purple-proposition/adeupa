@@ -41,8 +41,8 @@ header.top .btn-primary:hover{background:#3558CC}
 .mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
-.btn-danger{background:#DC2626;border-color:#DC2626;color:#fafafa}
-.btn-danger:hover{background:#B91C1C;border-color:#B91C1C}
+.btn.btn-danger{background:#DC2626;border-color:#DC2626;color:#fafafa}
+.btn.btn-danger:hover{background:#B91C1C;border-color:#B91C1C}
 .profil-cols{grid-column:4/span 6;display:grid;grid-template-columns:1fr 1fr;gap:var(--grid-gutter);align-items:start}
 .profil-col{display:flex;flex-direction:column;gap:var(--grid-gutter);min-width:0}
 @media (max-width:1024px){.profil-cols{grid-column:1/-1}}
@@ -398,8 +398,14 @@ const TYPES = ["Un particulier", "Une association", "Un club", "Un bar", "Un lie
 
 const $ = id => document.getElementById(id);
 const DEMO = { email: "demo@adeupa.fr", password: "demo-adeupa" };
-const DEFAULT_PROFILE = { name: "Club Le Rivage", type: TYPES[1], email: DEMO.email, phone: "", confirmed: false, plan: "gratuit" };
-const loadProfile = () => { try { return { ...DEFAULT_PROFILE, ...JSON.parse(sessionStorage.getItem("adeupa-profile") || "{}") }; } catch (_) { return { ...DEFAULT_PROFILE }; } };
+const DEFAULT_PROFILE = { name: "Club Le Rivage", type: "Un particulier", email: DEMO.email, phone: "", confirmed: false, plan: "gratuit" };
+// Un compte gratuit n'a que le type « Un particulier »
+const fixType = p => {
+  if (!PLANS.some(x => x.key === p.plan)) p.plan = "gratuit";
+  if (p.plan === "gratuit" || !TYPES.includes(p.type)) p.type = p.plan === "gratuit" ? "Un particulier" : p.type;
+  return p;
+};
+const loadProfile = () => { try { return fixType({ ...DEFAULT_PROFILE, ...JSON.parse(sessionStorage.getItem("adeupa-profile") || "{}") }); } catch (_) { return fixType({ ...DEFAULT_PROFILE }); } };
 const saveProfile = p => { try { sessionStorage.setItem("adeupa-profile", JSON.stringify(p)); } catch (_) {} };
 let profile = loadProfile();
 
@@ -447,7 +453,7 @@ $("login-form").addEventListener("submit", async e => {
     const r = await post("/api/verify", { email, code: $("code").value });
     if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Code incorrect.");
     const u = await r.json();
-    profile = { ...profile, name: u.name, email: u.email };
+    profile = fixType({ ...profile, name: u.name, email: u.email, plan: "gratuit" });
     saveProfile(profile);
     fail(""); showApp();
   } catch (_) {
@@ -558,7 +564,8 @@ function renderProfile() {
   $("p-name").value = profile.name;
   $("p-email").value = profile.email;
   $("p-phone").value = profile.phone || "";
-  $("p-type").innerHTML = TYPES.map(t => `<option${profile.type === t ? " selected" : ""}>${t}</option>`).join("");
+  const types = profile.plan === "gratuit" ? ["Un particulier"] : TYPES;
+  $("p-type").innerHTML = types.map(t => `<option${profile.type === t ? " selected" : ""}>${t}</option>`).join("");
   $("p-type").onchange = () => { profile.type = $("p-type").value; saveProfile(profile); };
   const st = $("p-status");
   st.classList.toggle("ok", profile.confirmed);
@@ -903,7 +910,7 @@ function addPin(e) {
 (async () => {
   try {
     const r = await fetch("/api/me");
-    if (r.ok) { const u = await r.json(); profile = { ...profile, name: u.name, email: u.email }; saveProfile(profile); showApp(); return; }
+    if (r.ok) { const u = await r.json(); profile = fixType({ ...profile, name: u.name, email: u.email }); saveProfile(profile); showApp(); return; }
     if (sessionStorage.getItem("adeupa-demo") === "1") showApp();
   } catch (_) {}
 })();
