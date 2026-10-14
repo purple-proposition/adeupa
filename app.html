@@ -40,7 +40,8 @@ header.top .btn-primary:hover{background:#3558CC}
 .empty[hidden],.mine-empty[hidden]{display:none}
 #live-block,#soon-block{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter);row-gap:var(--grid-gutter)}
 #live-block[hidden],#soon-block[hidden]{display:none}
-#live-block>*,#soon-block>*{grid-column:1/-1}
+#live-block>*,#soon-block>*{grid-column:4/span 6}
+@media (max-width:1024px){#live-block>*,#soon-block>*{grid-column:1/-1}}
 .mine-empty{grid-column:1/-1;display:flex;justify-content:center;margin:32px 0 0}
 .empty p{margin:0;font-size:16px;color:var(--muted)}
 .count{font-size:16px;color:var(--muted)}
