@@ -25,8 +25,8 @@
 .ecard-cover .cat-tag svg{width:16px;height:16px;flex:none}
 .ecard h4{font-size:24px;line-height:1.2;margin:4px 0 8px}
 .ecard .meta{font-size:12px;color:var(--text);display:flex;flex-direction:column;gap:4px}
-.ecard .meta .line{display:flex;align-items:center;gap:8px}
-.ecard .meta svg{width:16px;height:16px;flex:none;color:var(--muted)}
+.ecard .meta .line{display:flex;align-items:flex-start;gap:8px}
+.ecard .meta svg{width:16px;height:16px;flex:none;color:var(--muted);margin-top:2px}
 .ecard .desc{font-size:16px;color:var(--muted);margin:8px 0 0;line-height:1.45;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-y}
 .ecard .desc::-webkit-scrollbar{display:none}
 .desc-wrap{position:relative}
