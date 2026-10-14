@@ -457,10 +457,12 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .clamp.open{display:block;overflow:visible}
 .voir-plus{align-self:flex-start;padding:8px 16px;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
 .cta-row{display:flex;justify-content:center;margin-top:48px}
-.visuel img{cursor:zoom-in}
-.apercu{position:fixed;left:50%;top:50%;z-index:90;width:min(90vw,1200px);transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
+.apercu{cursor:zoom-out;position:fixed;left:50%;top:50%;z-index:90;width:min(90vw,1200px);transform:translate(-50%,-50%) scale(.96);opacity:0;pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
 .apercu.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .apercu img{display:block;width:100%;height:auto;border:1px solid #e5e5e5;border-radius:32px;background:var(--surface)}
+.visuel{position:relative}
+.zoom{position:absolute;top:16px;right:16px;z-index:2;width:40px;height:40px;display:grid;place-items:center;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);cursor:pointer}
+.zoom svg{width:16px;height:16px}
 .pb-float{position:absolute;z-index:2;border-radius:50%;background:var(--blue);color:#fafafa;display:grid;place-items:center;animation:pbFloat 4.8s ease-in-out infinite}
 .pb-float svg{width:50%;height:50%}
 .pb-float.pf1{width:56px;height:56px;top:8%;left:4%}
@@ -555,9 +557,9 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Des événements plus visibles, mieux suivis, plus réservés</h2>
     </div>
     <div class="visuels-row" data-reveal>
-      <div class="visuel"><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"></div>
-      <div class="visuel"><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"></div>
-      <div class="visuel"><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"></div>
+      <div class="visuel"><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
+      <div class="visuel"><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
+      <div class="visuel"><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"><button class="zoom" type="button" aria-label="Agrandir l’image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button></div>
     </div>
   </div>
 <div class="wrap"><div class="cta-row"><a class="btn btn-dark" href="app.html">Publier mon événement</a></div></div>
@@ -1581,13 +1583,17 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
 </script>
 <div class="apercu" id="apercu" aria-hidden="true"><img alt=""></div>
 <script>
-// Aperçu en grand au survol des visuels
+// Aperçu en grand : ouvert par la loupe, fermé par un clic ou la touche Échap
 (() => {
   const box = document.getElementById("apercu"), big = box.querySelector("img");
-  document.querySelectorAll(".visuel img").forEach(img => {
-    img.addEventListener("mouseenter", () => { big.src = img.src; big.alt = img.alt; box.classList.add("on"); });
-    img.addEventListener("mouseleave", () => box.classList.remove("on"));
-  });
+  const close = () => box.classList.remove("on");
+  document.querySelectorAll(".visuel .zoom").forEach(z => z.addEventListener("click", () => {
+    const img = z.parentElement.querySelector("img");
+    big.src = img.src; big.alt = img.alt;
+    box.classList.add("on");
+  }));
+  box.addEventListener("click", close);
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 })();
 </script>
 <script>
