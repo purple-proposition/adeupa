@@ -273,6 +273,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <div id="view-profile" class="g12 app-section" style="grid-column:1/-1" hidden>
       <div class="section-title" style="margin-top:0"><h2>Mon profil</h2></div>
       <div class="g6 in-6" style="row-gap:var(--grid-gutter)">
+      <div class="panel danger-zone"><h3>Supprimer mon compte</h3><p>Votre compte et tous les événements que vous avez publiés seront supprimés définitivement.</p><button class="btn" id="delete-account" type="button">Supprimer mon compte</button></div>
       <form class="panel" id="profile-form">
         <h3>Informations</h3>
         <div class="field"><label for="p-name">Nom de la structure</label><input id="p-name" required></div>
@@ -463,6 +464,15 @@ function bindSwitch() {
   b.addEventListener("click", () => setSignup(!signupMode));
 }
 bindSwitch();
+$("delete-account").addEventListener("click", async () => {
+  if (!confirm("Supprimer définitivement votre compte et vos événements publiés ? Cette action est irréversible.")) return;
+  try {
+    const r = await fetch("/api/me", { method: "DELETE" });
+    if (!r.ok) { alert("Suppression impossible pour le moment. Réessayez dans quelques instants."); return; }
+  } catch (_) { alert("Suppression impossible pour le moment. Réessayez dans quelques instants."); return; }
+  try { sessionStorage.removeItem("adeupa-demo"); } catch (_) {}
+  location.reload();
+});
 $("logout").addEventListener("click", async () => { try { sessionStorage.removeItem("adeupa-demo"); await fetch("/api/logout", { method: "POST" }); } catch (_) {} showLogin(); });
 
 // Onglets

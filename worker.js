@@ -132,6 +132,24 @@ async function login(req, env) {
   return json(publicUser(u), 200, { "set-cookie": await sessionCookie(u.id, env) });
 }
 
+async function deleteAccount(req, env) {
+  const u = await currentUser(req, env);
+  if (!u) return json({ error: "Non connecté" }, 401);
+  // Supprime d'abord les événements du compte (fiches, images, index), puis le compte
+  const ids = await listIds(env);
+  const keep = [];
+  for (const id of ids) {
+    const ev = await env.ADEUPA_EVENTS.get(`event:${id}`, "json");
+    if (ev && ev.owner === u.id) {
+      await env.ADEUPA_EVENTS.delete(`event:${id}`);
+      await env.ADEUPA_EVENTS.delete(`image:${id}`);
+    } else keep.push(id);
+  }
+  await env.ADEUPA_EVENTS.put("index", JSON.stringify(keep));
+  await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(u.id).run();
+  return json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
+}
+
 const logout = () => json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
 
 export default {
@@ -140,6 +158,7 @@ export default {
     if (url.pathname === "/api/signup" && req.method === "POST") return signup(req, env);
     if (url.pathname === "/api/login" && req.method === "POST") return login(req, env);
     if (url.pathname === "/api/logout" && req.method === "POST") return logout();
+    if (url.pathname === "/api/me" && req.method === "DELETE") return deleteAccount(req, env);
     if (url.pathname === "/api/me" && req.method === "GET") {
       const u = await currentUser(req, env);
       return u ? json(publicUser(u)) : json({ error: "Non connecté" }, 401);
