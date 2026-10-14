@@ -61,6 +61,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 #app-view.show{display:block}
 .section-title{grid-column:4/span 6;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:32px 0 0;flex-wrap:wrap}
 .section-title h2{font-size:24px;line-height:1.2;margin:0;letter-spacing:-.015em}
+.meta{display:flex;flex-direction:column;gap:4px}
+.meta .line{display:flex;align-items:center;gap:8px}
 .app-ecard{position:absolute;z-index:6;left:16px;top:16px;width:320px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:auto;background:var(--surface);border:1px solid #a3a3a3;border-radius:32px;padding:16px;display:flex;flex-direction:column;gap:12px;opacity:0;transform:translateX(-16px);pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
 .app-ecard.show{opacity:1;transform:none;pointer-events:auto}
 .app-ecard .ae-cover{height:160px;border-radius:24px;background-size:cover!important;background-position:center}
@@ -458,7 +460,7 @@ function renderGrid() {
       <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org">${profile.name}</span>
       <h3>${e.title}</h3>
-      <div class="meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
+      <div class="meta"><span class="line">${ICON_CAL}${e.date}${e.hours ? " de " + e.hours : ""}</span><span class="line">${ICON_PIN}${e.address}</span></div>
       <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
       <button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>
     </article>`;
@@ -549,6 +551,7 @@ $("p-confirm").addEventListener("click", () => { profile.confirmed = !profile.co
 const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
 const WEEK = ["lun.","mar.","mer.","jeu.","ven.","sam.","dim."];
 const ICON_CAL = svgIcon('<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>');
+const ICON_PIN = svgIcon('<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>');
 const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const fmt = d => d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 function DatePickerRange(root) {
