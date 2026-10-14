@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="assets/shared.css">
 <script src="assets/events.js"></script>
+<script src="assets/shared.js"></script>
 <style>
 :root{--col:calc((100vw - 2 * var(--grid-margin) - 11 * var(--grid-gutter)) / 12);--bg:#fafafa;--surface:#ffffff;--soft:#f5f5f5;--text:#171717;--muted:#737373;--line:#e5e5e5;--blue:#4169E1;--dark:#171717;--dot:#171717;--live:#4169E1;--grid-gutter:24px;--grid-margin:24px}
 @media (max-width:1024px){:root{--grid-gutter:16px;--grid-margin:16px}}
@@ -66,14 +67,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .meta{display:flex;flex-direction:column;gap:4px}
 .meta .line{display:flex;align-items:flex-start;gap:8px}
 .meta .line svg{width:12px;height:12px;flex:none;margin-top:3px}
-.app-ecard{position:absolute;z-index:6;left:16px;top:16px;width:320px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);overflow:auto;background:var(--surface);border:1px solid #e5e5e5;border-radius:32px;padding:16px;display:flex;flex-direction:column;gap:12px;opacity:0;transform:translateX(-16px);pointer-events:none;transition:opacity 240ms cubic-bezier(.22,1,.36,1),transform 240ms cubic-bezier(.22,1,.36,1)}
-.app-ecard.show{opacity:1;transform:none;pointer-events:auto}
-.app-ecard .ae-cover{height:160px;border-radius:24px;background-size:cover!important;background-position:center}
-.app-ecard .ae-org{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}
-.app-ecard .ae-close{width:32px;height:32px;border:0;border-radius:24px;background:none;color:var(--muted);cursor:pointer;font-size:24px;line-height:1}
-.app-ecard h4{margin:0;font-size:24px;line-height:1.2;font-weight:800}
-.app-ecard .ae-meta{display:flex;flex-direction:column;gap:4px;font-size:16px;color:var(--text)}
-.app-ecard .ae-stats{display:flex;gap:16px;font-size:12px;color:var(--muted);border-top:1px solid #e5e5e5;padding-top:12px}
 .map-box{grid-column:3/span 8;position:relative;height:min(560px,62vh);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--soft)}
 #map{position:absolute;inset:0}
 .pill{position:absolute;top:16px;left:16px;z-index:2;padding:12px 16px;border-radius:8px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);border:1px solid rgba(10,10,10,.08);font-size:14px}
@@ -250,7 +243,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     <div id="view-events" class="g12 app-section" style="grid-column:1/-1">
       <section class="map-box" aria-label="Carte des événements">
         <div id="map"></div>
-        <div class="app-ecard" id="app-ecard" aria-live="polite"></div>
+        <div class="ecard" id="app-ecard" aria-live="polite"></div>
         <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
       </section>
       <div class="section-title"><h2>Vos événements en cours</h2></div>
@@ -812,17 +805,10 @@ function showToast(msg) {
 
 // Fiche de l'événement à gauche de la carte, comme sur la landing page
 const aeCard = $("app-ecard");
+// Fiche partagée avec la landing : même gabarit, même style, même comportement
 function openCard(e) {
-  const cover = e.image ? `background:url(${e.image}) center/cover no-repeat` : "";
-  aeCard.innerHTML = `
-    <div class="ae-cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${cover}"></div>
-    <div class="ae-org"><span>${e.org}</span><button class="ae-close" type="button" aria-label="Fermer">×</button></div>
-    <h4>${e.title}</h4>
-    <div class="ae-meta"><span>${e.date}${e.hours ? " de " + e.hours : ""}</span><span>${e.address}</span></div>
-    <div class="ae-stats"><span><b>${e.tickets ?? 0}</b> confirmés</span><span><b>${e.interested ?? 0}</b> intéressés</span></div>`;
-  aeCard.querySelector(".ae-close").addEventListener("click", ev => { ev.stopPropagation(); closeCard(); });
+  Adeupa.mountEcard(aeCard, { ...e, org: { name: typeof e.org === "string" ? e.org : e.org.name, type: "ind" }, desc: e.desc || "", ticket: false }, { container: aeCard.parentElement, onClose: closeCard });
   aeOpen = e;
-  aeCard.classList.add("show");
 }
 let aeOpen = null;
 function toggleCard(e) { if (aeOpen === e) closeCard(); else openCard(e); }
