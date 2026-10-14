@@ -244,7 +244,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
       <section class="map-box" aria-label="Carte des événements">
         <div id="map"></div>
         <div class="ecard" id="app-ecard" aria-live="polite"></div>
-        <div class="pill"><b id="n-total">0</b> événements sur la carte</div>
       </section>
       <div class="section-title"><h2>Vos événements en cours</h2></div>
       <div id="grid-live" class="g6 in-6"></div>
@@ -436,7 +435,6 @@ $("tab-profile").addEventListener("click", () => showTab($("tab-profile").datase
 // Cartes d'événements, dans un ordre mélangé à chaque affichage
 const shuffled = list => list.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(([, v]) => v);
 function renderGrid() {
-  $("n-total").textContent = EVENTS.length;
   const card = e => `
     <article class="card">
       <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
