@@ -84,6 +84,8 @@ h1{font-size:56px;line-height:1.04;margin:0 auto 24px;max-width:860px;font-weigh
 .stats-live .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:8px;vertical-align:middle}
 .cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #e5e5e5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
 .cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fafafa}
+.cat-chip .cat-btn{font-size:12px}
+.more-btn{align-self:flex-end;padding:4px 8px;border:0;background:none;font:inherit;font-size:12px;font-weight:600;color:var(--text);text-decoration:underline;cursor:pointer}
 .cat-chip .cat-btn:hover:not(.on){background:var(--soft)}
 .seg-pill.live{background:var(--live)}
 .seg-pill.soon{background:var(--dot)}
@@ -1140,7 +1142,8 @@ const ecard = $("ecard");
 // Filtres : temporalité et genre, en sélection multiple ; rien de coché = tous
 let timeSel = new Set(); // "live" et/ou "soon"
 let catSel = new Set();  // catégories cochées
-let dateSel = null;      // période choisie : today | weekend | nextweek | month
+let dateSel = null;      // période choisie : today | thisweek | weekend | nextweek | month
+let filtersOpen = false; // genres masqués tant que « Voir plus » n’est pas activé
 const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier", "Bar", "Humour", "Club", "Food"];
 const filterBtn = $("filter-btn");
 filterBtn.addEventListener("click", () => {
@@ -1172,8 +1175,11 @@ function buildCats() {
   ];
   const btn = (o, i, on) => `<button type="button" class="cat-btn${on ? " on" : ""}" data-kind="${o.kind || "time"}" data-k="${o.key}" style="--i:${i}">${o.dot ? '<span class="dot"></span>' : ""}${o.icon ? svgIcon(o.icon) : ""}${o.label}</button>`;
   const timeRow = `<div class="filter-row time-row"><div class="filter-pills">${timeOpts.map((o, i) => btn(o, i, timeSel.has(o.key))).join("")}${dateOpts.map((o, i) => btn(o, i + timeOpts.length, dateSel === o.key)).join("")}</div></div>`;
+  const catRow = filterRow("cat", "Genre", CATS.map(c => ({ key: c, label: c, icon: CAT_ICON[c] })), catSel);
   box.innerHTML = timeRow
-    + filterRow("cat", "Genre", CATS.map(c => ({ key: c, label: c, icon: CAT_ICON[c] })), catSel);
+    + (filtersOpen ? catRow : "")
+    + `<button type="button" class="more-btn" aria-expanded="${filtersOpen}">${filtersOpen ? "Voir moins" : "Voir plus"}</button>`;
+  box.querySelector(".more-btn").addEventListener("click", () => { filtersOpen = !filtersOpen; buildCats(); });
   box.querySelectorAll(".cat-btn").forEach(b => b.addEventListener("click", () => {
     if (b.dataset.kind === "date") { const k = b.dataset.k; dateSel = !k || dateSel === k ? null : k; buildCats(); applyFilter(); return; }
     const set = b.dataset.kind === "time" ? timeSel : catSel;
