@@ -1590,5 +1590,26 @@ document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener
   });
 })();
 </script>
+<script>
+// Menu : glissement doux vers la section, en laissant la place à la barre fixe
+(() => {
+  const EASE = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  document.querySelectorAll('.menu-links a[href^="#"]').forEach(a => a.addEventListener("click", ev => {
+    const target = document.getElementById(a.getAttribute("href").slice(1));
+    if (!target) return;
+    ev.preventDefault();
+    history.replaceState(null, "", a.getAttribute("href"));
+    const from = scrollY, to = Math.max(0, target.getBoundingClientRect().top + scrollY - 128);
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const dur = reduce ? 0 : 900, t0 = performance.now();
+    const step = now => {
+      const k = dur ? Math.min(1, (now - t0) / dur) : 1;
+      window.scrollTo(0, from + (to - from) * EASE(k));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }));
+})();
+</script>
 </body>
 </html>
