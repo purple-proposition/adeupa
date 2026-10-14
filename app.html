@@ -65,6 +65,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .field input:focus,.field select:focus{border-color:var(--blue)}
 .field input[readonly]{background:var(--soft);color:var(--muted)}
 .auth .btn{width:100%}
+.auth input::placeholder{color:#a3a3a3;opacity:1}
 .switch{margin:16px 0 0;font-size:14px;color:var(--muted);text-align:center}
 .link{border:0;background:none;padding:0;font:inherit;font-weight:600;color:var(--text);text-decoration:underline;cursor:pointer}
 .err{color:#b42318;font-size:14px;min-height:20px;margin:0 0 8px}
@@ -227,8 +228,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
     </a>
     <h1 id="login-title">Connexion</h1>
     <p class="lead">Saisissez votre e-mail, nous vous envoyons un code de connexion.</p>
-    <div class="field" id="signup-fields"><label for="s-name">Prénom et nom</label><input id="s-name" autocomplete="name" required></div>
-    <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
+    <div class="field" id="signup-fields"><label for="s-name">Prénom et nom</label><input id="s-name" autocomplete="name" placeholder="Prénom et nom" required></div>
+    <div class="field"><label for="email">E-mail</label><input id="email" type="email" placeholder="vous@exemple.fr" autocomplete="username" required></div>
     <div class="field" id="code-field" hidden><label for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
     <div class="field" id="password-field" hidden><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password"></div>
     <p class="err" id="login-err" role="alert"></p>
