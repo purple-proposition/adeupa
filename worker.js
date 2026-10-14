@@ -150,14 +150,75 @@ async function deleteAccount(req, env) {
   return json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
 }
 
+
+// ---------- Connexion par code e-mail (code à 6 chiffres, valable 10 minutes) ----------
+const CODE_TTL = 600, CODE_COOLDOWN = 60, CODE_MAX_TRIES = 5;
+
+async function sendCode(email, code, env) {
+  const r = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+    body: JSON.stringify({
+      from: "Adeupa <onboarding@resend.dev>",
+      to: [email],
+      subject: `${code} : votre code de connexion Adeupa`,
+      html: `<p>Votre code de connexion Adeupa :</p><p style="font-size:32px;font-weight:800;letter-spacing:4px">${code}</p><p>Il est valable 10 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail.</p>`,
+    }),
+  });
+  return r.ok;
+}
+
+async function requestCode(req, env) {
+  let b; try { b = await req.json(); } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  const email = clean(b.email).toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: "Adresse e-mail invalide." }, 400);
+  const now = Math.floor(Date.now() / 1000);
+  const existing = await env.DB.prepare("SELECT id FROM users WHERE email = ?").bind(email).first();
+  if (!existing) {
+    // Inscription : code d'invitation et nom de la structure obligatoires
+    if (!b.invite || b.invite !== env.INVITE_CODE) return json({ error: "Code d'invitation incorrect." }, 403);
+    if (clean(b.name).length < 2) return json({ error: "Indiquez le nom de votre structure." }, 400);
+  }
+  const prev = await env.DB.prepare("SELECT sent_at FROM login_codes WHERE email = ?").bind(email).first();
+  if (prev && now - prev.sent_at < CODE_COOLDOWN) return json({ error: "Patientez une minute avant de demander un nouveau code." }, 429);
+  const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, "0");
+  const hash = await sign(`${email}:${code}`, env.SESSION_SECRET);
+  await env.DB.prepare("INSERT OR REPLACE INTO login_codes (email, code_hash, name, expires_at, attempts, sent_at) VALUES (?, ?, ?, ?, 0, ?)")
+    .bind(email, hash, clean(b.name).slice(0, 80) || null, now + CODE_TTL, now).run();
+  if (!(await sendCode(email, code, env))) return json({ error: "Envoi du code impossible pour le moment." }, 502);
+  return json({ ok: true });
+}
+
+async function verifyCode(req, env) {
+  let b; try { b = await req.json(); } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  const email = clean(b.email).toLowerCase(), code = String(b.code || "").trim();
+  const row = await env.DB.prepare("SELECT * FROM login_codes WHERE email = ?").bind(email).first();
+  const now = Math.floor(Date.now() / 1000);
+  if (!row || row.expires_at < now) return json({ error: "Code expiré. Demandez-en un nouveau." }, 401);
+  if (row.attempts >= CODE_MAX_TRIES) return json({ error: "Trop de tentatives. Demandez un nouveau code." }, 429);
+  if ((await sign(`${email}:${code}`, env.SESSION_SECRET)) !== row.code_hash) {
+    await env.DB.prepare("UPDATE login_codes SET attempts = attempts + 1 WHERE email = ?").bind(email).run();
+    return json({ error: "Code incorrect." }, 401);
+  }
+  await env.DB.prepare("DELETE FROM login_codes WHERE email = ?").bind(email).run();
+  let u = await env.DB.prepare("SELECT id, email, name FROM users WHERE email = ?").bind(email).first();
+  if (!u) {
+    if (!row.name) return json({ error: "Compte introuvable." }, 404);
+    const id = crypto.randomUUID().slice(0, 12);
+    await env.DB.prepare("INSERT INTO users (id, email, name, password_hash, salt) VALUES (?, ?, ?, '', '')").bind(id, email, row.name).run();
+    u = { id, email, name: row.name };
+  }
+  return json(publicUser(u), 200, { "set-cookie": await sessionCookie(u.id, env) });
+}
+
 const logout = () => json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
 
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
-    if (url.pathname === "/api/signup" && req.method === "POST") return signup(req, env);
-    if (url.pathname === "/api/login" && req.method === "POST") return login(req, env);
     if (url.pathname === "/api/logout" && req.method === "POST") return logout();
+    if (url.pathname === "/api/code" && req.method === "POST") return requestCode(req, env);
+    if (url.pathname === "/api/verify" && req.method === "POST") return verifyCode(req, env);
     if (url.pathname === "/api/me" && req.method === "DELETE") return deleteAccount(req, env);
     if (url.pathname === "/api/me" && req.method === "GET") {
       const u = await currentUser(req, env);

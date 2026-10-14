@@ -226,9 +226,10 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
       Adeupa
     </a>
     <h1 id="login-title">Connexion</h1>
-    <p class="lead">Accédez à votre espace organisateur.</p>
+    <p class="lead">Saisissez votre e-mail, nous vous envoyons un code de connexion.</p>
     <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required></div>
-    <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
+    <div class="field" id="code-field" hidden><label for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+    <div class="field" id="password-field" hidden><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password"></div>
     <p class="err" id="login-err" role="alert"></p>
     <div class="field" id="signup-fields" hidden><label for="s-name">Nom de la structure</label><input id="s-name"></div>
     <div class="field" id="signup-invite" hidden><label for="s-invite">Code d’invitation</label><input id="s-invite" autocomplete="off"></div>
@@ -407,49 +408,52 @@ function showLogin() {
   $("app-view").classList.remove("show");
   $("login-view").style.display = "flex";
 }
+let codeStep = false;
 $("login-form").addEventListener("submit", async e => {
   e.preventDefault();
-  const email = $("email").value.trim().toLowerCase(), password = $("password").value;
+  const email = $("email").value.trim().toLowerCase();
   const btn = $("login-submit"), label = btn.textContent;
   btn.disabled = true; btn.textContent = "Un instant…";
+  const fail = msg => { $("login-err").textContent = msg; };
+  const post = (url, body) => fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   try {
-    if (signupMode) {
-      const r = await fetch("/api/signup", { method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email, password, name: $("s-name").value.trim(), invite: $("s-invite").value.trim() }) });
-      if (!r.ok) { $("login-err").textContent = (await r.json().catch(() => ({}))).error || "Inscription impossible."; return; }
-      const u = await r.json();
-      profile = { ...profile, name: u.name, email: u.email };
-      saveProfile(profile);
-      $("login-err").textContent = "";
-      showApp();
-      return;
-    }
-    if (email === DEMO.email && password === DEMO.password) {
+    // Compte de démonstration : mot de passe demandé dans le formulaire
+    if (email === DEMO.email && !$("password-field").hidden) {
+      if ($("password").value !== DEMO.password) return fail("E-mail ou mot de passe incorrect.");
       try { sessionStorage.setItem("adeupa-demo", "1"); } catch (_) {}
-      $("login-err").textContent = "";
-      showApp();
+      fail(""); showApp(); return;
+    }
+    if (email === DEMO.email && $("password-field").hidden) {
+      $("password-field").hidden = false; $("password").focus(); return;
+    }
+    if (!codeStep) {
+      const r = await post("/api/code", { email, name: signupMode ? $("s-name").value.trim() : "", invite: signupMode ? $("s-invite").value.trim() : "" });
+      if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Envoi impossible pour le moment.");
+      codeStep = true;
+      $("code-field").hidden = false; $("code").focus();
+      $("login-submit").textContent = "Valider le code";
+      fail("Un code à 6 chiffres vient d’être envoyé à " + email + ".");
       return;
     }
-    const r = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email, password }) });
-    if (!r.ok) { $("login-err").textContent = (await r.json().catch(() => ({}))).error || "E-mail ou mot de passe incorrect."; return; }
+    const r = await post("/api/verify", { email, code: $("code").value });
+    if (!r.ok) return fail((await r.json().catch(() => ({}))).error || "Code incorrect.");
     const u = await r.json();
     profile = { ...profile, name: u.name, email: u.email };
     saveProfile(profile);
-    $("login-err").textContent = "";
-    showApp();
+    fail(""); showApp();
   } catch (_) {
-    $("login-err").textContent = "Connexion impossible pour le moment. Réessayez dans quelques instants.";
+    fail("Connexion impossible pour le moment. Réessayez dans quelques instants.");
   } finally {
-    btn.disabled = false; btn.textContent = label;
+    btn.disabled = false; btn.textContent = codeStep ? "Valider le code" : label;
   }
 });
-document.getElementById("empty-add")?.addEventListener("click", () => $("open-add").click());
 let signupMode = false;
 function setSignup(on) {
   signupMode = on;
   $("login-form").dataset.mode = on ? "signup" : "login";
   $("login-title").textContent = on ? "Créer mon compte" : "Connexion";
-  $("login-submit").textContent = on ? "Créer mon compte" : "Me connecter";
+  codeStep = false; $("code-field").hidden = true; $("code").value = "";
+  $("login-submit").textContent = on ? "Recevoir mon code" : "Recevoir mon code";
   $("signup-fields").hidden = !on;
   $("signup-type").hidden = !on;
   $("signup-invite").hidden = !on;
