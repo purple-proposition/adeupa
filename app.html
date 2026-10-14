@@ -29,6 +29,13 @@ button,input,textarea,select{font:inherit}
 .g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--grid-gutter);row-gap:var(--grid-gutter)}
 .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:24px;color:var(--blue);letter-spacing:-.02em;text-decoration:none}
 .brand svg{width:40px;height:40px}
+/* Barre du haut alignée sur la landing : logo seul, boutons de même style */
+header.top .brand{font-size:0}
+header.top .brand svg{width:48px;height:48px}
+header.top .btn{height:40px;padding:8px 16px;border-radius:24px;font-size:16px;line-height:24px;font-weight:600;background:rgba(250,250,250,.72);border:1px solid var(--line);color:var(--text);box-sizing:border-box}
+header.top .btn:hover{background:#fafafa}
+header.top .btn-primary{background:var(--blue);border-color:var(--blue);color:#fafafa}
+header.top .btn-primary:hover{background:#3558CC}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:16px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .btn:hover{background:var(--soft)}
 .btn-primary{background:var(--blue);border-color:var(--blue);color:#fff}
