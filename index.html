@@ -449,8 +449,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .av-card p{margin:0;font-size:16px;color:var(--muted);line-height:1.5}
 @media (max-width:1024px){.av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:768px){.fr-grid,.av-grid{grid-template-columns:1fr}}
-.visuel{margin:0 0 24px;border:1px solid #e5e5e5;border-radius:32px;overflow:hidden;background:var(--surface)}
+.visuels-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter)}
+.visuel{border:1px solid #e5e5e5;border-radius:32px;overflow:hidden;background:var(--surface)}
 .visuel img{display:block;width:100%;height:auto}
+@media (max-width:768px){.visuels-row{grid-template-columns:1fr}}
 .clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .clamp.open{display:block;overflow:visible}
 .voir-plus{align-self:flex-start;padding:8px 16px;border:1px solid #e5e5e5;border-radius:24px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;font-weight:600;cursor:pointer}
@@ -543,9 +545,14 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 
 <section id="visuels">
   <div class="wrap">
-    <div class="visuel" data-reveal><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"></div>
-    <div class="visuel" data-reveal><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"></div>
-    <div class="visuel" data-reveal><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"></div>
+    <div class="section-head" data-reveal>
+      <h2>Des événements plus visibles, mieux suivis, plus réservés</h2>
+    </div>
+    <div class="visuels-row" data-reveal>
+      <div class="visuel"><img src="assets/benefices/chiffres.webp" alt="Tableau de bord Adeupa : vues, clics vers la billetterie, likes et interactions" width="1672" height="941" loading="lazy"></div>
+      <div class="visuel"><img src="assets/benefices/visible.webp" alt="Application Adeupa : la carte des événements à Lyon" width="1672" height="941" loading="lazy"></div>
+      <div class="visuel"><img src="assets/benefices/action.webp" alt="Application Adeupa : réservation d'un événement depuis la carte" width="1672" height="941" loading="lazy"></div>
+    </div>
   </div>
 </section>
 
