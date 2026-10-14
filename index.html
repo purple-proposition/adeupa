@@ -474,7 +474,8 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .env:hover .env-letter{transform:translateY(-24px) rotate(-3deg)}
 @media (prefers-reduced-motion:reduce){.env-letter{transition:none}}
 .fr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gutter)}
-.fr-card{display:flex;flex-direction:column;gap:16px;padding:16px;border:1px solid var(--line);border-radius:32px;background:var(--surface)}
+.fr-card{overflow:hidden;border:1px solid var(--line);border-radius:32px;background:var(--surface)}
+.fr-card img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
 .fr-tile{height:160px;border-radius:24px;display:grid;place-items:center;color:#fafafa}
 .fr-tile svg{width:48px;height:48px}
 .fr-card h3{margin:0;padding:0 8px 8px;font-size:24px;line-height:1.2;font-weight:800}
@@ -563,22 +564,10 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <h2>Attirer des participants à vos événements ne devrait pas dépendre…</h2>
     </div>
     <div class="fr-grid" data-reveal>
-      <article class="fr-card">
-        <div class="fr-tile g-brocante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <h3>… d’une affiche ignorée par des passants pressés</h3>
-      </article>
-      <article class="fr-card">
-        <div class="fr-tile g-fete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <h3>… d’une communauté déjà acquise sur les réseaux sociaux</h3>
-      </article>
-      <article class="fr-card">
-        <div class="fr-tile g-culture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
-        <h3>… d’un budget publicitaire que vous n’avez pas</h3>
-      </article>
-      <article class="fr-card">
-        <div class="fr-tile g-musique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
-        <h3>… d’une newsletter survolée en quelques secondes</h3>
-      </article>
+      <article class="fr-card"><img src="assets/frictions/friction-1.webp" alt="… d’une affiche ignorée par des passants pressés" width="1536" height="1024" loading="lazy"></article>
+      <article class="fr-card"><img src="assets/frictions/friction-2.webp" alt="… d’une communauté déjà acquise sur les réseaux sociaux" width="1536" height="1024" loading="lazy"></article>
+      <article class="fr-card"><img src="assets/frictions/friction-3.webp" alt="… d’un budget publicitaire que vous n’avez pas" width="1536" height="1024" loading="lazy"></article>
+      <article class="fr-card"><img src="assets/frictions/friction-4.webp" alt="… d’une newsletter survolée en quelques secondes" width="1536" height="1024" loading="lazy"></article>
     </div>
   </div>
 </section>
