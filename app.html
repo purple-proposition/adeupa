@@ -730,8 +730,7 @@ function clearErr(el) {
 ["f-title", "f-start-time", "f-end-time", "f-address"].forEach(id => $(id).addEventListener("input", () => clearErr($(id))));
 $("f-cat").addEventListener("click", () => clearErr($("f-cat")));
 
-$("add-form").addEventListener("submit", async e => {
-  e.preventDefault();
+async function publishEvent() {
   const missing = [];
   if (!$("f-title").value.trim()) missing.push(setErr($("f-title"), "Ajoutez un titre à votre événement."));
   if (!dates.start) missing.push(setErr($("dp-range"), "Choisissez une date ou une période."));
@@ -770,6 +769,17 @@ $("add-form").addEventListener("submit", async e => {
   $("add-form").reset(); dates.reset(); chosenCat = null; clearImage(); addrPick = null;
   showTab("events");
   showToast(`« ${ev.title} » a été ajouté à vos événements ${ev.status === "live" ? "en cours" : "à venir"}.`);
+}
+
+// Publication : le bouton indique l’envoi, et toute erreur est affichée
+$("add-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = e.submitter || e.target.querySelector("button[type=submit]");
+  const label = btn.textContent;
+  btn.disabled = true; btn.textContent = "Publication…";
+  try { await publishEvent(); }
+  catch (err) { alert("Publication impossible pour le moment : " + (err && err.message ? err.message : "erreur inconnue") + ". Réessayez dans quelques instants."); }
+  finally { btn.disabled = false; btn.textContent = label; }
 });
 
 // Message de confirmation discret, en bas de l'écran
