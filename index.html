@@ -163,7 +163,7 @@ h2{font-size:36px;line-height:1.1;margin:0 0 16px;font-weight:800}
 /* Étapes */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 .step h4{margin:0 0 8px;font-size:24px;line-height:1.2;font-weight:800}
-.step .big{font-size:24px;font-weight:800;color:var(--text);margin:0 0 8px}
+.step .big{font-size:24px;line-height:1.2;font-weight:800;color:var(--blue);margin:0 0 8px}
 .step{padding:32px;border-radius:32px;background:var(--surface);border:1px solid var(--line)}
 .step .n{width:36px;height:36px;border-radius:50%;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:24px}
 .step h3{margin:0 0 8px;font-size:24px;font-weight:800}
@@ -462,6 +462,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 #gestion .av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:768px){#gestion .av-grid{grid-template-columns:1fr}}
 .av-card.blue h3,.av-card.blue p{color:#fafafa}
+@media (min-width:1025px){#confiance .steps,#etapes .steps{--vw:min(1040px,calc(100vw - 2 * var(--grid-margin) - 16px));grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--grid-gutter);width:var(--vw);margin-left:calc((100% - var(--vw)) / 2)}#confiance .steps>*,#etapes .steps>*{grid-column:auto}}
 @media (max-width:1024px){.av-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:768px){.fr-grid,.av-grid{grid-template-columns:1fr}}
 .visuels-row{--vw:min(1040px,calc(100vw - 2 * var(--grid-margin) - 16px));display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--grid-gutter);width:var(--vw);margin-left:calc((100% - var(--vw)) / 2)}
@@ -657,15 +658,18 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
     <div class="steps">
       <div class="step" data-reveal style="--i:0">
+        <div class="nb-head"><span class="nb-num">1</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span></div>
         <h4>Une audience locale</h4>
         <p class="big">100 000 visiteurs / mois</p>
         <p>La fréquentation mensuelle de la carte.</p>
       </div>
       <div class="step" data-reveal style="--i:1">
+        <div class="nb-head"><span class="nb-num">2</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></span></div>
         <h4>Une commission adaptée à votre formule</h4>
         <p>Les taux et frais fixes par billet sont clairement affichés pour les formules Gratuit, Pro et Business, avec les conditions applicables.</p>
       </div>
       <div class="step" data-reveal style="--i:2">
+        <div class="nb-head"><span class="nb-num">3</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg></span></div>
         <h4>Un mois offert pour découvrir Adeupa</h4>
         <p>Profitez d’un mois offert sur l’offre Pro (29 €/mois) et d’une visibilité renforcée pour vos 5 prochains événements.</p>
       </div>
