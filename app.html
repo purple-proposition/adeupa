@@ -145,7 +145,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .pick svg{width:16px;height:16px}
 .alerts-form{display:flex;flex-direction:column;gap:16px}
 .alerts-form h3,.alerts-form .note{margin:0}
-.alerts-full[aria-pressed="true"]{border-color:var(--blue);color:var(--blue)}
 .alerts-form .field{display:flex;flex-direction:column;gap:8px;margin:0}
 .alerts-full{width:100%;justify-content:center}
 .alert-dd summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;height:40px;box-sizing:border-box;padding:8px 16px;border-radius:24px;font-size:16px}
@@ -329,7 +328,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
               <div class="alert-menu" id="alerts-cats"></div>
             </details>
           </div>
-          <button class="btn btn-dark alerts-full" type="submit">Enregistrer mes alertes</button>
           <p class="note" id="alerts-saved" role="status"></p>
         </form>
         </div>
@@ -664,8 +662,8 @@ let alerts = { active: false, zones: [], cats: [] };
 function renderAlerts() {
   const t = $("alerts-toggle");
   t.setAttribute("aria-pressed", String(alerts.active));
-  t.textContent = alerts.active ? "Alertes activées" : "Activer les alertes";
-  t.className = "btn alerts-full";
+  t.textContent = alerts.active ? "Désactiver les alertes" : "Activer les alertes";
+  t.className = "btn btn-primary alerts-full";
   $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
   $("alerts-cats").innerHTML = CATS.map(c => `<label><input type="checkbox" data-c="${c}"${alerts.cats.includes(c) ? " checked" : ""}>${svgIcon(CAT_ICON[c])}${c}</label>`).join("");
   $("alerts-zones").querySelectorAll("[data-z]").forEach(i => i.addEventListener("change", () => toggleAlert("zones", i.dataset.z)));
@@ -676,8 +674,28 @@ function renderAlerts() {
 function toggleAlert(key, value) {
   alerts[key] = alerts[key].includes(value) ? alerts[key].filter(v => v !== value) : [...alerts[key], value];
   renderAlerts();
+  if (alerts.active) saveAlerts(false);
 }
-$("alerts-toggle").addEventListener("click", () => { alerts.active = !alerts.active; renderAlerts(); });
+// Enregistre l'état des alertes sur le serveur ; la fenêtre de confirmation ne s'ouvre que sur activation ou désactivation
+async function saveAlerts(showModal) {
+  const msg = $("alerts-saved");
+  msg.textContent = "";
+  if (alerts.active && !alerts.zones.length) { msg.textContent = "Choisissez au moins un arrondissement."; alerts.active = false; renderAlerts(); return; }
+  try {
+    const r = await fetch("/api/alerts", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(alerts) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { msg.textContent = d.error || "Enregistrement impossible pour le moment."; return; }
+    alerts = d;
+    renderAlerts();
+    if (!showModal) return;
+    $("alerts-modal-title").textContent = alerts.active ? "Alertes activées" : "Alertes désactivées";
+    $("alerts-modal-text").textContent = alerts.active
+      ? `Vous recevrez un e-mail pour les nouveaux événements à ${alerts.zones.join(", ")}${alerts.cats.length ? `, dans les catégories ${alerts.cats.join(", ")}` : " (toutes catégories)"}.`
+      : "Vous ne recevrez plus d’alertes.";
+    $("alerts-modal").classList.add("open");
+  } catch (_) { msg.textContent = "Enregistrement impossible pour le moment."; }
+}
+$("alerts-toggle").addEventListener("click", () => { alerts.active = !alerts.active; renderAlerts(); saveAlerts(true); });
 function loadAlerts() {
   return fetch("/api/alerts").then(r => (r.ok ? r.json() : null)).then(d => {
     if (d) alerts = d;
@@ -685,24 +703,7 @@ function loadAlerts() {
     $("alerts-saved").textContent = d ? "" : "Connectez-vous pour activer les alertes.";
   }).catch(() => {});
 }
-$("alerts-form").addEventListener("submit", async e => {
-  e.preventDefault();
-  const msg = $("alerts-saved");
-  msg.textContent = "";
-  try {
-    const r = await fetch("/api/alerts", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(alerts) });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok) { msg.textContent = d.error || "Enregistrement impossible pour le moment."; return; }
-    alerts = d;
-    renderAlerts();
-    msg.textContent = "";
-    $("alerts-modal-title").textContent = alerts.active ? "Alertes activées" : "Alertes désactivées";
-    $("alerts-modal-text").textContent = alerts.active
-      ? `Vous recevrez un e-mail pour les nouveaux événements à ${alerts.zones.join(", ")}${alerts.cats.length ? `, dans les catégories ${alerts.cats.join(", ")}` : " (toutes catégories)"}.`
-      : "Vous ne recevrez plus d’alertes.";
-    $("alerts-modal").classList.add("open");
-  } catch (_) { msg.textContent = "Enregistrement impossible pour le moment."; }
-});
+
 function closeAlerts() { $("alerts-modal").classList.remove("open"); }
 $("x-alerts").addEventListener("click", closeAlerts);
 $("ok-alerts").addEventListener("click", closeAlerts);
