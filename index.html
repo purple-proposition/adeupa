@@ -305,13 +305,16 @@ section{scroll-margin-top:128px}
 #login:hover{background:#fafafa;box-shadow:none}
 @media (max-width:768px){#login{right:16px}}
 @media (max-width:768px){.menu-links{display:none}#brand{display:none}#cta{display:none}}
-/* Carte sur mobile : plus haute, filtres en bas sur une seule ligne défilante */
+/* Carte sur mobile : filtres au-dessus de la carte, sur des lignes défilantes, la carte reste entière */
 @media (max-width:768px){
-  .product{height:480px;margin-top:32px;border-radius:24px}
-  .cat-chip{top:auto;bottom:44px;left:12px;right:12px;max-width:none;align-items:stretch;gap:8px}
-  .cat-chip .filter-pills{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding:0}
+  .product{height:auto;display:flex;flex-direction:column;margin-top:32px;border-radius:24px;overflow:hidden}
+  #map{position:relative;inset:auto;order:2;height:440px}
+  .cat-chip{order:1;position:relative;top:auto;bottom:auto;left:auto;right:auto;max-width:none;align-items:stretch;gap:8px;padding:16px;background:var(--surface);border:0;border-bottom:1px solid var(--line);border-radius:0}
+  .cat-chip .filter-row{width:100%}
+  .cat-chip .filter-pills{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding:0;width:100%}
   .cat-chip .filter-pills::-webkit-scrollbar{display:none}
   .cat-chip .cat-btn{flex:none}
+}
 }
 
 /* Animations au défilement (rythme repris de Causal) */
