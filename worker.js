@@ -243,18 +243,21 @@ const eventCard = ({ title, zone, cat, when, org, fictif }) => `<div style="bord
 
 const button = (href, label) => `<a href="${href}" style="display:inline-block;padding:8px 16px;border-radius:24px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:600;text-decoration:none">${label}</a>`;
 
-// Exemple envoyé à l'activation : événements fictifs, clairement signalés, pour montrer le format
+// Newsletter d'exemple, envoyée une seule fois après la première activation : contenu fictif, clairement signalé
 const SAMPLE = [
   { title: "Marché d’artisans", cat: "Brocante", when: "Samedi 24 octobre, 14h à 18h" },
   { title: "Soirée jazz en petit comité", cat: "Musique", when: "Vendredi 30 octobre, 20h" },
+  { title: "Atelier céramique pour débutants", cat: "Atelier", when: "Dimanche 1er novembre, 10h à 12h" },
 ];
-function welcomeHTML(name, zones, cats) {
-  const cards = zones.slice(0, 2).map((zone, i) => eventCard({ ...SAMPLE[i], cat: cats[i] || SAMPLE[i].cat, zone, fictif: true })).join("");
-  return emailShell(`<p style="font-size:16px">Bonjour ${esc(name)},</p>
-    <p style="font-size:16px">Vos alertes sont activées pour ${esc(zones.join(", "))}${cats.length ? `, catégories : ${esc(cats.join(", "))}` : ", toutes catégories"}.</p>
-    <p style="font-size:16px;color:#737373">Voici à quoi ressemblera une alerte. Les événements ci-dessous sont des exemples fictifs, pas de vrais événements.</p>
+function newsletterHTML(name, zones, cats) {
+  const cards = SAMPLE.map((s, i) => eventCard({ ...s, cat: cats[i % Math.max(cats.length, 1)] || s.cat, zone: zones[i % zones.length], fictif: true })).join("");
+  return emailShell(`<p style="margin:0 0 16px;font-size:12px;font-weight:700;color:#737373">EXEMPLE DE NEWSLETTER : contenu fictif, prototype</p>
+    <h1 style="margin:0 0 16px;font-size:36px;line-height:1.2;font-weight:800">Les sorties près de chez vous</h1>
+    <p style="font-size:16px">Bonjour ${esc(name)},</p>
+    <p style="font-size:16px">Voici une sélection d’événements publiés dans ${esc(zones.join(", "))}${cats.length ? `, dans les catégories ${esc(cats.join(", "))}` : ", toutes catégories confondues"}.</p>
     ${cards}
-    <p style="margin:24px 0 0">${button(`${SITE}/app.html`, "Gérer mes alertes")}</p>`);
+    <p style="margin:24px 0 0">${button(SITE, "Voir la carte")}</p>
+    <p style="margin:24px 0 0;font-size:16px;color:#737373">Vous recevrez ensuite un e-mail seulement quand un nouvel événement correspondra à vos alertes.</p>`);
 }
 
 function alertHTML(name, events) {
@@ -281,13 +284,14 @@ async function saveAlerts(req, env) {
   const zones = (Array.isArray(b.zones) ? b.zones : []).filter(z => ZONES.includes(z));
   const cats = (Array.isArray(b.cats) ? b.cats : []).filter(c => CATS.includes(c));
   if (active && !zones.length) return json({ error: "Choisissez au moins un arrondissement." }, 400);
-  const before = await env.DB.prepare("SELECT active FROM alerts WHERE user_id = ?").bind(u.id).first();
-  await env.DB.prepare("INSERT OR REPLACE INTO alerts (user_id, active, zones, cats, updated_at) VALUES (?, ?, ?, ?, ?)")
-    .bind(u.id, active ? 1 : 0, JSON.stringify(zones), JSON.stringify(cats), Math.floor(Date.now() / 1000)).run();
-  // Un e-mail d'exemple à l'activation, seulement quand les alertes passent de désactivées à activées
-  if (active && !(before && before.active)) {
-    await sendMail(env, u.email, u.name, "Vos alertes Adeupa sont activées", welcomeHTML(u.name, zones, cats));
+  const before = await env.DB.prepare("SELECT sample_sent FROM alerts WHERE user_id = ?").bind(u.id).first();
+  let sampleSent = before ? !!before.sample_sent : false;
+  // La newsletter d'exemple part une seule fois par compte, à la première activation
+  if (active && !sampleSent) {
+    sampleSent = await sendMail(env, u.email, u.name, "Exemple de newsletter Adeupa : les sorties près de chez vous", newsletterHTML(u.name, zones, cats));
   }
+  await env.DB.prepare("INSERT OR REPLACE INTO alerts (user_id, active, zones, cats, updated_at, sample_sent) VALUES (?, ?, ?, ?, ?, ?)")
+    .bind(u.id, active ? 1 : 0, JSON.stringify(zones), JSON.stringify(cats), Math.floor(Date.now() / 1000), sampleSent ? 1 : 0).run();
   return json({ active, zones, cats });
 }
 

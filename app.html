@@ -335,6 +335,18 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
   </div>
 </div>
 
+<!-- Modale : alertes enregistrées -->
+<div class="modal" id="alerts-modal" role="dialog" aria-modal="true" aria-labelledby="alerts-modal-title">
+  <div class="modal-box">
+    <button type="button" class="modal-x" id="x-alerts" aria-label="Fermer">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <h2 id="alerts-modal-title"></h2>
+    <p class="note" id="alerts-modal-text" style="font-size:16px;color:var(--text)"></p>
+    <div class="actions"><button type="button" class="btn btn-dark" id="ok-alerts">Fermer</button></div>
+  </div>
+</div>
+
 <!-- Modale : ajouter un événement -->
 <div class="modal" id="add-modal" role="dialog" aria-modal="true" aria-labelledby="add-title">
   <form class="modal-box" id="add-form" novalidate>
@@ -653,9 +665,18 @@ $("alerts-form").addEventListener("submit", async e => {
     if (!r.ok) { msg.textContent = d.error || "Enregistrement impossible pour le moment."; return; }
     alerts = d;
     renderAlerts();
-    msg.textContent = "Alertes enregistrées.";
+    msg.textContent = "";
+    $("alerts-modal-title").textContent = alerts.active ? "Alertes activées" : "Alertes désactivées";
+    $("alerts-modal-text").textContent = alerts.active
+      ? `Vous recevrez un e-mail pour les nouveaux événements à ${alerts.zones.join(", ")}${alerts.cats.length ? `, dans les catégories ${alerts.cats.join(", ")}` : " (toutes catégories)"}.`
+      : "Vous ne recevrez plus d’alertes.";
+    $("alerts-modal").classList.add("open");
   } catch (_) { msg.textContent = "Enregistrement impossible pour le moment."; }
 });
+function closeAlerts() { $("alerts-modal").classList.remove("open"); }
+$("x-alerts").addEventListener("click", closeAlerts);
+$("ok-alerts").addEventListener("click", closeAlerts);
+$("alerts-modal").addEventListener("click", e => { if (e.target === $("alerts-modal")) closeAlerts(); });
 
 // Ajout d'un événement : catégorie, dates, horaires, plusieurs jours
 const MONTHS = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
@@ -836,7 +857,7 @@ $("close-add").addEventListener("click", closeAdd);
 $("x-add").addEventListener("click", closeAdd);
 // Un clic en dehors de la fenêtre, ou la touche Échap, ferme aussi la modale
 $("add-modal").addEventListener("click", e => { if (e.target === $("add-modal")) closeAdd(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAdd(); closeStats(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeAdd(); closeStats(); closeAlerts(); } });
 // Erreur affichée sous le champ concerné, retirée dès que le champ est modifié
 function setErr(el, msg) {
   const box = el.closest(".field") || el.parentElement;

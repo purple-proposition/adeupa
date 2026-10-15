@@ -69,11 +69,9 @@ h1{font-size:56px;line-height:1.04;margin:0 auto 24px;max-width:860px;font-weigh
 .cat-btn{flex:none;padding:8px 12px;border:0;border-radius:24px;background:transparent;font:inherit;font-size:16px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease}
 .cat-btn:hover{color:var(--text)}
 .cat-btn.on{background:var(--text);color:#fafafa}
-.filter-btn{top:16px;right:16px;height:48px;display:inline-flex;align-items:center;gap:8px;padding:0 20px;border:1px solid #e5e5e5;border-radius:24px;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;pointer-events:auto}
-.filter-btn[aria-expanded="true"]{background:var(--text);color:#fafafa}
 .cat-chip{display:flex;top:80px;bottom:auto;left:auto;right:16px;flex-wrap:wrap;justify-content:flex-end;gap:8px;padding:0;max-width:min(420px,calc(100% - 32px));background:none;border:0;backdrop-filter:none;-webkit-backdrop-filter:none}
 /* ouverture et fermeture identiques : même glissement, même décalage, sens inverse */
-.cat-chip .cat-btn{opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .4s cubic-bezier(.4,0,.2,1),transform .5s cubic-bezier(.22,1,.36,1),background-color .25s ease,color .25s ease;transition-delay:calc(var(--i,0) * 40ms)}
+.cat-chip .cat-btn{transition:background-color .15s ease,color .15s ease}
 .cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
 .cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:8px;max-width:min(760px,calc(100% - 32px))}
 .filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:100%}
@@ -82,10 +80,9 @@ h1{font-size:56px;line-height:1.04;margin:0 auto 24px;max-width:860px;font-weigh
 .cat-chip .cat-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--live);flex:none}
 .cat-chip .cat-btn.on .dot{background:#fafafa}
 .stats-live .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live);margin-right:8px;vertical-align:middle}
-.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #e5e5e5;background:rgba(245,245,245,.40);backdrop-filter:blur(24px) saturate(160%) brightness(1.20);-webkit-backdrop-filter:blur(24px) saturate(160%) brightness(1.20);color:var(--text);font-size:16px}
+.cat-chip .cat-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #e5e5e5;background:rgba(245,245,245,.92);color:var(--text);font-size:16px}
 .cat-chip .cat-btn.on{background:var(--text);border-color:var(--text);color:#fafafa}
 .cat-chip .cat-btn{font-size:12px}
-.more-btn{align-self:flex-end;padding:4px 8px;border:0;background:none;font:inherit;font-size:12px;font-weight:600;color:var(--text);text-decoration:underline;cursor:pointer}
 .cat-chip .cat-btn:hover:not(.on){background:var(--soft)}
 .seg-pill.live{background:var(--live)}
 .seg-pill.soon{background:var(--dot)}
@@ -569,8 +566,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
-      <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="false" aria-controls="cats"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg><span>Filtres</span></button>
-      <div class="float cat-chip" id="cats" role="group" aria-label="Catégories"></div>
+      <div class="float cat-chip open" id="cats" role="group" aria-label="Filtres"></div>
       <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
       <div class="cursor" id="cursor">
@@ -1051,14 +1047,7 @@ const ecard = $("ecard");
 let timeSel = new Set(); // "live" et/ou "soon"
 let catSel = new Set();  // catégories cochées
 let dateSel = null;      // période choisie : today | thisweek | weekend | nextweek | month
-let filtersOpen = false; // genres masqués tant que « Voir plus » n’est pas activé
-const CATS = ["Musique", "Culture", "Sport", "Brocante", "Fête", "Atelier", "Bar", "Humour", "Club", "Food"];
-const filterBtn = $("filter-btn");
-filterBtn.addEventListener("click", () => {
-  const open = !$("cats").classList.contains("open");
-  $("cats").classList.toggle("open", open);
-  filterBtn.setAttribute("aria-expanded", String(open));
-});
+const CATS = ["Atelier", "Bar", "Brocante", "Club", "Culture", "Fête", "Food", "Humour", "Musique", "Sport"];
 const CAT_CLASS = window.Adeupa.CAT_CLASS;
 const CAT_ICON = window.Adeupa.CAT_ICON;
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
@@ -1084,10 +1073,7 @@ function buildCats() {
   const btn = (o, i, on) => `<button type="button" class="cat-btn${on ? " on" : ""}" data-kind="${o.kind || "time"}" data-k="${o.key}" style="--i:${i}">${o.dot ? '<span class="dot"></span>' : ""}${o.icon ? svgIcon(o.icon) : ""}${o.label}</button>`;
   const timeRow = `<div class="filter-row time-row"><div class="filter-pills">${timeOpts.map((o, i) => btn(o, i, timeSel.has(o.key))).join("")}${dateOpts.map((o, i) => btn(o, i + timeOpts.length, dateSel === o.key)).join("")}</div></div>`;
   const catRow = filterRow("cat", "Genre", CATS.map(c => ({ key: c, label: c, icon: CAT_ICON[c] })), catSel);
-  box.innerHTML = timeRow
-    + (filtersOpen ? catRow : "")
-    + `<button type="button" class="more-btn" aria-expanded="${filtersOpen}">${filtersOpen ? "Voir moins" : "Voir plus"}</button>`;
-  box.querySelector(".more-btn").addEventListener("click", () => { filtersOpen = !filtersOpen; buildCats(); });
+  box.innerHTML = timeRow + catRow;
   box.querySelectorAll(".cat-btn").forEach(b => b.addEventListener("click", () => {
     if (b.dataset.kind === "date") { const k = b.dataset.k; dateSel = !k || dateSel === k ? null : k; buildCats(); applyFilter(); return; }
     const set = b.dataset.kind === "time" ? timeSel : catSel;
