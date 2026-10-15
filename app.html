@@ -144,7 +144,8 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .pick.on{background:var(--text);border-color:var(--text);color:#fff}
 .pick svg{width:16px;height:16px}
 .alerts-form{display:flex;flex-direction:column;gap:16px}
-.alerts-form h3{margin:0}
+.alerts-form h3,.alerts-form .note{margin:0}
+.alerts-full[aria-pressed="true"]{border-color:var(--blue);color:var(--blue)}
 .alerts-form .field{display:flex;flex-direction:column;gap:8px;margin:0}
 .alerts-full{width:100%;justify-content:center}
 .alert-dd summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;height:40px;box-sizing:border-box;padding:8px 16px;border-radius:24px;font-size:16px}
@@ -664,7 +665,7 @@ function renderAlerts() {
   const t = $("alerts-toggle");
   t.setAttribute("aria-pressed", String(alerts.active));
   t.textContent = alerts.active ? "Alertes activées" : "Activer les alertes";
-  t.className = "btn alerts-full" + (alerts.active ? " btn-primary" : "");
+  t.className = "btn alerts-full";
   $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
   $("alerts-cats").innerHTML = CATS.map(c => `<label><input type="checkbox" data-c="${c}"${alerts.cats.includes(c) ? " checked" : ""}>${svgIcon(CAT_ICON[c])}${c}</label>`).join("");
   $("alerts-zones").querySelectorAll("[data-z]").forEach(i => i.addEventListener("change", () => toggleAlert("zones", i.dataset.z)));
