@@ -664,11 +664,15 @@ function renderAlerts() {
   t.setAttribute("aria-pressed", String(alerts.active));
   t.textContent = alerts.active ? "Désactiver les alertes" : "Activer les alertes";
   t.className = "btn btn-primary alerts-full";
-  $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
+  const allZones = ALERT_ZONES.every(z => alerts.zones.includes(z));
+  $("alerts-zones").innerHTML = `<label><input type="checkbox" id="zones-all"${allZones ? " checked" : ""}>Lyon (tous les arrondissements)</label>` + ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
+  const all = $("zones-all");
+  all.indeterminate = !allZones && alerts.zones.length > 0;
+  all.addEventListener("change", () => { alerts.zones = all.checked ? [...ALERT_ZONES] : []; renderAlerts(); if (alerts.active) saveAlerts(false); });
   $("alerts-cats").innerHTML = CATS.map(c => `<label><input type="checkbox" data-c="${c}"${alerts.cats.includes(c) ? " checked" : ""}>${svgIcon(CAT_ICON[c])}${c}</label>`).join("");
   $("alerts-zones").querySelectorAll("[data-z]").forEach(i => i.addEventListener("change", () => toggleAlert("zones", i.dataset.z)));
   $("alerts-cats").querySelectorAll("[data-c]").forEach(i => i.addEventListener("change", () => toggleAlert("cats", i.dataset.c)));
-  $("sum-zones").textContent = alerts.zones.length ? alerts.zones.join(", ") : "Choisir des arrondissements";
+  $("sum-zones").textContent = allZones ? "Lyon (tous les arrondissements)" : alerts.zones.length ? alerts.zones.join(", ") : "Choisir des arrondissements";
   $("sum-cats").textContent = alerts.cats.length ? alerts.cats.join(", ") : "Toutes catégories";
 }
 function toggleAlert(key, value) {
