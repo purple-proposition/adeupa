@@ -311,10 +311,6 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <h3>Alertes événements</h3>
           <p class="note">Recevez un e-mail quand un événement est publié près de chez vous.</p>
           <div class="field">
-            <span class="lbl">Statut</span>
-            <button class="btn alerts-full" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
-          </div>
-          <div class="field">
             <span class="lbl">Arrondissements</span>
             <details class="alert-dd" id="dd-zones">
               <summary class="dp-trigger" id="sum-zones">Choisir des arrondissements</summary>
@@ -328,6 +324,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
               <div class="alert-menu" id="alerts-cats"></div>
             </details>
           </div>
+          <button class="btn btn-primary alerts-full" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
           <p class="note" id="alerts-saved" role="status"></p>
         </form>
         </div>
