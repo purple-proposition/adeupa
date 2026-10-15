@@ -304,7 +304,15 @@ section{scroll-margin-top:128px}
 #login{position:fixed;top:24px;right:24px;z-index:36;transition:top .32s cubic-bezier(.22,1,.36,1),background-color .2s ease,box-shadow .2s ease;background:rgba(250,250,250,.72);color:var(--text);border:1px solid var(--line)}
 #login:hover{background:#fafafa;box-shadow:none}
 @media (max-width:768px){#login{right:16px}}
-@media (max-width:768px){.menu-links{gap:16px}.menu-links a{font-size:16px}.menu-links li:nth-child(3){display:none}}
+@media (max-width:768px){.menu-links{display:none}#brand{display:none}#cta{display:none}}
+/* Carte sur mobile : plus haute, filtres en bas sur une seule ligne défilante */
+@media (max-width:768px){
+  .product{height:480px;margin-top:32px;border-radius:24px}
+  .cat-chip{top:auto;bottom:44px;left:12px;right:12px;max-width:none;align-items:stretch;gap:8px}
+  .cat-chip .filter-pills{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;padding:0}
+  .cat-chip .filter-pills::-webkit-scrollbar{display:none}
+  .cat-chip .cat-btn{flex:none}
+}
 
 /* Animations au défilement (rythme repris de Causal) */
 :root{--ease-emerge:cubic-bezier(.22,1,.36,1);--ease-glide:cubic-bezier(.33,1,.68,1);--dur-enter:800ms;--dur-hover:150ms;--dur-press:100ms;--dur-swap:260ms;--stagger:120ms}
@@ -1289,7 +1297,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 <script>
 (() => {
   const login = document.getElementById("login"), cta = document.getElementById("cta");
-  const place = () => { cta.style.right = (parseFloat(getComputedStyle(login).right) + login.offsetWidth + 8) + "px"; };
+  const place = () => { cta.style.right = innerWidth <= 768 ? "" : (parseFloat(getComputedStyle(login).right) + login.offsetWidth + 8) + "px"; };
   place(); window.addEventListener("resize", place);
   // une fois le bandeau sorti de l\u2019écran, le bouton remonte dans le coin
   const onScroll = () => document.documentElement.classList.toggle("scrolled", window.scrollY > 40);

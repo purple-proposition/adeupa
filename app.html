@@ -135,13 +135,24 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
 .plan{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:16px}
 .plan.on{border-color:var(--blue)}
 .plan b{display:block;font-size:16px}
-.plan span{font-size:14px;color:var(--muted)}
+.plan div span{font-size:14px;color:var(--muted)}
+.plan .btn{height:40px;border-radius:24px;font-size:16px}
 .note{font-size:12px;color:var(--muted);margin:16px 0 0}
 .pills{display:flex;flex-wrap:wrap;gap:8px}
 .pick{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:16px;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 .pick:hover{background:var(--soft)}
 .pick.on{background:var(--text);border-color:var(--text);color:#fff}
 .pick svg{width:16px;height:16px}
+.alerts-form{display:flex;flex-direction:column;gap:24px}
+.alerts-form .field{display:flex;flex-direction:column;gap:8px;margin:0}
+.alerts-full{width:100%;justify-content:center}
+.alert-dd summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.alert-dd summary::-webkit-details-marker{display:none}
+.alert-dd[open] summary{border-color:var(--blue)}
+.alert-menu{display:flex;flex-direction:column;gap:4px;margin-top:8px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.alert-menu label{display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;font-size:16px;color:var(--text);cursor:pointer}
+.alert-menu label:hover{background:var(--soft)}
+.alert-menu input{width:16px;height:16px;margin:0;accent-color:var(--blue)}
 /* ajout d'événement */
 .modal{position:fixed;inset:0;background:rgba(10,10,10,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
 .modal.open{display:flex}
@@ -295,13 +306,28 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <button class="btn btn-dark" type="submit">Enregistrer</button>
           <p class="note" id="p-saved" role="status"></p>
         </form>
-        <form class="panel" id="alerts-form">
+        <form class="panel alerts-form" id="alerts-form">
           <h3>Alertes événements</h3>
           <p class="note">Recevez un e-mail quand un événement est publié près de chez vous.</p>
-          <button class="btn" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
-          <div class="field"><span class="lbl">Arrondissements</span><div id="alerts-zones" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
-          <div class="field"><span class="lbl">Catégories (toutes si aucune n’est choisie)</span><div id="alerts-cats" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
-          <button class="btn btn-dark" type="submit">Enregistrer mes alertes</button>
+          <div class="field">
+            <span class="lbl">Statut</span>
+            <button class="btn alerts-full" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
+          </div>
+          <div class="field">
+            <span class="lbl">Arrondissements</span>
+            <details class="alert-dd" id="dd-zones">
+              <summary class="dp-trigger" id="sum-zones">Choisir des arrondissements</summary>
+              <div class="alert-menu" id="alerts-zones"></div>
+            </details>
+          </div>
+          <div class="field">
+            <span class="lbl">Catégories</span>
+            <details class="alert-dd" id="dd-cats">
+              <summary class="dp-trigger" id="sum-cats">Toutes catégories</summary>
+              <div class="alert-menu" id="alerts-cats"></div>
+            </details>
+          </div>
+          <button class="btn btn-dark alerts-full" type="submit">Enregistrer mes alertes</button>
           <p class="note" id="alerts-saved" role="status"></p>
         </form>
         </div>
@@ -618,7 +644,7 @@ function renderProfile() {
   const st = $("p-status");
   st.classList.toggle("ok", profile.confirmed);
   st.querySelector("span:last-child").textContent = profile.confirmed ? "Compte confirmé" : "Compte non confirmé";
-  $("plans").innerHTML = PLANS.map(p => `<div class="plan${profile.plan === p.key ? " on" : ""}"><div><b>${p.name}</b><span>${p.desc}</span></div>${profile.plan === p.key ? '<span class="tag live">Actuel</span>' : `<button class="btn" type="button" data-plan="${p.key}">Choisir</button>`}</div>`).join("");
+  $("plans").innerHTML = PLANS.map(p => `<div class="plan${profile.plan === p.key ? " on" : ""}"><div><b>${p.name}</b><span>${p.desc}</span></div>${profile.plan === p.key ? '<span class="btn btn-primary" aria-current="true">Actuel</span>' : `<button class="btn" type="button" data-plan="${p.key}">Choisir</button>`}</div>`).join("");
   $("plans").querySelectorAll("[data-plan]").forEach(b => b.addEventListener("click", () => { profile.plan = b.dataset.plan; saveProfile(profile); renderProfile(); }));
 }
 $("profile-form").addEventListener("submit", e => {
@@ -637,11 +663,13 @@ function renderAlerts() {
   const t = $("alerts-toggle");
   t.setAttribute("aria-pressed", String(alerts.active));
   t.textContent = alerts.active ? "Alertes activées" : "Activer les alertes";
-  t.className = "btn" + (alerts.active ? " btn-primary" : "");
-  $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<button type="button" class="pick${alerts.zones.includes(z) ? " on" : ""}" data-z="${z}">${z}</button>`).join("");
-  $("alerts-cats").innerHTML = CATS.map(c => `<button type="button" class="pick${alerts.cats.includes(c) ? " on" : ""}" data-c="${c}">${c}</button>`).join("");
-  $("alerts-zones").querySelectorAll("[data-z]").forEach(b => b.addEventListener("click", () => toggleAlert("zones", b.dataset.z)));
-  $("alerts-cats").querySelectorAll("[data-c]").forEach(b => b.addEventListener("click", () => toggleAlert("cats", b.dataset.c)));
+  t.className = "btn alerts-full" + (alerts.active ? " btn-primary" : "");
+  $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
+  $("alerts-cats").innerHTML = CATS.map(c => `<label><input type="checkbox" data-c="${c}"${alerts.cats.includes(c) ? " checked" : ""}>${svgIcon(CAT_ICON[c])}${c}</label>`).join("");
+  $("alerts-zones").querySelectorAll("[data-z]").forEach(i => i.addEventListener("change", () => toggleAlert("zones", i.dataset.z)));
+  $("alerts-cats").querySelectorAll("[data-c]").forEach(i => i.addEventListener("change", () => toggleAlert("cats", i.dataset.c)));
+  $("sum-zones").textContent = alerts.zones.length ? alerts.zones.join(", ") : "Choisir des arrondissements";
+  $("sum-cats").textContent = alerts.cats.length ? alerts.cats.join(", ") : "Toutes catégories";
 }
 function toggleAlert(key, value) {
   alerts[key] = alerts[key].includes(value) ? alerts[key].filter(v => v !== value) : [...alerts[key], value];
