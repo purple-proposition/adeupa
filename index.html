@@ -526,6 +526,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .nb-ico{flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:rgba(65,105,225,.12);color:var(--blue)}
 .nb-ico svg{width:24px;height:24px}
 .av-card.blue .nb-num{color:#171717}
+@media (min-width:769px){#billetterie .steps{grid-template-columns:repeat(2,minmax(0,1fr));width:min(720px,100%);margin-inline:auto}#billetterie .steps>*{grid-column:auto}}
 #gestion .av-card:not(.blue) .nb-num{color:#75DBDB}
 #gestion .av-card:not(.blue) .nb-ico{background:#75DBDB;color:#171717}
 #gestion .av-card:not(.blue) .voir-plus{background:#75DBDB;border-color:#5CC8C8;color:#171717}
@@ -855,14 +856,9 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 
 <section id="billetterie">
   <div class="wrap">
-    <div class="section-head" data-reveal>
-      <h2>Vos billets se vendent depuis votre fiche</h2>
-      <p class="lead">Une billetterie intégrée à votre fiche : vos visiteurs achètent sans quitter la page, et vous ne payez qu'une commission sur les billets vendus.</p>
-    </div>
     <div class="steps" data-reveal>
       <div class="step"><div class="n">%</div><h3>Commission à partir de 0,9 %</h3><p>Plus votre formule est large, plus la commission baisse. Gratuit : 2,9 % + 0,49 € par billet. Pro : 1,2 % + 0,20 € par billet. Business : 0,9 % + 0,15 € par billet.</p></div>
       <div class="step"><div class="n">€</div><h3>Aucun frais caché</h3><p>Le montant affiché est celui que vos visiteurs paient, commission comprise. Vos ventes arrivent sur votre compte selon les délais de versement indiqués dans vos conditions.</p></div>
-      <div class="step"><div class="n">✓</div><h3>Une fiche, un billet</h3><p>Le bouton Billetterie est sur la fiche de votre événement, à côté de l'adresse et des horaires. Vous suivez vos ventes depuis votre espace.</p></div>
     </div>
   </div>
 <div class="wrap"><div class="cta-row"><a class="btn btn-dark" href="app.html">Publier mon événement</a></div></div>
