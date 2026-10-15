@@ -563,12 +563,12 @@ const shuffled = list => list.map(v => [Math.random(), v]).sort((a, b) => a[0] -
 function renderGrid() {
   const card = e => `
     <article class="card">
-      <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
+      <div class="cover${e.image ? "" : " g-" + CAT_CLASS[e.cat]}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true">${window.Adeupa.heartBtn(e)}<div class="tags">${e.status === "soon" ? '<span class="tag">À venir</span>' : ""}<span class="tag cat">${svgIcon(CAT_ICON[e.cat])}${e.cat}</span></div></div>
       <span class="org"><span>${e.org}</span>${e.verified ? `<span class="seal" aria-label="Entreprise vérifiée">${window.Adeupa.SEAL}</span>` : ""}</span>
       <h3>${e.title}</h3>
       <div class="meta"><span class="line">${ICON_CAL}${e.date}${e.hours ? " de " + e.hours : ""}</span><span class="line">${ICON_PIN}${window.Adeupa.fmtAddress(e.address)}</span></div>
       <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
-      <div class="stat"><span><b>${e.tickets}</b> confirmés</span><span><b>${e.interested}</b> intéressés</span></div>
+      ${window.Adeupa.statsHTML(e).replace('<div class="ecard-stats">', '<div class="stat">').replace(/class="ecard-stat"/g, "")}
       ${e.user ? `<button class="btn card-stats" type="button" data-stats="${EVENTS.indexOf(e)}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/> <path d="M18 17V9"/> <path d="M13 17V5"/> <path d="M8 17v-3"/></svg>Statistiques</button>` : ""}
     </article>`;
   // Trois événements par section ; le reste est accessible depuis la liste complète

@@ -20,7 +20,12 @@
 .ecard-close{margin-left:auto;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:24px;background:none;color:var(--muted);cursor:pointer}
 .ecard-close:hover{background:rgba(10,10,10,.06);color:var(--text)}
 .ecard-close svg{width:16px;height:16px}
-.ecard-cover-box{padding:0;margin:0 0 16px;background:none}
+.ecard-cover-box{position:relative;padding:0;margin:0 0 16px;background:none}
+.heart{position:absolute;top:12px;left:12px;z-index:2;width:40px;height:40px;padding:0;border-radius:50%;border:1px solid #e5e5e5;background:#fafafa;color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+.heart:hover{background:#f5f5f5}
+.heart[aria-pressed="true"]{background:#4169E1;border-color:#4169E1;color:#fafafa}
+.heart[aria-pressed="true"] svg{fill:currentColor}
+.heart svg{width:20px;height:20px}
 .ecard-cover{position:relative;display:block;width:100%;aspect-ratio:16 / 9;max-height:240px;border-radius:16px;overflow:hidden}
 .ecard-cover .cat-tag{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--text)}
 .ecard-cover .cat-tag svg{width:16px;height:16px;flex:none}

@@ -18,9 +18,30 @@ const ICON_PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" str
 // Adresse au format « numéro rue, code postal ville »
 const fmtAddress = a => (a || "").replace(/^(.*?[^,\s])\s+(\d{5})\s+/, "$1, $2 ");
 
+// Intérêt : cœur sur la carte, mémorisé dans ce navigateur
+const HEART = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>`;
+const keyOf = e => encodeURIComponent(String(e.id ?? e.title));
+const readInterest = () => { try { return JSON.parse(localStorage.getItem("adeupa-interest") || "[]"); } catch (_) { return []; } };
+const isInterested = e => readInterest().includes(decodeURIComponent(keyOf(e)));
+const interestCount = e => (e.interested ?? 0) + (isInterested(e) ? 1 : 0);
+const heartBtn = e => `<button class="heart" type="button" aria-pressed="${isInterested(e)}" aria-label="Je suis intéressé" data-heart="${keyOf(e)}">${HEART}</button>`;
+// Participants (billetterie) seulement si l'événement vend des billets ; intéressés toujours
+const statsHTML = e => `<div class="ecard-stats">${e.ticket ? `<span class="ecard-stat"><b>${e.tickets ?? 0}</b> participant${e.tickets === 1 ? "" : "s"}</span>` : ""}<span class="ecard-stat"><b data-int="${keyOf(e)}" data-base="${e.interested ?? 0}">${interestCount(e)}</b> intéressé${interestCount(e) === 1 ? "" : "s"}</span></div>`;
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-heart]");
+  if (!b) return;
+  ev.stopPropagation();
+  const raw = decodeURIComponent(b.dataset.heart);
+  const list = readInterest();
+  const on = !list.includes(raw);
+  try { localStorage.setItem("adeupa-interest", JSON.stringify(on ? [...list, raw] : list.filter(k => k !== raw))); } catch (_) {}
+  document.querySelectorAll(`[data-heart="${b.dataset.heart}"]`).forEach(x => x.setAttribute("aria-pressed", String(on)));
+  document.querySelectorAll(`[data-int="${b.dataset.heart}"]`).forEach(x => { x.textContent = Number(x.dataset.base) + (on ? 1 : 0); });
+});
+
 // Gabarit de la fiche d'un événement (landing et back-office)
 const ecardHTML = e => `
-    <div class="ecard-cover-box"><div class="ecard-cover${e.image ? "" : " g-" + (CAT_CLASS[e.cat] || "culture")}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><span class="cat-tag">${CAT_ICON[e.cat] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[e.cat].replace(/`/g, "")}</svg>` : ""}${e.cat || ""}</span></div></div>
+    <div class="ecard-cover-box"><div class="ecard-cover${e.image ? "" : " g-" + (CAT_CLASS[e.cat] || "culture")}" style="${e.image ? `background:url(${e.image}) center/cover no-repeat` : ""}" aria-hidden="true"><span class="cat-tag">${CAT_ICON[e.cat] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CAT_ICON[e.cat].replace(/`/g, "")}</svg>` : ""}${e.cat || ""}</span>${heartBtn(e)}</div></div>
     <div class="org"><span>${e.org.name}</span>${e.org.type === "ent" ? `<span class="seal" title="Entreprise vérifiée" aria-label="Entreprise vérifiée">${SEAL}</span>` : ""}<button class="ecard-close" type="button" aria-label="Fermer la carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
     <h4>${e.title}</h4>
     <div class="meta">
@@ -28,7 +49,7 @@ const ecardHTML = e => `
       <span class="line">${ICON_PIN}${fmtAddress(e.address)}</span>
     </div>
     <div class="desc-wrap"><div class="desc">${e.desc}</div></div>
-    <div class="ecard-stats"><span class="ecard-stat"><b>${e.tickets ?? "–"}</b> confirmé${e.tickets === 1 ? "" : "s"}</span><span class="ecard-stat"><b>${e.interested ?? "–"}</b> intéressé${e.interested === 1 ? "" : "s"}</span></div></div>
+    ${statsHTML(e)}</div>
     ${e.ticket ? `<a class="ticket" href="${e.ticketUrl || "#"}" target="_blank" rel="noopener">Billetterie</a>` : ""}
     `;
 
@@ -63,5 +84,5 @@ const pinSVG = e => {
   const icon = CAT_ICON[e.cat] || "";
   return `<svg class="pin-svg" viewBox="0 0 32 40" width="32" height="40" aria-hidden="true"><path d="M16 39C16 39 3 24 3 14a13 13 0 0 1 26 0c0 10-13 25-13 25z" fill="${fill}" stroke="#fafafa" stroke-width="2"/><g transform="translate(8 6) scale(.667)" fill="none" stroke="#fafafa" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${icon}</g></svg>`;
 };
-window.Adeupa = { CAT_CLASS, CAT_ICON, SEAL, ICON_CLOCK, ICON_PIN, ecardHTML, mountEcard, fmtAddress, pinSVG };
+window.Adeupa = { CAT_CLASS, CAT_ICON, SEAL, ICON_CLOCK, ICON_PIN, ecardHTML, mountEcard, fmtAddress, pinSVG, heartBtn, statsHTML, interestCount, keyOf, isInterested };
 })();
