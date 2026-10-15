@@ -509,6 +509,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-frame{margin-top:0}
 @media (max-width:1100px){.pb-slide{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:left}}
 @media (max-width:768px){.pb-slide{padding:24px}}
+.step .voir-plus{margin-top:16px}
 /* Cartes numérotées : grand chiffre à gauche, pictogramme à droite, puis titre et texte */
 .nb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .step .nb-head{margin-bottom:16px}
@@ -673,17 +674,20 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
       <div class="step" data-reveal style="--i:0">
         <div class="nb-head"><span class="nb-num">1</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span></div>
         <h4>Inscrivez-vous</h4>
-        <p>Renseignez votre e-mail, le nom de votre structure et son type (association ou organisateur professionnel). Une empreinte bancaire de 0 € est demandée, sans aucun prélèvement.</p>
+        <p class="clamp">Renseignez votre e-mail, le nom de votre structure et son type (association ou organisateur professionnel). Une empreinte bancaire de 0 € est demandée, sans aucun prélèvement.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </div>
       <div class="step" data-reveal style="--i:1">
         <div class="nb-head"><span class="nb-num">2</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg></span></div>
         <h4>Créez votre fiche événement</h4>
-        <p>Renseignez le titre, les dates, la catégorie, l’adresse et l’image de votre événement. Prévisualisez votre fiche et son emplacement sur la carte avant sa publication, puis configurez votre billetterie.</p>
+        <p class="clamp">Renseignez le titre, les dates, la catégorie, l’adresse et l’image de votre événement. Prévisualisez votre fiche et son emplacement sur la carte avant sa publication, puis configurez votre billetterie.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </div>
       <div class="step" data-reveal style="--i:2">
         <div class="nb-head"><span class="nb-num">3</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span></div>
         <h4>Cliquez sur Publier</h4>
-        <p>Votre événement apparaît alors sur la carte publique et reste accessible jusqu’à sa date de fin. Les visiteurs peuvent consulter sa fiche et accéder à la billetterie intégrée pour réserver leurs billets.</p>
+        <p class="clamp">Votre événement apparaît alors sur la carte publique et reste accessible jusqu’à sa date de fin. Les visiteurs peuvent consulter sa fiche et accéder à la billetterie intégrée pour réserver leurs billets.</p>
+        <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </div>
     </div>
   </div>
@@ -1513,7 +1517,7 @@ document.querySelectorAll(".faq-q").forEach(btn => {
 </script>
 <script>
 // « Voir plus » : affiche la description complète de la carte
-document.querySelectorAll("#gestion .voir-plus").forEach(b => b.addEventListener("click", () => {
+document.querySelectorAll("#gestion .voir-plus, #etapes .voir-plus").forEach(b => b.addEventListener("click", () => {
   const p = b.previousElementSibling;
   const open = p.classList.toggle("open");
   b.textContent = open ? "Voir moins" : "Voir plus";
