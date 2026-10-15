@@ -146,6 +146,7 @@ async function deleteAccount(req, env) {
     } else keep.push(id);
   }
   await env.ADEUPA_EVENTS.put("index", JSON.stringify(keep));
+  await env.DB.prepare("DELETE FROM alerts WHERE user_id = ?").bind(u.id).run();
   await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(u.id).run();
   return json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
 }
@@ -213,15 +214,117 @@ async function verifyCode(req, env) {
   return json(publicUser(u), 200, { "set-cookie": await sessionCookie(u.id, env) });
 }
 
+// ---------- Alertes : arrondissements et catégories choisis par le compte, e-mail à chaque nouvel événement ----------
+const SITE = "https://adeupa.lyon-map-demo.workers.dev";
+const ZONES = ["Lyon 1er", "Lyon 2e", "Lyon 3e", "Lyon 4e", "Lyon 5e", "Lyon 6e", "Lyon 7e", "Lyon 8e", "Lyon 9e"];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Arrondissement déduit du code postal de l'adresse (690xx), sinon null
+function zoneOf(address) {
+  const m = String(address || "").match(/\b690(0[1-9])\b/);
+  if (!m) return null;
+  const n = Number(m[1]);
+  return `Lyon ${n}${n === 1 ? "er" : "e"}`;
+}
+
+async function sendMail(env, to, name, subject, htmlContent) {
+  const r = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: { "api-key": env.BREVO_API_KEY, "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify({ sender: { name: "Adeupa", email: env.SENDER_EMAIL }, to: [{ email: to, name }], subject, htmlContent }),
+  });
+  if (!r.ok) console.log("brevo", r.status, await r.text());
+  return r.ok;
+}
+
+const emailShell = (body) => `<div style="font-family:Arial,sans-serif;color:#171717;max-width:560px;margin:0 auto;padding:24px"><div style="display:flex;align-items:center;gap:12px;margin:0 0 24px"><img src="${SITE}/assets/logo-email.png" width="40" height="40" alt="" style="display:block"><span style="font-size:24px;font-weight:800;color:#4169E1">Adeupa</span></div>${body}<p style="font-size:12px;color:#737373;margin:24px 0 0">Vous recevez cet e-mail car vous avez activé les alertes Adeupa. Vous pouvez les désactiver à tout moment dans <a href="${SITE}/app.html" style="color:#4169E1">Mon profil</a>.</p></div>`;
+
+const eventCard = ({ title, zone, cat, when, org, fictif }) => `<div style="border:1px solid #e5e5e5;border-radius:32px;padding:24px;margin:0 0 16px">${fictif ? `<p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#737373">EXEMPLE FICTIF : cet événement n’existe pas</p>` : ""}<p style="margin:0;font-size:12px;color:#737373">${esc(zone)} · ${esc(cat)}</p><p style="margin:4px 0 0;font-size:24px;font-weight:800;line-height:1.2">${esc(title)}</p><p style="margin:8px 0 0;font-size:16px;color:#737373">${esc(when)}${org ? ` · ${esc(org)}` : ""}</p></div>`;
+
+const button = (href, label) => `<a href="${href}" style="display:inline-block;padding:8px 16px;border-radius:24px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:600;text-decoration:none">${label}</a>`;
+
+// Exemple envoyé à l'activation : événements fictifs, clairement signalés, pour montrer le format
+const SAMPLE = [
+  { title: "Marché d’artisans", cat: "Brocante", when: "Samedi 24 octobre, 14h à 18h" },
+  { title: "Soirée jazz en petit comité", cat: "Musique", when: "Vendredi 30 octobre, 20h" },
+];
+function welcomeHTML(name, zones, cats) {
+  const cards = zones.slice(0, 2).map((zone, i) => eventCard({ ...SAMPLE[i], cat: cats[i] || SAMPLE[i].cat, zone, fictif: true })).join("");
+  return emailShell(`<p style="font-size:16px">Bonjour ${esc(name)},</p>
+    <p style="font-size:16px">Vos alertes sont activées pour ${esc(zones.join(", "))}${cats.length ? `, catégories : ${esc(cats.join(", "))}` : ", toutes catégories"}.</p>
+    <p style="font-size:16px;color:#737373">Voici à quoi ressemblera une alerte. Les événements ci-dessous sont des exemples fictifs, pas de vrais événements.</p>
+    ${cards}
+    <p style="margin:24px 0 0">${button(`${SITE}/app.html`, "Gérer mes alertes")}</p>`);
+}
+
+function alertHTML(name, events) {
+  const cards = events.map(e => eventCard({ title: e.title, zone: zoneOf(e.address), cat: e.cat, when: [e.date, e.hours].filter(Boolean).join(" · "), org: e.org, fictif: false })).join("");
+  return emailShell(`<p style="font-size:16px">Bonjour ${esc(name)},</p>
+    <p style="font-size:16px">${events.length > 1 ? `${events.length} nouveaux événements` : "Un nouvel événement"} correspond${events.length > 1 ? "ent" : ""} à vos alertes :</p>
+    ${cards}
+    <p style="margin:24px 0 0">${button(SITE, "Voir la carte")}</p>`);
+}
+
+async function getAlerts(req, env) {
+  const u = await currentUser(req, env);
+  if (!u) return json({ error: "Non connecté" }, 401);
+  const row = await env.DB.prepare("SELECT active, zones, cats FROM alerts WHERE user_id = ?").bind(u.id).first();
+  if (!row) return json({ active: false, zones: [], cats: [] });
+  return json({ active: !!row.active, zones: JSON.parse(row.zones), cats: JSON.parse(row.cats) });
+}
+
+async function saveAlerts(req, env) {
+  const u = await currentUser(req, env);
+  if (!u) return json({ error: "Non connecté" }, 401);
+  let b; try { b = await req.json(); } catch (_) { return json({ error: "Envoi invalide" }, 400); }
+  const active = b.active === true;
+  const zones = (Array.isArray(b.zones) ? b.zones : []).filter(z => ZONES.includes(z));
+  const cats = (Array.isArray(b.cats) ? b.cats : []).filter(c => CATS.includes(c));
+  if (active && !zones.length) return json({ error: "Choisissez au moins un arrondissement." }, 400);
+  const before = await env.DB.prepare("SELECT active FROM alerts WHERE user_id = ?").bind(u.id).first();
+  await env.DB.prepare("INSERT OR REPLACE INTO alerts (user_id, active, zones, cats, updated_at) VALUES (?, ?, ?, ?, ?)")
+    .bind(u.id, active ? 1 : 0, JSON.stringify(zones), JSON.stringify(cats), Math.floor(Date.now() / 1000)).run();
+  // Un e-mail d'exemple à l'activation, seulement quand les alertes passent de désactivées à activées
+  if (active && !(before && before.active)) {
+    await sendMail(env, u.email, u.name, "Vos alertes Adeupa sont activées", welcomeHTML(u.name, zones, cats));
+  }
+  return json({ active, zones, cats });
+}
+
+// Déclenché par le cron : envoie une alerte pour les nouveaux événements qui correspondent
+async function notifyNewEvents(env) {
+  const ids = await listIds(env);
+  const seen = await env.ADEUPA_EVENTS.get("alerts:seen", "json");
+  // Premier passage : on mémorise les événements existants sans rien envoyer
+  if (!seen) { await env.ADEUPA_EVENTS.put("alerts:seen", JSON.stringify(ids)); return; }
+  const fresh = ids.filter(id => !seen.includes(id));
+  if (!fresh.length) return;
+  await env.ADEUPA_EVENTS.put("alerts:seen", JSON.stringify(ids));
+  const events = (await Promise.all(fresh.map(id => env.ADEUPA_EVENTS.get(`event:${id}`, "json")))).filter(Boolean);
+  if (!events.length) return;
+  const subs = await env.DB.prepare("SELECT a.zones, a.cats, u.email, u.name FROM alerts a JOIN users u ON u.id = a.user_id WHERE a.active = 1").all();
+  for (const s of subs.results) {
+    const zones = JSON.parse(s.zones), cats = JSON.parse(s.cats);
+    const matches = events.filter(e => zones.includes(zoneOf(e.address)) && (!cats.length || cats.includes(e.cat)));
+    if (matches.length) await sendMail(env, s.email, s.name, `${matches.length > 1 ? `${matches.length} nouveaux événements` : "Un nouvel événement"} près de chez vous`, alertHTML(s.name, matches));
+  }
+}
+
 const logout = () => json({ ok: true }, 200, { "set-cookie": "adeupa_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0" });
 
 export default {
+  async scheduled(_event, env, ctx) {
+    ctx.waitUntil(notifyNewEvents(env));
+  },
+
   async fetch(req, env) {
     const url = new URL(req.url);
     if (url.pathname === "/api/logout" && req.method === "POST") return logout();
     if (url.pathname === "/api/code" && req.method === "POST") return requestCode(req, env);
     if (url.pathname === "/api/verify" && req.method === "POST") return verifyCode(req, env);
     if (url.pathname === "/api/me" && req.method === "DELETE") return deleteAccount(req, env);
+    if (url.pathname === "/api/alerts" && req.method === "GET") return getAlerts(req, env);
+    if (url.pathname === "/api/alerts" && req.method === "PUT") return saveAlerts(req, env);
     if (url.pathname === "/api/me" && req.method === "GET") {
       const u = await currentUser(req, env);
       return u ? json(publicUser(u)) : json({ error: "Non connecté" }, 401);

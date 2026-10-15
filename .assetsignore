@@ -1,0 +1,10 @@
+.git
+.gitignore
+.wrangler
+node_modules
+migrations
+worker.js
+wrangler.jsonc
+.DS_Store
+*.md
+*.txt

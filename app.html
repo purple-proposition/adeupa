@@ -295,6 +295,15 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <button class="btn btn-dark" type="submit">Enregistrer</button>
           <p class="note" id="p-saved" role="status"></p>
         </form>
+        <form class="panel" id="alerts-form">
+          <h3>Alertes événements</h3>
+          <p class="note">Recevez un e-mail quand un événement est publié près de chez vous.</p>
+          <button class="btn" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
+          <div class="field"><span class="lbl">Arrondissements</span><div id="alerts-zones" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+          <div class="field"><span class="lbl">Catégories (toutes si aucune n’est choisie)</span><div id="alerts-cats" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+          <button class="btn btn-dark" type="submit">Enregistrer mes alertes</button>
+          <p class="note" id="alerts-saved" role="status"></p>
+        </form>
         </div>
         <div class="profil-col">
         <div class="panel">
@@ -421,6 +430,7 @@ function showApp() {
   renderProfile(); showTab("events");
   remoteEvents = loadMine();
   remoteEvents.then(() => { renderGrid(); initMap(); });
+  loadAlerts();
 }
 function showLogin() {
   $("app-view").classList.remove("show");
@@ -606,6 +616,45 @@ $("profile-form").addEventListener("submit", e => {
   saveProfile(profile);
   $("p-saved").textContent = "Profil enregistré.";
   renderProfile();
+});
+
+// Alertes : arrondissements et catégories, enregistrés sur le compte connecté
+const ALERT_ZONES = ["Lyon 1er", "Lyon 2e", "Lyon 3e", "Lyon 4e", "Lyon 5e", "Lyon 6e", "Lyon 7e", "Lyon 8e", "Lyon 9e"];
+let alerts = { active: false, zones: [], cats: [] };
+function renderAlerts() {
+  const t = $("alerts-toggle");
+  t.setAttribute("aria-pressed", String(alerts.active));
+  t.textContent = alerts.active ? "Alertes activées" : "Activer les alertes";
+  t.className = "btn" + (alerts.active ? " btn-primary" : "");
+  $("alerts-zones").innerHTML = ALERT_ZONES.map(z => `<button type="button" class="pick${alerts.zones.includes(z) ? " on" : ""}" data-z="${z}">${z}</button>`).join("");
+  $("alerts-cats").innerHTML = CATS.map(c => `<button type="button" class="pick${alerts.cats.includes(c) ? " on" : ""}" data-c="${c}">${c}</button>`).join("");
+  $("alerts-zones").querySelectorAll("[data-z]").forEach(b => b.addEventListener("click", () => toggleAlert("zones", b.dataset.z)));
+  $("alerts-cats").querySelectorAll("[data-c]").forEach(b => b.addEventListener("click", () => toggleAlert("cats", b.dataset.c)));
+}
+function toggleAlert(key, value) {
+  alerts[key] = alerts[key].includes(value) ? alerts[key].filter(v => v !== value) : [...alerts[key], value];
+  renderAlerts();
+}
+$("alerts-toggle").addEventListener("click", () => { alerts.active = !alerts.active; renderAlerts(); });
+function loadAlerts() {
+  return fetch("/api/alerts").then(r => (r.ok ? r.json() : null)).then(d => {
+    if (d) alerts = d;
+    renderAlerts();
+    $("alerts-saved").textContent = d ? "" : "Connectez-vous pour activer les alertes.";
+  }).catch(() => {});
+}
+$("alerts-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = $("alerts-saved");
+  msg.textContent = "";
+  try {
+    const r = await fetch("/api/alerts", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(alerts) });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) { msg.textContent = d.error || "Enregistrement impossible pour le moment."; return; }
+    alerts = d;
+    renderAlerts();
+    msg.textContent = "Alertes enregistrées.";
+  } catch (_) { msg.textContent = "Enregistrement impossible pour le moment."; }
 });
 
 // Ajout d'un événement : catégorie, dates, horaires, plusieurs jours

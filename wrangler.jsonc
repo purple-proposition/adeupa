@@ -3,6 +3,7 @@
   "main": "worker.js",
   "vars": { "SENDER_EMAIL": "adeupa.app@gmail.com" },
   "compatibility_date": "2026-10-01",
+  "triggers": { "crons": ["0 * * * *"] },
   "assets": { "directory": ".", "binding": "ASSETS", "run_worker_first": ["/api/*", "/evenements*"] },
   "kv_namespaces": [{ "binding": "ADEUPA_EVENTS", "id": "e30f0c88c1f640e2bc65fb9ad9dd3b11" }],
   "d1_databases": [{ "binding": "DB", "database_name": "adeupa-users", "database_id": "ac09c4b4-93b0-4e2a-9b37-b0968c5a3d72", "migrations_dir": "migrations" }]

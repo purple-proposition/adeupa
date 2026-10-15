@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS alerts (
+  user_id TEXT PRIMARY KEY,
+  active INTEGER NOT NULL DEFAULT 0,
+  zones TEXT NOT NULL DEFAULT '[]',
+  cats TEXT NOT NULL DEFAULT '[]',
+  updated_at INTEGER NOT NULL
+);
