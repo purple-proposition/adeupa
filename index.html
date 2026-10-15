@@ -75,7 +75,11 @@ h1{font-size:56px;line-height:1.04;margin:0 auto 24px;max-width:860px;font-weigh
 .cat-chip.open .cat-btn{opacity:1;transform:none;pointer-events:auto}
 .cat-chip{flex-direction:column;align-items:flex-end;flex-wrap:nowrap;gap:8px;max-width:min(760px,calc(100% - 32px))}
 .filter-row{display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:100%}
-.filter-pills{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:100%;padding:4px}
+.filter-pills{display:flex;flex-wrap:nowrap;justify-content:flex-end;gap:8px;max-width:100%;padding:4px;overflow-x:auto;scrollbar-width:none}
+.filter-pills::-webkit-scrollbar{display:none}
+.filter-btn{position:absolute;top:16px;right:16px;z-index:6;height:40px;display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid #e5e5e5;border-radius:24px;background:rgba(245,245,245,.92);font:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer}
+.filter-btn[aria-expanded="true"]{background:var(--text);border-color:var(--text);color:#fafafa}
+.cat-chip[hidden]{display:none}
 .filter-pills::-webkit-scrollbar{display:none}
 .cat-chip .cat-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--live);flex:none}
 .cat-chip .cat-btn.on .dot{background:#fafafa}
@@ -588,6 +592,7 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     <!-- Démo en boucle : rien n'est cliquable, le curseur montre les fonctions -->
     <div class="product" id="product" aria-hidden="true">
       <div id="map"></div>
+      <button type="button" class="float filter-btn" id="filter-btn" aria-expanded="true" aria-controls="cats"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg><span>Filtres</span></button>
       <div class="float cat-chip open" id="cats" role="group" aria-label="Filtres"></div>
       <div class="ecard" id="ecard"></div>
       <div class="ripple" id="ripple"></div>
@@ -1083,6 +1088,12 @@ let timeSel = new Set(); // "live" et/ou "soon"
 let catSel = new Set();  // catégories cochées
 let dateSel = null;      // période choisie : today | thisweek | weekend | nextweek | month
 const CATS = ["Atelier", "Bar", "Brocante", "Club", "Culture", "Fête", "Food", "Humour", "Musique", "Sport"];
+// Le bouton « Filtres » affiche ou masque le panneau de filtres
+$("filter-btn").addEventListener("click", () => {
+  const cats = $("cats");
+  cats.hidden = !cats.hidden;
+  $("filter-btn").setAttribute("aria-expanded", String(!cats.hidden));
+});
 const CAT_CLASS = window.Adeupa.CAT_CLASS;
 const CAT_ICON = window.Adeupa.CAT_ICON;
 const svgIcon = inner => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
