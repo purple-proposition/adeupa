@@ -237,7 +237,7 @@ async function sendMail(env, to, name, subject, htmlContent) {
   return r.ok;
 }
 
-const emailShell = (body) => `<div style="font-family:Arial,sans-serif;color:#171717;max-width:560px;margin:0 auto;padding:24px"><div style="display:flex;align-items:center;gap:12px;margin:0 0 24px"><img src="${SITE}/assets/logo-email.png" width="40" height="40" alt="" style="display:block"><span style="font-size:24px;font-weight:800;color:#4169E1">Adeupa</span></div>${body}<p style="font-size:12px;color:#737373;margin:24px 0 0">Vous recevez cet e-mail car vous avez activé les alertes Adeupa. Vous pouvez les désactiver à tout moment dans <a href="${SITE}/app.html" style="color:#4169E1">Mon profil</a>.</p></div>`;
+const emailShell = (body) => `<div style="font-family:Arial,sans-serif;color:#171717;max-width:560px;margin:0 auto;padding:24px"><div style="display:flex;align-items:center;gap:12px;margin:0 0 24px"><img src="${SITE}/assets/logo-email.png" width="40" height="40" alt="" style="display:block"><span style="font-size:24px;font-weight:800;color:#4169E1">Adeupa</span></div>${body}<p style="font-size:12px;color:#737373;margin:24px 0 0">Vous recevez cet e-mail car vous avez activé la newsletter Adeupa. Vous pouvez les désactiver à tout moment dans <a href="${SITE}/app.html" style="color:#4169E1">Mon profil</a>.</p></div>`;
 
 const TAG = "display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;border:1px solid #e5e5e5;color:#737373;margin:0 4px 0 0";
 // Carte d'événement : mêmes règles que la carte du site (bordure, rayon 32 px, étiquette, titre 24 px)
@@ -259,13 +259,13 @@ function newsletterHTML(name, zones, cats) {
     <p style="font-size:16px">Voici une sélection d’événements publiés dans ${esc(zones.length === ZONES.length ? "Lyon" : zones.join(", "))}${cats.length ? `, dans les catégories ${esc(cats.join(", "))}` : ", toutes catégories confondues"}.</p>
     ${cards}
     <p style="margin:24px 0 0">${button(SITE, "Voir la carte")}</p>
-    <p style="margin:24px 0 0;font-size:16px;color:#737373">Vous recevrez ensuite un e-mail seulement quand un nouvel événement correspondra à vos alertes.</p>`);
+    <p style="margin:24px 0 0;font-size:16px;color:#737373">Vous recevrez ensuite un e-mail seulement quand un nouvel événement correspondra à vos choix.</p>`);
 }
 
 function alertHTML(name, events) {
   const cards = events.map(e => eventCard({ title: e.title, zone: zoneOf(e.address), cat: e.cat, when: [e.date, e.hours].filter(Boolean).join(" · "), org: e.org, fictif: false })).join("");
   return emailShell(`<p style="font-size:16px">Bonjour ${esc(name)},</p>
-    <p style="font-size:16px">${events.length > 1 ? `${events.length} nouveaux événements` : "Un nouvel événement"} correspond${events.length > 1 ? "ent" : ""} à vos alertes :</p>
+    <p style="font-size:16px">${events.length > 1 ? `${events.length} nouveaux événements` : "Un nouvel événement"} correspond${events.length > 1 ? "ent" : ""} à vos choix :</p>
     ${cards}
     <p style="margin:24px 0 0">${button(SITE, "Voir la carte")}</p>`);
 }

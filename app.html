@@ -308,7 +308,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
           <p class="note" id="p-saved" role="status"></p>
         </form>
         <form class="panel alerts-form" id="alerts-form">
-          <h3>Alertes événements</h3>
+          <h3>Newsletter</h3>
           <p class="note">Recevez un e-mail quand un événement est publié près de chez vous.</p>
           <div class="field">
             <span class="lbl">Arrondissements</span>
@@ -324,7 +324,7 @@ header.top{display:flex;align-items:center;justify-content:space-between;gap:16p
               <div class="alert-menu" id="alerts-cats"></div>
             </details>
           </div>
-          <button class="btn btn-primary alerts-full" id="alerts-toggle" type="button" aria-pressed="false">Activer les alertes</button>
+          <button class="btn btn-primary alerts-full" id="alerts-toggle" type="button" aria-pressed="false">Activer la newsletter</button>
           <p class="note" id="alerts-saved" role="status"></p>
         </form>
         </div>
@@ -659,7 +659,7 @@ let alerts = { active: false, zones: [], cats: [] };
 function renderAlerts() {
   const t = $("alerts-toggle");
   t.setAttribute("aria-pressed", String(alerts.active));
-  t.textContent = alerts.active ? "Désactiver les alertes" : "Activer les alertes";
+  t.textContent = alerts.active ? "Désactiver la newsletter" : "Activer la newsletter";
   t.className = "btn btn-primary alerts-full";
   const allZones = ALERT_ZONES.every(z => alerts.zones.includes(z));
   $("alerts-zones").innerHTML = `<label><input type="checkbox" id="zones-all"${allZones ? " checked" : ""}>Lyon (tous les arrondissements)</label>` + ALERT_ZONES.map(z => `<label><input type="checkbox" data-z="${z}"${alerts.zones.includes(z) ? " checked" : ""}>${z}</label>`).join("");
@@ -690,10 +690,10 @@ async function saveAlerts(showModal) {
     alerts = d;
     renderAlerts();
     if (!showModal) return;
-    $("alerts-modal-title").textContent = alerts.active ? "Alertes activées" : "Alertes désactivées";
+    $("alerts-modal-title").textContent = alerts.active ? "Newsletter activée" : "Newsletter désactivée";
     $("alerts-modal-text").textContent = alerts.active
       ? `Vous recevrez un e-mail pour les nouveaux événements à ${alerts.zones.join(", ")}${alerts.cats.length ? `, dans les catégories ${alerts.cats.join(", ")}` : " (toutes catégories)"}.`
-      : "Vous ne recevrez plus d’alertes.";
+      : "Vous ne recevrez plus la newsletter.";
     $("alerts-modal").classList.add("open");
   } catch (_) { msg.textContent = "Enregistrement impossible pour le moment."; }
 }
@@ -702,7 +702,7 @@ function loadAlerts() {
   return fetch("/api/alerts").then(r => (r.ok ? r.json() : null)).then(d => {
     if (d) alerts = d;
     renderAlerts();
-    $("alerts-saved").textContent = d ? "" : "Connectez-vous pour activer les alertes.";
+    $("alerts-saved").textContent = d ? "" : "Connectez-vous pour activer la newsletter.";
   }).catch(() => {});
 }
 
