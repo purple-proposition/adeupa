@@ -509,6 +509,14 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
 .pb-frame{margin-top:0}
 @media (max-width:1100px){.pb-slide{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:left}}
 @media (max-width:768px){.pb-slide{padding:24px}}
+/* Cartes numérotées : grand chiffre à gauche, pictogramme à droite, puis titre et texte */
+.nb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.step .nb-head{margin-bottom:16px}
+.nb-num{font-size:48px;line-height:1;font-weight:800;color:var(--blue)}
+.nb-ico{flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;background:rgba(65,105,225,.12);color:var(--blue)}
+.nb-ico svg{width:24px;height:24px}
+.av-card.blue .nb-num{color:#fafafa}
+.av-card.blue .nb-ico{background:rgba(250,250,250,.2);color:#fafafa}
 /* Témoignages (exemples de maquette) : bandeau qui défile de la gauche vers la droite */
 .tm-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
 .tm-track{display:flex;gap:var(--grid-gutter);width:max-content;padding-right:var(--grid-gutter);animation:tmRight 70s linear infinite}
@@ -602,22 +610,26 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
     <div class="av-grid" data-reveal>
       <article class="av-card blue">
-        <h3>1. Vos événements sur une carte interactive</h3>
+        <div class="nb-head"><span class="nb-num">1</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span></div>
+        <h3>Vos événements sur une carte interactive</h3>
         <p class="clamp">Publiez vos événements en cours et à venir sur notre carte, avec un classement par catégorie pour faciliter leur exploration. Un halo coloré distingue les événements en cours des événements à venir, représentés en gris. Grâce aux filtres par statut et par catégorie, le public peut affiner l’affichage et découvrir les événements référencés dans la zone couverte.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
       <article class="av-card">
-        <h3>2. Une fiche personnalisée pour chacun de vos événements</h3>
+        <div class="nb-head"><span class="nb-num">2</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="7" x="3" y="3" rx="1"/><rect width="9" height="7" x="3" y="14" rx="1"/><rect width="5" height="7" x="16" y="14" rx="1"/></svg></span></div>
+        <h3>Une fiche personnalisée pour chacun de vos événements</h3>
         <p class="clamp">Présentez les informations essentielles de vos événements et rassemblez la programmation de votre lieu sur une fiche dédiée. Ajoutez un titre, une catégorie, une date, une adresse, une description et une image pour donner aux visiteurs toutes les informations utiles. Intégrez un lien vers votre billetterie pour leur permettre d’accéder directement à la réservation.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
       <article class="av-card">
-        <h3>3. Des statistiques claires et accessibles dans un tableau de bord unique</h3>
+        <div class="nb-head"><span class="nb-num">3</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></span></div>
+        <h3>Des statistiques claires et accessibles dans un tableau de bord unique</h3>
         <p class="clamp">Consultez le nombre de vues de vos fiches et les clics vers la billetterie pour suivre les interactions avec vos événements. Retrouvez ces données dans un tableau de bord centralisé pour visualiser les résultats de chaque événement. Identifiez ainsi ceux qui suscitent le plus d’intérêt et obtenez des repères pour ajuster votre communication.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
       <article class="av-card blue">
-        <h3>4. Gestion optimisée de votre profil</h3>
+        <div class="nb-head"><span class="nb-num">4</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg></span></div>
+        <h3>Gestion optimisée de votre profil</h3>
         <p class="clamp">Gérez votre profil et vos événements depuis un espace dédié : créez vos fiches, modifiez-les et préparez vos publications en brouillon avant de les mettre en ligne. Réutilisez les informations de vos précédentes éditions pour gagner du temps et partagez facilement les liens de vos événements. Des badges permettent également d’identifier les entreprises vérifiées et les événements sponsorisés.</p>
         <button class="voir-plus" type="button" aria-expanded="false">Voir plus</button>
       </article>
@@ -659,15 +671,18 @@ body.intro-on .brand-inline .brand-mark,body.intro-on #brand .brand-mark{visibil
     </div>
     <div class="steps">
       <div class="step" data-reveal style="--i:0">
-        <h4>1. Inscrivez-vous</h4>
+        <div class="nb-head"><span class="nb-num">1</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></span></div>
+        <h4>Inscrivez-vous</h4>
         <p>Renseignez votre e-mail, le nom de votre structure et son type (association ou organisateur professionnel). Une empreinte bancaire de 0 € est demandée, sans aucun prélèvement.</p>
       </div>
       <div class="step" data-reveal style="--i:1">
-        <h4>2. Créez votre fiche événement</h4>
+        <div class="nb-head"><span class="nb-num">2</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg></span></div>
+        <h4>Créez votre fiche événement</h4>
         <p>Renseignez le titre, les dates, la catégorie, l’adresse et l’image de votre événement. Prévisualisez votre fiche et son emplacement sur la carte avant sa publication, puis configurez votre billetterie.</p>
       </div>
       <div class="step" data-reveal style="--i:2">
-        <h4>3. Cliquez sur Publier</h4>
+        <div class="nb-head"><span class="nb-num">3</span><span class="nb-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span></div>
+        <h4>Cliquez sur Publier</h4>
         <p>Votre événement apparaît alors sur la carte publique et reste accessible jusqu’à sa date de fin. Les visiteurs peuvent consulter sa fiche et accéder à la billetterie intégrée pour réserver leurs billets.</p>
       </div>
     </div>
