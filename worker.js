@@ -239,7 +239,9 @@ async function sendMail(env, to, name, subject, htmlContent) {
 
 const emailShell = (body) => `<div style="font-family:Arial,sans-serif;color:#171717;max-width:560px;margin:0 auto;padding:24px"><div style="display:flex;align-items:center;gap:12px;margin:0 0 24px"><img src="${SITE}/assets/logo-email.png" width="40" height="40" alt="" style="display:block"><span style="font-size:24px;font-weight:800;color:#4169E1">Adeupa</span></div>${body}<p style="font-size:12px;color:#737373;margin:24px 0 0">Vous recevez cet e-mail car vous avez activé les alertes Adeupa. Vous pouvez les désactiver à tout moment dans <a href="${SITE}/app.html" style="color:#4169E1">Mon profil</a>.</p></div>`;
 
-const eventCard = ({ title, zone, cat, when, org, fictif }) => `<div style="border:1px solid #e5e5e5;border-radius:32px;padding:24px;margin:0 0 16px">${fictif ? `<p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#737373">EXEMPLE FICTIF : cet événement n’existe pas</p>` : ""}<p style="margin:0;font-size:12px;color:#737373">${esc(zone)} · ${esc(cat)}</p><p style="margin:4px 0 0;font-size:24px;font-weight:800;line-height:1.2">${esc(title)}</p><p style="margin:8px 0 0;font-size:16px;color:#737373">${esc(when)}${org ? ` · ${esc(org)}` : ""}</p></div>`;
+const TAG = "display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:12px;border:1px solid #e5e5e5;color:#737373;margin:0 4px 0 0";
+// Carte d'événement : mêmes règles que la carte du site (bordure, rayon 32 px, étiquette, titre 24 px)
+const eventCard = ({ title, zone, cat, when, org, fictif }) => `<div style="border:1px solid #e5e5e5;border-radius:32px;padding:16px;margin:0 0 16px"><p style="margin:0 0 8px"><span style="${TAG}">${esc(cat)}</span>${fictif ? `<span style="${TAG}">Exemple fictif</span>` : ""}</p><p style="margin:0;font-size:24px;font-weight:800;line-height:1.2">${esc(title)}</p><p style="margin:8px 0 0;font-size:12px;color:#737373">${esc(zone)} · ${esc(when)}${org ? ` · ${esc(org)}` : ""}</p></div>`;
 
 const button = (href, label) => `<a href="${href}" style="display:inline-block;padding:8px 16px;border-radius:24px;background:#4169E1;color:#fafafa;font-size:16px;font-weight:600;text-decoration:none">${label}</a>`;
 
@@ -254,7 +256,7 @@ function newsletterHTML(name, zones, cats) {
   return emailShell(`<p style="margin:0 0 16px;font-size:12px;font-weight:700;color:#737373">EXEMPLE DE NEWSLETTER : contenu fictif, prototype</p>
     <h1 style="margin:0 0 16px;font-size:36px;line-height:1.2;font-weight:800">Les sorties près de chez vous</h1>
     <p style="font-size:16px">Bonjour ${esc(name)},</p>
-    <p style="font-size:16px">Voici une sélection d’événements publiés dans ${esc(zones.join(", "))}${cats.length ? `, dans les catégories ${esc(cats.join(", "))}` : ", toutes catégories confondues"}.</p>
+    <p style="font-size:16px">Voici une sélection d’événements publiés dans ${esc(zones.length === ZONES.length ? "Lyon" : zones.join(", "))}${cats.length ? `, dans les catégories ${esc(cats.join(", "))}` : ", toutes catégories confondues"}.</p>
     ${cards}
     <p style="margin:24px 0 0">${button(SITE, "Voir la carte")}</p>
     <p style="margin:24px 0 0;font-size:16px;color:#737373">Vous recevrez ensuite un e-mail seulement quand un nouvel événement correspondra à vos alertes.</p>`);
